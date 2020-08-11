@@ -1,7 +1,14 @@
 (
   axes: {
-    "left_paddle": Emulated(pos: Key(W), neg: Key(S)),
-    "right_paddle": Emulated(pos: Key(Up), neg: Key(Down)),
+      "updown": Emulated(
+          pos: Key(S),
+          neg: Key(W)
+      ),
+      "leftright": Emulated(
+          pos: Key(A),
+          neg: Key(D)
+      )
   },
+
   actions: {},
 )

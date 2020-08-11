@@ -22,8 +22,6 @@ pub struct MenuElems {
     pub lower_text: Entity,
 }
 
-    
-
 impl SimpleState for Menu {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
@@ -40,16 +38,15 @@ impl SimpleState for Menu {
                 return Trans::Push(Box::new(Civ::default()));
             }
         }
-
         // Space isn't pressed, so we stay in this `State`.
         Trans::None
     }
 
     // This code tells Amethyst to run all the systems in your game data.
-    fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
-        data.data.update(&data.world);
-        Trans::None
-    }
+    // fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
+    //     data.data.update(&data.world);
+    //     Trans::None
+    // }
 
     fn on_resume(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
@@ -84,7 +81,7 @@ fn initialise_menuelems(world: &mut World) {
         0., 
         -30., 
         0., 
-        200., 
+        600., 
         50.,
     );
 

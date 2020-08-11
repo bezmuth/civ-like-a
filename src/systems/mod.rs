@@ -1,6 +1,3 @@
-mod bounce;
-mod move_balls;
-mod paddle;
-mod winner;
+mod world_sheet;
 
-pub use self::{bounce::BounceSystem, move_balls::MoveBallsSystem, paddle::PaddleSystem, winner::WinnerSystem};
+pub use self::{world_sheet::SheetSystem};
