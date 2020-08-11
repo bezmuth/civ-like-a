@@ -76,7 +76,7 @@ fn initialise_menuelems(world: &mut World) {
         Anchor::TopMiddle, 
         Anchor::Middle,
         0., 
-        30., 
+        -30., 
         0., 
         200., 
         50.,
