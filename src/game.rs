@@ -4,7 +4,7 @@ use amethyst::{
     ecs::prelude::{Component, DenseVecStorage, Entity},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
-    ui::{Anchor, LineMode, TtfFormat, UiText, UiTransform},
+    ui::{Anchor, TtfFormat, UiText, UiTransform},
     shred::DispatcherBuilder,
     shred::Dispatcher, input::{is_key_down, VirtualKeyCode},
 };
@@ -23,16 +23,15 @@ pub const BALL_VELOCITY_Y: f32 = 50.0;
 pub const BALL_RADIUS: f32 = 2.0;
 
 #[derive(Default)]
-pub struct Pong<'a, 'b> {
+pub struct Civ<'a, 'b> {
     ball_spawn_timer: Option<f32>,
     sprite_sheet_handle: Option<Handle<SpriteSheet>>,
     dispatcher: Option<Dispatcher<'a, 'b>>,
 }
 
-impl<'a, 'b> SimpleState for Pong<'a, 'b> {
+impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
-        let mut dispatcher_builder = DispatcherBuilder::new();
 
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();

@@ -1,5 +1,5 @@
 [package]
-name = "pong"
+name = "civ-like-a"
 version = "0.1.0"
 authors = []
 edition = "2018"

@@ -3,7 +3,6 @@ mod game;
 mod menu;
 mod systems;
 
-use crate::game::Pong;
 use crate::menu::Menu;
 use amethyst::{
     core::TransformBundle,

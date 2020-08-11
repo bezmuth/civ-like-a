@@ -1,15 +1,14 @@
 use amethyst::{
-    assets::{AssetStorage, Handle, Loader},
-    core::{timing::Time, transform::Transform},
-    ecs::prelude::{Component, DenseVecStorage, Entity},
+    assets::Loader,
+    core::{transform::Transform},
+    ecs::prelude::Entity,
     prelude::*,
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
-    ui::{Anchor, LineMode, TtfFormat, UiText, UiTransform},
+    renderer::Camera,
+    ui::{Anchor, TtfFormat, UiText, UiTransform},
     input::{VirtualKeyCode, is_key_down},
-    EventReader,
 };
 
-use crate::game::Pong;
+use crate::game::Civ;
 
 pub const ARENA_HEIGHT: f32 = 100.0;
 pub const ARENA_WIDTH: f32 = 100.0;
@@ -19,7 +18,8 @@ pub struct Menu {
 }
 
 pub struct MenuElems {
-    pub Title: Entity,
+    pub title: Entity,
+    pub lower_text: Entity,
 }
 
     
@@ -32,11 +32,12 @@ impl SimpleState for Menu {
         initialise_menuelems(world);
     }
 
-    fn handle_event(&mut self, _data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans{
+    fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans{
         if let StateEvent::Window(event) = &event {
             if is_key_down(&event, VirtualKeyCode::Space) {
                 // Go to the `Game` State.
-                return Trans::Push(Box::new(Pong::default()));
+                data.world.delete_all();
+                return Trans::Push(Box::new(Civ::default()));
             }
         }
 
@@ -48,6 +49,11 @@ impl SimpleState for Menu {
     fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
         data.data.update(&data.world);
         Trans::None
+    }
+
+    fn on_resume(&mut self, data: StateData<'_, GameData<'_, '_>>) {
+        let world = data.world;
+        initialise_menuelems(world);
     }
 }
 
@@ -71,7 +77,7 @@ fn initialise_menuelems(world: &mut World) {
         (),
         &world.read_resource(),
     );
-    let titleInfo = UiTransform::new(
+    let title_info = UiTransform::new(
         "title".to_string(),
         Anchor::TopMiddle, 
         Anchor::Middle,
@@ -84,14 +90,36 @@ fn initialise_menuelems(world: &mut World) {
 
     let title = world
     .create_entity()
-    .with(titleInfo)
+    .with(title_info)
     .with(UiText::new(
         font.clone(),
-        "CivLike".to_string(),
+        format!("CivLike V.{}", env!("CARGO_PKG_VERSION")),
         [1., 1., 1., 1.],
         50.,
     ))
     .build();
 
-    world.insert(MenuElems {Title: title});
+    let lower_info = UiTransform::new(
+        "lower".to_string(),
+        Anchor::BottomMiddle, 
+        Anchor::Middle,
+        0., 
+        30., 
+        0., 
+        200., 
+        50.,
+    );
+
+    let lower_text = world
+    .create_entity()
+    .with(lower_info)
+    .with(UiText::new(
+        font.clone(),
+        "Press SPACE to start".to_string(),
+        [1., 1., 1., 1.],
+        15.,
+    ))
+    .build();
+
+    world.insert(MenuElems {title, lower_text});
 }

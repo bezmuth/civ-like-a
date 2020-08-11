@@ -620,6 +620,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "civ-like-a"
+version = "0.1.0"
+dependencies = [
+ "amethyst",
+]
+
+[[package]]
 name = "clang-sys"
 version = "0.29.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2301,13 +2308,6 @@ dependencies = [
  "crc32fast",
  "deflate",
  "inflate",
-]
-
-[[package]]
-name = "pong"
-version = "0.1.0"
-dependencies = [
- "amethyst",
 ]
 
 [[package]]
