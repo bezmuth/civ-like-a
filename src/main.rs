@@ -4,8 +4,9 @@ mod menu;
 mod systems;
 
 use crate::menu::Menu;
+
 use amethyst::{
-    core::TransformBundle,
+    core::{TransformBundle},
     input::{InputBundle, StringBindings},
     prelude::*,
     renderer::{

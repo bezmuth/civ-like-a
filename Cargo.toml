@@ -12,3 +12,12 @@ default = ["vulkan"]
 empty = ["amethyst/empty"]
 metal = ["amethyst/metal"]
 vulkan = ["amethyst/vulkan"]
+
+
+[profile.dev]
+opt-level = 0
+debug = true
+panic = "unwind"
+
+[profile.release]
+opt-level = 3

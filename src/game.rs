@@ -1,7 +1,11 @@
+use std::time::Duration;
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
-    core::{transform::Transform, ArcThreadPool},
-    ecs::prelude::{Component, DenseVecStorage},
+    core::{
+        transform::Transform, ArcThreadPool,
+        frame_limiter::{FrameLimiter, FrameRateLimitStrategy},
+    },
+    ecs::{prelude::{Component, DenseVecStorage}},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     shred::DispatcherBuilder,
@@ -10,8 +14,7 @@ use amethyst::{
 
 use super::systems;
 
-pub const ARENA_HEIGHT: f32 = 100.0;
-pub const ARENA_WIDTH: f32 = 100.0;
+
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
     sprite_sheet_handle: Option<Handle<SpriteSheet>>,
@@ -25,6 +28,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();
         dispatcher_builder.add(systems::SheetSystem, "sheet_system", &[]);
+        dispatcher_builder.add(systems::CameraSystem{multiplier:1}, "camera_system", &["sheet_system"]);
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
             .with_pool((*world.read_resource::<ArcThreadPool>()).clone())
@@ -35,7 +39,13 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // `spritesheet` is the layout of the sprites on the image;
         // `texture` is the pixel data.
         self.sprite_sheet_handle.replace(load_sprite_sheet(world));
-        //initialise_paddles(world, self.sprite_sheet_handle.clone().unwrap());
+
+        // * limits fps to 60
+        // https://github.com/amethyst/amethyst/blob/8e8bc94867f96feeeb392dd1ab1564a0f1f8ed70/src/app.rs
+        world.insert(FrameLimiter::new(FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(14)), 60)); // 16.8 ms in a frame, 14 ms for sleep about 2 ms for yeild
+
+
+
         initialise_camera(world);
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap())
     }
@@ -63,14 +73,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
 
 pub struct Tiles{
     pub layer: i32,
-}
-
-impl Tiles {
-    fn new(_layer: i32) -> Tiles {
-        Tiles {
-            layer: _layer
-        }
-    }
+    pub x: i32,
+    pub y: i32,
 }
 
 impl Component for Tiles {
@@ -109,11 +113,11 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
 fn initialise_camera(world: &mut World) {
     // Setup camera in a way that our screen covers whole arena and (0, 0) is in the bottom left.
     let mut transform = Transform::default();
-    transform.set_translation_xyz(ARENA_WIDTH * 0.5, ARENA_HEIGHT * 0.5, 1.0);
+    transform.set_translation_xyz(768./2.0, 432./2.0, 1.0);
 
     world
         .create_entity()
-        .with(Camera::standard_2d(ARENA_WIDTH, ARENA_HEIGHT))
+        .with(Camera::standard_2d(768., 432.)) // * width is halved in spritesheet.ron                                   
         .with(transform)
         .build();
 }
@@ -127,17 +131,18 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
         sprite_sheet: sprite_sheet_handle,
         sprite_number: 0, // ground is the first sprite in the sprite_sheet
     };
-    for x in (0..640).step_by(64){
-        for y in (0..320).step_by(32){
-            transform.set_translation_xyz(20. + x as f32, 20. +y as f32, 0.0);
+    for x in 0..20{
+        for y in 0..20{
+            transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.0);
+            // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
+            // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;
             world
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles::new(0))
+                .with(Tiles { layer: 0, x, y})
                 .build();
         }
     }
-    // world.insert(Tiles::new(tile1))
 }
 
