@@ -51,7 +51,7 @@ impl SimpleState for Menu {
     }
 }
 
-/// Initialise the camera.
+/// Initialise the camera. // TODO: reimplement camera
 fn initialise_camera(world: &mut World) {
     let transform = Transform::default();
 
