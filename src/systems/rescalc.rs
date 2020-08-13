@@ -17,11 +17,11 @@ impl<'s> System<'s> for ResourceCalcSystem {
 
 
     fn run(&mut self, (currentplayer, buildings, mut players): Self::SystemData) {
+        // TODO: integrate with turn system 
         for building in (buildings).join(){
             if building.playernum == currentplayer.playernum{
                 for player in (&mut players).join(){
                     if player.num == currentplayer.playernum {
-                        println!("Wood: {} Metal: {} Faith: {}", player.wood, player.metal, player.faith);
                         match building.buildingtype { // TODO: Ensure these are balanced
                             BuildingType::Center => {}
                             BuildingType::WarBuilding => {},
