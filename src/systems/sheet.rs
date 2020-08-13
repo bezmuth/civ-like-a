@@ -1,4 +1,4 @@
-use crate::game::{Tiles, Build, BuildingType, CurrentPlayer, Player, Building};
+use crate::game::{Tiles, Build, BuildingType, CurrentPlayer, Building};
 use amethyst::{
     core::{
         geometry::Plane,
@@ -39,7 +39,7 @@ impl<'s> System<'s> for SheetSystem {
         //WriteStorage<'s, TileEnts>
     );
 
-    fn run(&mut self, (transforms, mut tiles, input, mut spriterenderers, cameras, screen_dimensions, mut build, CurrentPlayer, mut Buildings, entities): Self::SystemData) {
+    fn run(&mut self, (transforms, mut tiles, input, mut spriterenderers, cameras, screen_dimensions, mut build, currentplayer, mut buildings, entities): Self::SystemData) {
         let modi: Option<usize> = match build.mode { // checks the current building mode and returns the sprite to be used //TODO: ENSURE THIS HAS ALL THE BUILDING SPRITES
             BuildingType::FaithBuilding => Some(3 as usize),
             _ => None,
@@ -71,7 +71,7 @@ impl<'s> System<'s> for SheetSystem {
                             tile.buildingtype = build.mode; // TODO: Check if this is redundant cause of the entity addition below
                             entities // add an entity of the build.mode type to the world, allows for resource calc
                                 .build_entity()
-                                .with(Building {buildingtype: build.mode , playernum: CurrentPlayer.playernum}, &mut Buildings)
+                                .with(Building {buildingtype: build.mode , playernum: currentplayer.playernum}, &mut buildings)
                                 .build();
                             if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
                                 build.mode = BuildingType::None;

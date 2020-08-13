@@ -1,12 +1,8 @@
 use crate::game::{CurrentPlayer, Player, Building, BuildingType};
 
 use amethyst::{
-    core::{
-        Time
-    },
     derive::SystemDesc,
-    ecs::prelude::{Join, Read, System, SystemData, WriteStorage, ReadExpect},
-    input::{InputHandler, StringBindings}, 
+    ecs::prelude::{Join, System, SystemData, WriteStorage, ReadExpect},
 };
 
 #[derive(SystemDesc)]
@@ -15,24 +11,23 @@ pub struct ResourceCalcSystem;
 impl<'s> System<'s> for ResourceCalcSystem {
     type SystemData = (
         ReadExpect<'s, CurrentPlayer>,
-        Read<'s, Time>,
         WriteStorage<'s, Building>,
         WriteStorage<'s, Player>,
     );
 
 
-    fn run(&mut self, (currentplayer, time, Buildings, mut Players): Self::SystemData) {
-        for building in (Buildings).join(){
+    fn run(&mut self, (currentplayer, buildings, mut players): Self::SystemData) {
+        for building in (buildings).join(){
             if building.playernum == currentplayer.playernum{
-                for player in (&mut Players).join(){
+                for player in (&mut players).join(){
                     if player.num == currentplayer.playernum {
                         println!("Wood: {} Metal: {} Faith: {}", player.wood, player.metal, player.faith);
                         match building.buildingtype { // TODO: Ensure these are balanced
                             BuildingType::Center => {}
                             BuildingType::WarBuilding => {},
-                            BuildingType::WoodBuilding => player.wood = 200,
-                            BuildingType::MetalBuilding => player.metal = 200,
-                            BuildingType::FaithBuilding => player.faith = 200,
+                            BuildingType::WoodBuilding => player.wood += 20,
+                            BuildingType::MetalBuilding => player.metal += 20,
+                            BuildingType::FaithBuilding => player.faith += 20,
                             BuildingType::None => {}
                         }
                     }
