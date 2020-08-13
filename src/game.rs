@@ -8,11 +8,12 @@ use amethyst::{
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     shred::DispatcherBuilder,
-    shred::Dispatcher, input::{is_key_down, VirtualKeyCode},
+    shred::Dispatcher, input::{is_key_down, VirtualKeyCode}, 
+    ui::{Anchor, TtfFormat, UiText, UiTransform},
 };
 
 use super::systems;
-pub use super::components::{Tiles, Player, Build, Building, BuildingType};
+pub use super::components::{Tiles, Player, Build, Building, BuildingType, Resbar};
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -22,7 +23,6 @@ pub struct Civ<'a, 'b> {
 
 impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
-        println!("Game Start!");
         let world = data.world;
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();
@@ -58,11 +58,12 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
 
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());
+        initialise_res_disp(world);
     }
 
     fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
         if let StateEvent::Window(event) = &event {
-            if is_key_down(&event, VirtualKeyCode::Escape) {
+            if is_key_down(&event, VirtualKeyCode::Escape){
                 // Go back to the Menu state.
                 data.world.delete_all();
                 return Trans::Pop;
@@ -169,4 +170,37 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
                 .build();
         }
     }
+}
+
+fn initialise_res_disp(world: &mut World){
+    let font = world.read_resource::<Loader>().load(
+        "font/square.ttf",
+        TtfFormat,
+        (),
+        &world.read_resource(),
+    );
+    let top_info = UiTransform::new(
+        "resbar_top".to_string(),
+        Anchor::TopMiddle, 
+        Anchor::Middle,
+        0., 
+        -30., 
+        0., 
+        600., 
+        50.,
+    );
+
+    let top = world
+    .create_entity()
+    .with(top_info)
+    .with(UiText::new(
+        font.clone(),
+        format!("RESBAR!"),
+        [1., 1., 1., 1.],
+        50.,
+    ))
+    .build();
+
+
+    world.insert(Resbar {top});
 }
