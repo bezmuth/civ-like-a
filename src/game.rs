@@ -20,6 +20,7 @@ pub struct Civ<'a, 'b> {
     sprite_sheet_handle: Option<Handle<SpriteSheet>>,
     dispatcher: Option<Dispatcher<'a, 'b>>,
 }
+// TODO: !! implement turn system !!
 
 impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
@@ -30,6 +31,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
         dispatcher_builder.add(systems::BuildSystem, "build_system", &["sheet_system", "camera_system"]);
         dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system"]);
+        dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system"]);
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
             .with_pool((*world.read_resource::<ArcThreadPool>()).clone())
@@ -186,8 +188,8 @@ fn initialise_res_disp(world: &mut World){
         0., 
         -30., 
         0., 
-        600., 
-        50.,
+        1920., 
+        25.,
     );
 
     let top = world
@@ -197,7 +199,7 @@ fn initialise_res_disp(world: &mut World){
         font.clone(),
         format!("RESBAR!"),
         [1., 1., 1., 1.],
-        50.,
+        25.,
     ))
     .build();
 
