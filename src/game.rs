@@ -48,7 +48,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         world.insert(FrameLimiter::new(FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(14)), 60)); // 16.8 ms in a frame, 14 ms for sleep about 2 ms for yeild
 
 
-        //TODO: Implement a resource initalise that loads a bunch of static info into thw world
+        //TODO: Implement a resource initalise that loads a bunch of static info into the world
         initialise_camera(world);
         // TODO: move all these to their own init?
         world.insert(Build {mode: BuildingType::None});
