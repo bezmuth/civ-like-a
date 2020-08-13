@@ -6,6 +6,7 @@ edition = "2018"
 
 [dependencies]
 amethyst = "0.15.0"
+amethyst-imgui = { version = "0.7", features = ["vulkan"] }
 
 [features]
 default = ["vulkan"]

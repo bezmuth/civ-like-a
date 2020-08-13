@@ -19,6 +19,8 @@ use amethyst::{
     utils::application_root_dir, 
 };
 
+use amethyst_imgui::RenderImgui;
+
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
 
@@ -49,6 +51,7 @@ fn main() -> amethyst::Result<()> {
                 )
                 // RenderFlat2D plugin is used to render entities with `SpriteRender` component.
                 .with_plugin(RenderFlat2D::default())
+                .with_plugin(RenderImgui::<StringBindings>::default())
                 .with_plugin(RenderUi::default()),
 
         )?;

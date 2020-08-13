@@ -108,6 +108,20 @@ dependencies = [
 ]
 
 [[package]]
+name = "amethyst-imgui"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f05fcb01a7093632aea28ff9929e84ecbbc7317e2e6335aa7c5bc934109396ba"
+dependencies = [
+ "amethyst",
+ "derivative",
+ "failure",
+ "imgui",
+ "imgui-winit-support",
+ "lazy_static",
+]
+
+[[package]]
 name = "amethyst_animation"
 version = "0.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -624,6 +638,7 @@ name = "civ-like-a"
 version = "0.1.0"
 dependencies = [
  "amethyst",
+ "amethyst-imgui",
 ]
 
 [[package]]
@@ -1524,6 +1539,37 @@ dependencies = [
  "png 0.15.3",
  "scoped_threadpool",
  "tiff 0.3.1",
+]
+
+[[package]]
+name = "imgui"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e70a1b421ac503e94009cc9bcd6ed256f6bf38ced98d841b095da6b94ea67702"
+dependencies = [
+ "bitflags",
+ "imgui-sys",
+ "lazy_static",
+ "parking_lot 0.9.0",
+]
+
+[[package]]
+name = "imgui-sys"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0350b22f0a64eeb852ed3995ddb5d6d24bd3038024d2bd81720a6573baa602dc"
+dependencies = [
+ "cc",
+]
+
+[[package]]
+name = "imgui-winit-support"
+version = "0.2.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c63c45c058634dbc045dde485a7baf0f4321b77c00cca90c5d2d9b3ab2f5eec"
+dependencies = [
+ "imgui",
+ "winit",
 ]
 
 [[package]]
