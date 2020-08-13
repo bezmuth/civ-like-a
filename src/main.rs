@@ -2,6 +2,7 @@
 mod game;
 mod menu;
 mod systems;
+mod components;
 
 use crate::menu::Menu;
 
