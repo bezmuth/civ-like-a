@@ -5,7 +5,6 @@ use amethyst::{
         transform::Transform, ArcThreadPool,
         frame_limiter::{FrameLimiter, FrameRateLimitStrategy},
     },
-    ecs::{prelude::{Component, DenseVecStorage}},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     shred::DispatcherBuilder,
@@ -13,7 +12,7 @@ use amethyst::{
 };
 
 use super::systems;
-
+pub use super::components::{Tiles, Player, Build, Building, BuildingType};
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -82,65 +81,9 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
-// TODO: move structs to components?
-
-pub struct Player{
-    pub num: i8,
-    pub wood: i32,
-    pub metal: i32,
-    pub faith: i32,
-}
-impl Player {
-    fn new(num: i8) -> Player {
-        Player {
-            num,
-            wood: 0,
-            metal: 0,
-            faith: 0,
-        }
-    }
-}
-impl Component for Player { // Component therefore use ReadStorage  an
-    type Storage = DenseVecStorage<Self>;
-}
-
+//TODO: alterantive to player: i8? (like a reference to player)
 pub struct CurrentPlayer{
     pub playernum: i8,
-}
-
-//TODO: alterantive to player: i8? (like a reference to player)
-
-pub struct Tiles{ 
-    pub layer: i8,
-    pub player: i8,
-    pub buildingtype: BuildingType,
-    pub x: i32,
-    pub y: i32,
-}
-impl Component for Tiles { // Component therefore use ReadStorage  an
-    type Storage = DenseVecStorage<Self>;
-}
-
-#[derive(Copy, Clone)]
-pub enum BuildingType{ // resource as it has no component implmentation, use READ and READEXPECT
-    Center,
-    WarBuilding,
-    WoodBuilding,
-    MetalBuilding,
-    FaithBuilding,
-    None,
-}
-
-pub struct Build{
-    pub mode: BuildingType,
-}
-
-pub struct Building{ 
-    pub buildingtype: BuildingType,
-    pub playernum: i8,
-}
-impl Component for Building { // Component therefore use ReadStorage  an
-    type Storage = DenseVecStorage<Self>;
 }
 
 
