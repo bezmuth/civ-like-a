@@ -27,6 +27,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         let world = data.world;
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();
+        dispatcher_builder.add(systems::Imgui, "imgui", &[]);
         dispatcher_builder.add(systems::SheetSystem, "sheet_system", &[]);
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
         dispatcher_builder.add(systems::BuildSystem, "build_system", &["sheet_system", "camera_system"]);
