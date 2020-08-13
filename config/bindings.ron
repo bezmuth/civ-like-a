@@ -11,6 +11,9 @@
   },
 
   actions: {
-      "speed_up" : [Key(Shift)]
+      "speed_up" : [[Key(LShift)]],
+      "build" : [[Key(B)]],
+      "extend" : [[Key(LControl)]],
+
   },
 )

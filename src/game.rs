@@ -28,7 +28,9 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();
         dispatcher_builder.add(systems::SheetSystem, "sheet_system", &[]);
-        dispatcher_builder.add(systems::CameraSystem{multiplier:1}, "camera_system", &["sheet_system"]);
+        dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
+        dispatcher_builder.add(systems::BuildSystem, "build_system", &["sheet_system", "camera_system"]);
+        dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system"]);
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
             .with_pool((*world.read_resource::<ArcThreadPool>()).clone())
@@ -45,20 +47,23 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         world.insert(FrameLimiter::new(FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(14)), 60)); // 16.8 ms in a frame, 14 ms for sleep about 2 ms for yeild
 
 
-
+        //TODO: Implement a resource initalise that loads a bunch of static info into thw world
         initialise_camera(world);
-        initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap())
+        world.insert(Build {mode: BuildingType::None});
+        world.insert(CurrentPlayer{ playernum: 0});
+        initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
+        initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());
     }
 
     fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
         if let StateEvent::Window(event) = &event {
             if is_key_down(&event, VirtualKeyCode::Escape) {
-                // Go back to the `Menu` state.
+                // Go back to the Menu state.
                 data.world.delete_all();
                 return Trans::Pop;
             }
         }
-        // Escape isn't pressed, so we stay in this `State`.
+        // Escape isn't pressed, so we stay in this State.
         Trans::None
     }
 
@@ -71,13 +76,64 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
-pub struct Tiles{
-    pub layer: i32,
+// TODO: move structs to components?
+
+pub struct Player{
+    pub num: i8,
+    pub wood: i32,
+    pub metal: i32,
+    pub faith: i32,
+}
+impl Player {
+    fn new(num: i8) -> Player {
+        Player {
+            num,
+            wood: 0,
+            metal: 0,
+            faith: 0,
+        }
+    }
+}
+impl Component for Player { // Component therefore use ReadStorage  an
+    type Storage = DenseVecStorage<Self>;
+}
+
+pub struct CurrentPlayer{
+    pub playernum: i8,
+}
+
+//TODO: alterantive to player: i8? (like a reference to player)
+
+pub struct Tiles{ 
+    pub layer: i8,
+    pub player: i8,
+    pub buildingtype: BuildingType,
     pub x: i32,
     pub y: i32,
 }
+impl Component for Tiles { // Component therefore use ReadStorage  an
+    type Storage = DenseVecStorage<Self>;
+}
 
-impl Component for Tiles {
+#[derive(Copy, Clone)]
+pub enum BuildingType{ // resource as it has no component implmentation, use READ and READEXPECT
+    Center,
+    WarBuilding,
+    WoodBuilding,
+    MetalBuilding,
+    FaithBuilding,
+    None,
+}
+
+pub struct Build{
+    pub mode: BuildingType,
+}
+
+pub struct Building{ 
+    pub buildingtype: BuildingType,
+    pub playernum: i8,
+}
+impl Component for Building { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;
 }
 
@@ -113,7 +169,7 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
 fn initialise_camera(world: &mut World) {
     // Setup camera in a way that our screen covers whole arena and (0, 0) is in the bottom left.
     let mut transform = Transform::default();
-    transform.set_translation_xyz(768./2.0, 432./2.0, 1.0);
+    transform.set_translation_xyz(768./2.0, 432./2.0, 1.0); //TODO: increase unscaled res? - more tiles on screen
 
     world
         .create_entity()
@@ -125,8 +181,6 @@ fn initialise_camera(world: &mut World) {
 fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let mut transform = Transform::default();
     
-
-
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle,
         sprite_number: 0, // ground is the first sprite in the sprite_sheet
@@ -140,9 +194,30 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { layer: 0, x, y})
+                .with(Tiles { layer: 0, player: 0, buildingtype: BuildingType::None, x, y})
                 .build();
         }
     }
 }
 
+fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+    let mut transform = Transform::default();
+    
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet_handle, 
+        sprite_number: 2 // blank sprite
+    };
+    for x in 0..20{
+        for y in 0..20{
+            transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.00001); // z > 0 so it is displayed above layer 0
+            // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
+            // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;
+            world
+                .create_entity()
+                .with(sprite_render.clone())
+                .with(transform.clone())
+                .with(Tiles { layer: 1, player: 0, buildingtype: BuildingType::None, x, y})
+                .build();
+        }
+    }
+}
