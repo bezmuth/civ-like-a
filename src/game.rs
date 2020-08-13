@@ -49,8 +49,14 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
 
         //TODO: Implement a resource initalise that loads a bunch of static info into thw world
         initialise_camera(world);
+        // TODO: move all these to their own init?
         world.insert(Build {mode: BuildingType::None});
-        world.insert(CurrentPlayer{ playernum: 0});
+        world.insert(CurrentPlayer{ playernum: 0}); // * WORLD.INSERT WORKS FINE WITH RESOURCES
+        world // * WORLD.INSERT DOES NOT WORK WITH COMPONENTS
+            .create_entity()
+            .with(Player::new(0)) // * width is halved in spritesheet.ron                                   
+            .build();
+
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());
     }
