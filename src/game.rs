@@ -6,10 +6,14 @@ use amethyst::{
         frame_limiter::{FrameLimiter, FrameRateLimitStrategy},
     },
     prelude::*,
-    renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
+    renderer::{
+        Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
+    },
     shred::DispatcherBuilder,
     shred::Dispatcher, input::{is_key_down, VirtualKeyCode}, 
-    ui::{Anchor, TtfFormat, UiText, UiTransform},
+    ui::{
+        Anchor, UiCreator, UiText, UiTransform, TtfFormat,
+    },
 };
 
 use super::systems;
@@ -30,7 +34,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::Imgui{toggled: false}, "imgui", &[]);
         dispatcher_builder.add(systems::SheetSystem, "sheet_system", &[]);
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
-        dispatcher_builder.add(systems::BuildSystem, "build_system", &["sheet_system", "camera_system"]);
+        dispatcher_builder.add(systems::BuildSystem::default(), "build_system", &["sheet_system", "camera_system"]); // https://doc.rust-lang.org/std/default/trait.Default.html
         dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system"]);
         dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system"]);
         // Build and setup the `Dispatcher`.
@@ -62,6 +66,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_res_disp(world);
+        initialise_lower_menu(world)
     }
 
     fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
@@ -194,16 +199,28 @@ fn initialise_res_disp(world: &mut World){
     );
 
     let top = world
-    .create_entity()
-    .with(top_info)
-    .with(UiText::new(
-        font.clone(),
-        format!("RESBAR!"),
-        [1., 1., 1., 1.],
-        25.,
-    ))
-    .build();
+        .create_entity()
+        .with(top_info)
+        .with(UiText::new(
+            font.clone(),
+            format!("RESBAR!"),
+            [1., 1., 1., 1.],
+            25.,
+        ))
+        .build();
 
 
     world.insert(Resbar {top});
+}
+
+// TODO: prefabs for other elements?
+fn initialise_lower_menu(world: &mut World){
+    //would use the UiButtonBuilder but that function seems to be broken
+    //TODO: ? fix in a pr
+    //seems that the .with_image() is broken and just the rest of the struct
+    world.exec(|mut creator: UiCreator<'_>| {
+        creator.create("ui/build_menu.ron", ());
+    });
+
+    //world.insert(BuildMenu{button});
 }

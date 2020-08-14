@@ -62,7 +62,7 @@ impl<'s> System<'s> for SheetSystem {
                         );
                         let distance = ray.intersect_plane(&Plane::with_z(0.0)).unwrap();
                         let mouse_world_position = ray.at_distance(distance);
-                        
+                        // todo: !ENSURE RAY IS NOT OVERLAPPING WITH ANY MENUS!
                         let pos = screen_to_tile(mouse_world_position.x, mouse_world_position.y);
                         // println!("{} {}", mouse_world_position.x, mouse_world_position.y);
                 
@@ -70,7 +70,7 @@ impl<'s> System<'s> for SheetSystem {
                             spriterender.sprite_number = modi.unwrap();
                             tile.buildingtype = build.mode; // TODO: Check if this is redundant cause of the entity addition below
                             entities // add an entity of the build.mode type to the world, allows for resource calc
-                                .build_entity()
+                                .build_entity() //TODO: implement demolish, might require a rewrite
                                 .with(Building {buildingtype: build.mode , playernum: currentplayer.playernum}, &mut buildings)
                                 .build();
                             if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
