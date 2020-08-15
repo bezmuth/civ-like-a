@@ -1,8 +1,7 @@
 use crate::game::{Build, BuildingType};
 use amethyst::{
-    ecs::{Entities, prelude::{Read, System, WriteExpect, Write,WriteStorage}, Entity},
-    input::{InputHandler, StringBindings}, 
-    ui::{UiFinder, UiEvent, UiEventType, UiButton, UiText}, 
+    ecs::{prelude::{System, WriteExpect, Write}},
+    ui::{UiFinder, UiEvent, UiEventType}, 
     shrev::{ReaderId, EventChannel}, 
     shred::World,
 
@@ -16,15 +15,13 @@ pub struct BuildSystem{
 
 impl<'s> System<'s> for BuildSystem {
     type SystemData = (
-        Read<'s, InputHandler<StringBindings>>,
         WriteExpect<'s, Build>,
-        Entities<'s>,
         Write<'s, EventChannel<UiEvent>>,
         UiFinder<'s>,
         //WriteStorage<'s, TileEnts>
     );
 
-    fn run(&mut self, (input, mut build, entities, events, ui_finder): Self::SystemData) {
+    fn run(&mut self, (mut build, events, ui_finder): Self::SystemData) {
         let reader = self
             .event_reader
             .as_mut()

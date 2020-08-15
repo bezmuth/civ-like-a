@@ -1,12 +1,8 @@
-use crate::game::{CurrentPlayer};
+use crate::game::{CurrentPlayer, MouseTilePos};
 use amethyst::{
-    core::{
-        transform::Transform,
-        Time
-    },
+
     derive::SystemDesc,
-    renderer::{Camera},
-    ecs::prelude::{Join, Read, System, SystemData, ReadExpect},
+    ecs::prelude::{Read, System, SystemData, ReadExpect},
     input::{InputHandler, StringBindings}, 
 };
 
@@ -22,10 +18,11 @@ impl<'s> System<'s> for Imgui {
     type SystemData = (
         Read<'s, InputHandler<StringBindings>>,
         ReadExpect<'s, CurrentPlayer>,
+        ReadExpect<'s, MouseTilePos>,
     );
 
 
-    fn run(&mut self, (input, currentplayer): Self::SystemData) {
+    fn run(&mut self, (input, currentplayer, mouse_tile_pos): Self::SystemData) {
         //TODO: fix debug toggle
         if input.action_is_down("debug").unwrap(){
             self.toggled = !self.toggled
@@ -36,6 +33,8 @@ impl<'s> System<'s> for Imgui {
                 .size([300.0, 110.0], Condition::FirstUseEver)
                 .build(ui, || {
                     ui.text(format!("Current Player Number: {}", currentplayer.playernum));
+                    ui.text(format!("Current Tile Pos: ({}, {})", mouse_tile_pos.x, mouse_tile_pos.y));
+
                     ui.bullet_text(im_str!("cool"));
                     ui.separator();
                     let mouse_pos = ui.io().mouse_pos;
