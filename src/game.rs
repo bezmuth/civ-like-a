@@ -31,12 +31,15 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         let world = data.world;
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();
+        //todo: reorder these
         dispatcher_builder.add(systems::Imgui{toggled: false}, "imgui", &[]);
-        dispatcher_builder.add(systems::SheetSystem, "sheet_system", &[]);
+        dispatcher_builder.add(systems::M2TileSystem, "m2tile_system", &[]);
+        dispatcher_builder.add(systems::SheetSystem, "sheet_system", &["m2tile_system"]);
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
         dispatcher_builder.add(systems::BuildSystem::default(), "build_system", &["sheet_system", "camera_system"]); // https://doc.rust-lang.org/std/default/trait.Default.html
         dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system"]);
         dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system"]);
+        
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
             .with_pool((*world.read_resource::<ArcThreadPool>()).clone())
@@ -58,6 +61,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // TODO: move all these to their own init?
         world.insert(Build {mode: BuildingType::None});
         world.insert(CurrentPlayer{ playernum: 0}); // * WORLD.INSERT WORKS FINE WITH RESOURCES
+        world.insert(MouseTilePos{ x:0 , y:0 });
         world // * WORLD.INSERT DOES NOT WORK WITH COMPONENTS
             .create_entity()
             .with(Player::new(0)) // * width is halved in spritesheet.ron                                   
@@ -95,6 +99,10 @@ pub struct CurrentPlayer{
     pub playernum: i8,
 }
 
+pub struct MouseTilePos{
+    pub x: i32,
+    pub y: i32,
+}
 
 fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
     // Load the sprite sheet necessary to render the graphics.

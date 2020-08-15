@@ -43,7 +43,8 @@ impl<'s> System<'s> for BuildSystem {
                         println!("Build!");
                         build.mode = BuildingType::FaithBuilding;
                     } else if clicked == demolish_button {
-                        println!("Demolish")
+                        println!("Demolish!");
+                        build.mode = BuildingType::Demolish;
                     }
 
 
