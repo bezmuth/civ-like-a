@@ -12,7 +12,7 @@ use amethyst::{
     shred::DispatcherBuilder,
     shred::Dispatcher, input::{is_key_down, VirtualKeyCode}, 
     ui::{
-        Anchor, UiCreator, UiText, UiTransform, TtfFormat,
+        Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,
     },
 };
 
@@ -214,6 +214,8 @@ fn initialise_res_disp(world: &mut World){
             format!("RESBAR!"),
             [1., 1., 1., 1.],
             25.,
+            LineMode::Single,
+            Anchor::TopMiddle,
         ))
         .build();
 

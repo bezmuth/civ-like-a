@@ -3,7 +3,7 @@ use amethyst::{
     core::{transform::Transform},
     ecs::prelude::Entity,
     prelude::*,
-    ui::{Anchor, TtfFormat, UiText, UiTransform},
+    ui::{Anchor, TtfFormat, UiText, UiTransform, LineMode},
     input::{VirtualKeyCode, is_key_down},
 };
 
@@ -87,6 +87,8 @@ fn initialise_menuelems(world: &mut World) {
         format!("CivLike V.{}", env!("CARGO_PKG_VERSION")),
         [1., 1., 1., 1.],
         50.,
+        LineMode::Single,
+        Anchor::TopMiddle,
     ))
     .build();
 
@@ -109,6 +111,8 @@ fn initialise_menuelems(world: &mut World) {
         "Press SPACE to start".to_string(),
         [1., 1., 1., 1.],
         15.,
+        LineMode::Single,
+        Anchor::TopMiddle,
     ))
     .build();
 

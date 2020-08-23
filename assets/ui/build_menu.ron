@@ -74,5 +74,38 @@ Container(
                 ),
             ]
         ),
+        Container(
+            transform: (
+                id: "build_menu_container",
+                x: 260., 
+                y: 35.,
+                width: 500.,
+                height: 60.,
+                anchor: TopLeft,
+            ),
+            background: SolidColor(0.6, 0.6, 1.0, 0.9),
+            children: [
+                Button(
+                    transform: (
+                        id: "Demolish_button",
+                        //width: 72.,
+                        //height: 75.,
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "Demolish",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
+                        hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
+                        press_image: SolidColor(0.01, 0.02, 0.035, 1.),
+                    )
+                ),
+            ]
+        ),
     ],
 )
