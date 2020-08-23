@@ -25,7 +25,7 @@ impl<'s> System<'s> for BuildSystem {
         let reader = self
             .event_reader
             .as_mut()
-            .expect("BuildSystem::setup was not called correctly, try adding component with ::defauly()");
+            .expect("BuildSystem::setup was not called correctly, try adding component with ::default()");
 
         for event in events.read(reader) {
             match event.event_type{
