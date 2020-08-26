@@ -1,0 +1,74 @@
+#![enable(implicit_some)]
+Container(
+    transform: (
+        id: "lower_panel",
+        anchor: BottomMiddle,
+        stretch: X( x_margin: 0.), // makes bar take up full width
+        // y : 50 ensures full bar is shown
+        y: 40.,
+        height: 80.,
+    ),
+    background: SolidColor(0.6, 0.6, 1.0, 0.9),
+    children: [
+        Container(
+            transform: (
+                id: "build_button",
+                x: 64.,
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleLeft,
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "Build_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "build",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
+                        hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
+                        press_image: SolidColor(0.01, 0.02, 0.035, 1.),
+                    )
+                ),
+            ]
+        ),
+        Container(
+            transform: (
+                id: "demolish_container",
+                x: 174., // margin of 10 between buttons
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleLeft,
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "Demolish_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "Demolish",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
+                        hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
+                        press_image: SolidColor(0.01, 0.02, 0.035, 1.),
+                    )
+                ),
+            ]
+        )
+    ],
+)

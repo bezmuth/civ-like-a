@@ -23,7 +23,7 @@ impl<'s> System<'s> for ResourceCalcSystem {
                 for player in (&mut players).join(){
                     if player.num == currentplayer.playernum {
                         match building.buildingtype { // TODO: Ensure these are balanced
-                            BuildingType::Center => {}
+                            BuildingType::Center => player.wood += 1,
                             BuildingType::WarBuilding => {},
                             BuildingType::WoodBuilding => player.wood += 20,
                             BuildingType::MetalBuilding => player.metal += 20,
