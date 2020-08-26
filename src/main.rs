@@ -7,7 +7,7 @@ mod components;
 use crate::menu::Menu;
 
 use amethyst::{
-    core::{TransformBundle},
+    core::{TransformBundle, HideHierarchySystemDesc},
     input::{InputBundle, StringBindings},
     prelude::*,
     renderer::{
@@ -52,9 +52,10 @@ fn main() -> amethyst::Result<()> {
                 // RenderFlat2D plugin is used to render entities with `SpriteRender` component.
                 .with_plugin(RenderFlat2D::default())
                 .with_plugin(RenderImgui::<StringBindings>::default())
-                .with_plugin(RenderUi::default()),
+                .with_plugin(RenderUi::default())
 
-        )?;
+        )?
+        .with_system_desc(HideHierarchySystemDesc, "hidehierarchysystemdesc", &[]); // * lets all the widgets of a panel be hidden
 
     let mut game = Application::new(assets_dir, Menu::default(), game_data)?;
     game.run();

@@ -1,37 +1,36 @@
 #![enable(implicit_some)]
 Container(
     transform: (
-        id: "lower_panel",
-        anchor: BottomMiddle,
-        stretch: X( x_margin: 0.), // makes bar take up full width
-        // y : 50 ensures full bar is shown
-        y: 50.,
-        height: 100.,
+        id: "build_menu",
+        anchor: BottomLeft,
+        x: 264.,
+        y: 110.,
+        height: 50.,
+        width: 500.,
     ),
     background: SolidColor(0.6, 0.6, 1.0, 0.9),
     children: [
         Container(
             transform: (
-                id: "build_button",
-                x: 64.,
+                id: "center_button",
+                x: 50.,
                 y: 0.,
                 width: 100.,
                 height: 50.,
                 anchor: MiddleLeft,
+
             ),
             children: [
                 Button(
                     transform: (
-                        id: "Build_button",
-                        //width: 72.,
-                        //height: 75.,
+                        id: "Center_button",
                         tab_order: 1,
                         anchor: Middle,
                         stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
                         mouse_reactive: true,
                     ),
                     button: (
-                        text: "build",
+                        text: "Center",
                         font: File("font/square.ttf", ("TTF", ())),
                         font_size: 20.,
                         normal_text_color: (1.0, 1.0, 1.0, 1.),
@@ -44,8 +43,8 @@ Container(
         ),
         Container(
             transform: (
-                id: "demolish_container",
-                x: 174., // margin of 10 between buttons
+                id: "warbuilding_button",
+                x: 160.,
                 y: 0.,
                 width: 100.,
                 height: 50.,
@@ -54,16 +53,14 @@ Container(
             children: [
                 Button(
                     transform: (
-                        id: "Demolish_button",
-                        //width: 72.,
-                        //height: 75.,
+                        id: "WarBuilding_button",
                         tab_order: 1,
                         anchor: Middle,
                         stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
                         mouse_reactive: true,
                     ),
                     button: (
-                        text: "Demolish",
+                        text: "Barracks",
                         font: File("font/square.ttf", ("TTF", ())),
                         font_size: 20.,
                         normal_text_color: (1.0, 1.0, 1.0, 1.),
@@ -76,27 +73,84 @@ Container(
         ),
         Container(
             transform: (
-                id: "build_menu_container",
-                x: 260., 
-                y: 35.,
-                width: 500.,
-                height: 60.,
-                anchor: TopLeft,
+                id: "woodbuilding_button",
+                x: 285.,
+                y: 0.,
+                width: 130.,
+                height: 50.,
+                anchor: MiddleLeft,
             ),
-            background: SolidColor(0.6, 0.6, 1.0, 0.9),
             children: [
                 Button(
                     transform: (
-                        id: "Demolish_button",
-                        //width: 72.,
-                        //height: 75.,
+                        id: "WoodBuilding_button",
                         tab_order: 1,
                         anchor: Middle,
                         stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
                         mouse_reactive: true,
                     ),
                     button: (
-                        text: "Demolish",
+                        text: "Lumber Camp",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
+                        hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
+                        press_image: SolidColor(0.01, 0.02, 0.035, 1.),
+                    )
+                ),
+            ]
+        ),
+        Container(
+            transform: (
+                id: "metalbuilding_button",
+                x: 410.,
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleLeft,
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "MetalBuilding_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "Mine",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
+                        hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
+                        press_image: SolidColor(0.01, 0.02, 0.035, 1.),
+                    )
+                ),
+            ]
+        ),
+        Container(
+            transform: (
+                id: "faithbuilding_button",
+                x: 520.,
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleLeft,
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "FaithBuilding_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "Church",
                         font: File("font/square.ttf", ("TTF", ())),
                         font_size: 20.,
                         normal_text_color: (1.0, 1.0, 1.0, 1.),

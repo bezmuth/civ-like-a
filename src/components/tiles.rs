@@ -1,7 +1,6 @@
-use amethyst::ecs::prelude::{DenseVecStorage, Component};
+use amethyst::ecs::{NullStorage, prelude::{DenseVecStorage, Component}};
 use super::BuildingType;
 pub struct Tiles{ 
-    pub layer: i8,
     pub player: i8,
     pub buildingtype: BuildingType,
     pub x: i32,
@@ -9,4 +8,21 @@ pub struct Tiles{
 }
 impl Component for Tiles { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;
+}
+
+// * tag components
+#[derive(Default)]
+pub struct Layer1;
+impl Component for Layer1 {
+    type Storage = NullStorage<Self>;
+}
+#[derive(Default)]
+pub struct Layer2;
+impl Component for Layer2 {
+    type Storage = NullStorage<Self>;
+}
+#[derive(Default)]
+pub struct Layer3;
+impl Component for Layer3 {
+    type Storage = NullStorage<Self>;
 }

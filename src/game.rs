@@ -17,7 +17,7 @@ use amethyst::{
 };
 
 use super::systems;
-pub use super::components::{Tiles, Player, Build, Building, BuildingType, Resbar};
+pub use super::components::{Tiles, Player, Build, Building, BuildingType, Resbar, Layer1, Layer2, Layer3};
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -56,6 +56,11 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         world.insert(FrameLimiter::new(FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(14)), 60)); // 16.8 ms in a frame, 14 ms for sleep about 2 ms for yeild
 
 
+        world.register::<Layer1>();
+        world.register::<Layer2>();
+        world.register::<Layer3>();
+
+
         //TODO: Implement a resource initalise that loads a bunch of static info into the world
         initialise_camera(world);
         // TODO: move all these to their own init?
@@ -67,8 +72,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
             .with(Player::new(0)) // * width is halved in spritesheet.ron                                   
             .build();
 
+        initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());    
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
-        initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_res_disp(world);
         initialise_lower_menu(world)
     }
@@ -160,7 +165,8 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { layer: 0, player: 0, buildingtype: BuildingType::None, x, y})
+                .with(Tiles { player: 0, buildingtype: BuildingType::None, x, y})
+                .with(Layer1)
                 .build();
         }
     }
@@ -182,7 +188,8 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { layer: 1, player: 0, buildingtype: BuildingType::None, x, y})
+                .with(Tiles { player: 0, buildingtype: BuildingType::None, x, y})
+                .with(Layer2)
                 .build();
         }
     }
@@ -229,8 +236,7 @@ fn initialise_lower_menu(world: &mut World){
     //TODO: ? fix in a pr
     //seems that the .with_image() is broken and just the rest of the struct
     world.exec(|mut creator: UiCreator<'_>| {
+        creator.create("ui/lower_panel.ron", ());
         creator.create("ui/build_menu.ron", ());
-    });
-
-    //world.insert(BuildMenu{button});
+    });           
 }
