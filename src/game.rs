@@ -9,15 +9,15 @@ use amethyst::{
     renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
     },
-    shred::DispatcherBuilder,
+    shred::{Write, DispatcherBuilder},
     shred::Dispatcher, input::{is_key_down, VirtualKeyCode}, 
     ui::{
-        Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,
-    },
+        Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode, UiEvent,
+    }, shrev::{EventChannel, ReaderId},
 };
 
 use super::systems;
-pub use super::components::{Tiles, Player, Build, Building, BuildingType, Resbar, Layer1, Layer2, Layer3};
+pub use super::components::{Tiles, Player, PlayersInfo, Build, Building, BuildingType, Resbar, Layer1, Layer2, Layer3};
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -29,6 +29,7 @@ pub struct Civ<'a, 'b> {
 impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
+
         // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
         let mut dispatcher_builder = DispatcherBuilder::new();
         //todo: reorder these
@@ -37,8 +38,9 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::SheetSystem, "sheet_system", &["m2tile_system"]);
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
         dispatcher_builder.add(systems::BuildSystem::default(), "build_system", &["sheet_system", "camera_system"]); // https://doc.rust-lang.org/std/default/trait.Default.html
-        dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system"]);
-        dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system"]);
+        dispatcher_builder.add(systems::TurnSystem::new(world), "turn_system", &["build_system"]); // * turn system depends on build system because build system inits the UiEvent reader into the world, turn system reads it
+        dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system", "turn_system"]);
+        dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
@@ -51,8 +53,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // `texture` is the pixel data.
         self.sprite_sheet_handle.replace(load_sprite_sheet(world));
 
+
         // * limits fps to 60
-        // https://github.com/amethyst/amethyst/blob/8e8bc94867f96feeeb392dd1ab1564a0f1f8ed70/src/app.rs
         world.insert(FrameLimiter::new(FrameRateLimitStrategy::SleepAndYield(Duration::from_millis(14)), 60)); // 16.8 ms in a frame, 14 ms for sleep about 2 ms for yeild
 
 
@@ -60,17 +62,23 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         world.register::<Layer2>();
         world.register::<Layer3>();
 
-
-        //TODO: Implement a resource initalise that loads a bunch of static info into the world
         initialise_camera(world);
         // TODO: move all these to their own init?
-        world.insert(Build {mode: BuildingType::None});
-        world.insert(CurrentPlayer{ playernum: 0}); // * WORLD.INSERT WORKS FINE WITH RESOURCES
+        world.insert(Build {mode: BuildingType::None}); // * WORLD.INSERT WORKS WITH RESOURCES
+        // world.insert(CurrentPlayer{ playernum: 0}); 
         world.insert(MouseTilePos{ x:0 , y:0 });
-        world // * WORLD.INSERT DOES NOT WORK WITH COMPONENTS
-            .create_entity()
-            .with(Player::new(0)) // * width is halved in spritesheet.ron                                   
-            .build();
+        world.insert(Turn{num:0});
+
+
+        let playercount = 2; // todo: move this and the player gen logic to a system?
+        world.insert(PlayersInfo{count: playercount, current_player_num:0});
+        for x in 0..(playercount){
+            world // * WORLD.INSERT DOES NOT WORK WITH COMPONENTS
+                .create_entity()
+                .with(Player::new(x))                                   
+                .build();
+        } 
+
 
         initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());    
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
@@ -99,9 +107,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
-//TODO: alterantive to player: i8? (like a reference to player)
-pub struct CurrentPlayer{
-    pub playernum: i8,
+pub struct Turn{
+    pub num: i32,
 }
 
 pub struct MouseTilePos{

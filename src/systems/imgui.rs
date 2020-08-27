@@ -1,4 +1,4 @@
-use crate::game::{CurrentPlayer, MouseTilePos};
+use crate::game::{PlayersInfo, MouseTilePos, Turn};
 use amethyst::{
 
     derive::SystemDesc,
@@ -17,12 +17,13 @@ pub struct Imgui{
 impl<'s> System<'s> for Imgui {
     type SystemData = (
         Read<'s, InputHandler<StringBindings>>,
-        ReadExpect<'s, CurrentPlayer>,
+        ReadExpect<'s, PlayersInfo>,
         ReadExpect<'s, MouseTilePos>,
+        ReadExpect<'s, Turn>
     );
 
 
-    fn run(&mut self, (input, currentplayer, mouse_tile_pos): Self::SystemData) {
+    fn run(&mut self, (input, playersinfo, mouse_tile_pos, turn): Self::SystemData) {
         //TODO: fix debug toggle
         if input.action_is_down("debug").unwrap(){
             self.toggled = !self.toggled
@@ -32,8 +33,10 @@ impl<'s> System<'s> for Imgui {
                 Window::new(im_str!("Debug"))
                 .size([300.0, 110.0], Condition::FirstUseEver)
                 .build(ui, || {
-                    ui.text(format!("Current Player Number: {}", currentplayer.playernum));
+                    ui.text(format!("Current Player Number: {}/{}", playersinfo.current_player_num, playersinfo.count));
                     ui.text(format!("Current Tile Pos: ({}, {})", mouse_tile_pos.x, mouse_tile_pos.y));
+                    ui.text(format!("Current Turn : {}", turn.num));
+
 
                     ui.bullet_text(im_str!("cool"));
                     ui.separator();

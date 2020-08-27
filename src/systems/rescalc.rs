@@ -1,4 +1,4 @@
-use crate::game::{CurrentPlayer, Player, Building, BuildingType};
+use crate::game::{PlayersInfo, Player, Building, BuildingType};
 
 use amethyst::{
     derive::SystemDesc,
@@ -10,18 +10,18 @@ pub struct ResourceCalcSystem;
 
 impl<'s> System<'s> for ResourceCalcSystem {
     type SystemData = (
-        ReadExpect<'s, CurrentPlayer>,
+        ReadExpect<'s, PlayersInfo>,
         WriteStorage<'s, Building>,
         WriteStorage<'s, Player>,
     );
 
 
-    fn run(&mut self, (currentplayer, buildings, mut players): Self::SystemData) {
+    fn run(&mut self, (playersinfo, buildings, mut players): Self::SystemData) {
         // TODO: integrate with turn system 
         for building in (buildings).join(){
-            if building.playernum == currentplayer.playernum{
+            if building.playernum == playersinfo.current_player_num {
                 for player in (&mut players).join(){
-                    if player.num == currentplayer.playernum {
+                    if player.num == playersinfo.current_player_num {
                         match building.buildingtype { // TODO: Ensure these are balanced
                             BuildingType::Center => player.wood += 1,
                             BuildingType::WarBuilding => {},

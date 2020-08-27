@@ -16,7 +16,7 @@ pub struct Build{
 
 pub struct Building{ 
     pub buildingtype: BuildingType,
-    pub playernum: i8,
+    pub playernum: i32,
 }
 impl Component for Building { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;

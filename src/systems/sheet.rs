@@ -1,4 +1,4 @@
-use crate::game::{Tiles, Build, BuildingType, CurrentPlayer, Building, MouseTilePos, Layer2};
+use crate::game::{Tiles, Build, BuildingType, PlayersInfo, Building, MouseTilePos, Layer2};
 use amethyst::{
     derive::SystemDesc,
     renderer::{SpriteRender},
@@ -20,7 +20,7 @@ impl<'s> System<'s> for SheetSystem {
         Read<'s, InputHandler<StringBindings>>,
         WriteStorage<'s, SpriteRender>,
         WriteExpect<'s, Build>,
-        ReadExpect<'s, CurrentPlayer>,
+        ReadExpect<'s, PlayersInfo>,
         WriteStorage<'s, Building>,
         Entities<'s>,
         ReadExpect<'s, MouseTilePos>,
@@ -28,7 +28,7 @@ impl<'s> System<'s> for SheetSystem {
         //WriteStorage<'s, TileEnts>
     );
 
-    fn run(&mut self, (mut tiles, input, mut spriterenderers, mut build, currentplayer, mut buildings, entities, mouse_tile_pos, mut layer2): Self::SystemData) {
+    fn run(&mut self, (mut tiles, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2): Self::SystemData) {
         // TODO: combine these 2 code blocks?
 
         
@@ -39,7 +39,7 @@ impl<'s> System<'s> for SheetSystem {
             BuildingType::WoodBuilding => Some(3 as usize),
             BuildingType::MetalBuilding => Some(3 as usize),
             BuildingType::FaithBuilding => Some(3 as usize),
-            BuildingType::Demolish => Some(3 as usize),
+            BuildingType::Demolish => None,
             BuildingType::None => None,
         };
         if modi.is_some(){
@@ -50,7 +50,8 @@ impl<'s> System<'s> for SheetSystem {
                         tile.buildingtype = build.mode; 
                         entities // add an entity of the build.mode type to the world, allows for resource calc
                             .build_entity() 
-                            .with(Building {buildingtype: build.mode , playernum: currentplayer.playernum}, &mut buildings)
+                            .with(Building {buildingtype: build.mode , playernum: playersinfo.current_player_num}, &mut buildings)
+                            .with(tile, &mut tiles)
                             .build();
                         if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
                             build.mode = BuildingType::None;
@@ -67,17 +68,17 @@ impl<'s> System<'s> for SheetSystem {
             _ => false,
         };
         if runs{
-            for (tile, spriterender) in (&mut tiles, &mut spriterenderers).join() {
+            for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {
                 if input.mouse_button_is_down(MouseButton::Left){
-                    if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y){
-                        spriterender.sprite_number = 2;
+                    if (mouse_tile_pos.x == tile.x) &&( mouse_tile_pos.y == tile.y){
                         for (ent, building) in (&*entities, &mut buildings).join(){
-                            if building.buildingtype == tile.buildingtype && building.playernum == currentplayer.playernum{
+                            if building.buildingtype == tile.buildingtype && building.playernum == playersinfo.current_player_num{
                                 entities.delete(ent).expect("Could not delete this building, does it exist?");
+                                spriterender.sprite_number = 2;
+                                tile.buildingtype = BuildingType::None;
                                 break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
                             }
                         }
-                        tile.buildingtype = BuildingType::None;
                         if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
                             build.mode = BuildingType::None;
                         }
