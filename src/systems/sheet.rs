@@ -50,8 +50,7 @@ impl<'s> System<'s> for SheetSystem {
                         tile.buildingtype = build.mode; 
                         entities // add an entity of the build.mode type to the world, allows for resource calc
                             .build_entity() 
-                            .with(Building {buildingtype: build.mode , playernum: playersinfo.current_player_num}, &mut buildings)
-                            .with(tile, &mut tiles)
+                            .with(Building {buildingtype: build.mode , playernum: playersinfo.current_player_num, x: tile.x, y: tile.y}, &mut buildings)
                             .build();
                         if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
                             build.mode = BuildingType::None;
@@ -72,7 +71,7 @@ impl<'s> System<'s> for SheetSystem {
                 if input.mouse_button_is_down(MouseButton::Left){
                     if (mouse_tile_pos.x == tile.x) &&( mouse_tile_pos.y == tile.y){
                         for (ent, building) in (&*entities, &mut buildings).join(){
-                            if building.buildingtype == tile.buildingtype && building.playernum == playersinfo.current_player_num{
+                            if building.buildingtype == tile.buildingtype && building.playernum == playersinfo.current_player_num && tile.x == building.x && tile.y == building.y{
                                 entities.delete(ent).expect("Could not delete this building, does it exist?");
                                 spriterender.sprite_number = 2;
                                 tile.buildingtype = BuildingType::None;
