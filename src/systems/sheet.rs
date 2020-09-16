@@ -29,62 +29,49 @@ impl<'s> System<'s> for SheetSystem {
     );
 
     fn run(&mut self, (mut tiles, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2): Self::SystemData) {
-        // TODO: combine these 2 code blocks?
-
-        
-        
-        let modi: Option<usize> = match build.mode { // checks the current building mode and returns the sprite to be used //TODO: ENSURE THIS HAS ALL THE BUILDING SPRITES
-            BuildingType::Center => Some(3 as usize),
-            BuildingType::WarBuilding => Some(3 as usize),
-            BuildingType::WoodBuilding => Some(3 as usize),
-            BuildingType::MetalBuilding => Some(3 as usize),
-            BuildingType::FaithBuilding => Some(3 as usize),
-            BuildingType::Demolish => None,
-            BuildingType::None => None,
-        };
-        if modi.is_some(){
-            for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {
-                if input.mouse_button_is_down(MouseButton::Left){
-                    if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y) && tile.buildingtype == BuildingType::None{
-                        spriterender.sprite_number = modi.unwrap();
-                        tile.buildingtype = build.mode; 
-                        entities // add an entity of the build.mode type to the world, allows for resource calc
-                            .build_entity() 
-                            .with(Building {buildingtype: build.mode , playernum: playersinfo.current_player_num, x: tile.x, y: tile.y}, &mut buildings)
-                            .build();
-                        if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
-                            build.mode = BuildingType::None;
-                        }
-                    }
-                }
-            }
-        }
-
-
-
-        let runs: bool = match build.mode { // checks the current building mode and returns the sprite to be used
-            BuildingType::Demolish => true,
-            _ => false,
-        };
-        if runs{
-            for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {
-                if input.mouse_button_is_down(MouseButton::Left){
-                    if (mouse_tile_pos.x == tile.x) &&( mouse_tile_pos.y == tile.y){
-                        for (ent, building) in (&*entities, &mut buildings).join(){
-                            if building.buildingtype == tile.buildingtype && building.playernum == playersinfo.current_player_num && tile.x == building.x && tile.y == building.y{
-                                entities.delete(ent).expect("Could not delete this building, does it exist?");
-                                spriterender.sprite_number = 2;
-                                tile.buildingtype = BuildingType::None;
-                                break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
+        // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
+        if build.mode.is_some(){
+            if build.mode.unwrap() != BuildingType::Demolish{
+                for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {
+                    if input.mouse_button_is_down(MouseButton::Left){
+                        if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y) && tile.buildingtype.is_none(){
+                            spriterender.sprite_number = build.mode.unwrap() as usize;
+                            tile.buildingtype = build.mode; 
+                            entities // add an entity of the build.mode type to the world, allows for resource calc
+                                .build_entity() 
+                                .with(Building {buildingtype: build.mode.unwrap() , playernum: playersinfo.current_player_num, x: tile.x, y: tile.y}, &mut buildings)
+                                .build();
+                            if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
+                                build.mode = None;
                             }
                         }
-                        if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
-                            build.mode = BuildingType::None;
+                    }
+                }
+            }
+        }
+        if build.mode.is_some(){
+            if build.mode.unwrap() == BuildingType::Demolish{ // else if ensures build.mode cannot be set to None before interaction 
+                for (tile, spriterender, ent, _) in (&mut tiles, &mut spriterenderers, &*entities, &mut layer2).join() {
+                    if input.mouse_button_is_down(MouseButton::Left){
+                        if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y){
+                            for building in (&mut buildings).join(){
+                                if tile.buildingtype.is_some() && building.buildingtype == tile.buildingtype.unwrap() && building.playernum == playersinfo.current_player_num && tile.x == building.x && tile.y == building.y{
+                                    entities.delete(ent).expect("Could not delete this building, does it exist?");
+                                    spriterender.sprite_number = 2;
+                                    tile.buildingtype = None;
+                                    break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
+                                }
+                            }
+                            if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
+                                build.mode = None;
+                            }
                         }
                     }
                 }
             }
         }
+        
+        
 
 
 

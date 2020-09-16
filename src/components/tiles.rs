@@ -2,7 +2,7 @@ use amethyst::ecs::{NullStorage, prelude::{DenseVecStorage, Component}};
 use super::BuildingType;
 pub struct Tiles{ 
     pub player: i8,
-    pub buildingtype: BuildingType,
+    pub buildingtype: Option<BuildingType>,
     pub x: i32,
     pub y: i32,
 }

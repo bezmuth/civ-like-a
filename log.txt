@@ -1,0 +1,194 @@
+commit 6452a251ce9916f20ea1b6b77ed79bcecfdda732
+Author: Bensmuth <>
+Date:   Fri Aug 28 21:32:51 2020 +0100
+
+    fixed players being able to destroy other player's buildings
+
+commit c753fb7972239694a7c9e179e84f1fba9d899a00
+Author: Bensmuth <>
+Date:   Thu Aug 27 19:37:53 2020 +0100
+
+    implemented turns
+
+commit 26c93273d3b0da06e302cce45c6b92aa4623b5a7
+Merge: f60dcbd 506774f
+Author: Bensmuth <>
+Date:   Wed Aug 26 21:48:03 2020 +0100
+
+    Merge branch 'master' of https://github.com/Bensmuth/civ-like-a into master
+
+commit f60dcbd0fdc4fd7ed6796bedd6f18def75f538f0
+Author: Bensmuth <>
+Date:   Wed Aug 26 21:47:38 2020 +0100
+
+    Implemented build menu hide and show, moved tile layers to tags
+
+commit 506774f39c90c13a6cb3f2f9718ade0500217b0d
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Sun Aug 23 17:55:25 2020 +0100
+
+    Update World.drawio
+
+commit ab051460d271d6ff31b7ab1274e1e366528f5395
+Author: Bensmuth <>
+Date:   Sun Aug 23 12:50:07 2020 +0100
+
+    Updated to amethyst 0.15.3
+
+commit 53001f3e39531bf0be5d72d5933b7c4e9c098903
+Author: Bensmuth <>
+Date:   Sat Aug 15 13:49:04 2020 +0100
+
+    Fixed Some Warnings
+
+commit 9d9da1cbcf10502c013b37ef00e555f5adcded0e
+Merge: 527e807 520f136
+Author: Bensmuth <>
+Date:   Sat Aug 15 13:47:13 2020 +0100
+
+    Merge branch 'master' of https://github.com/Bensmuth/civ-like-a into master
+
+commit 527e807e7c37e2b8442243078d034c50c521847f
+Author: Bensmuth <>
+Date:   Sat Aug 15 13:34:44 2020 +0100
+
+    implemented demolish and moved the mouse logit to its own system
+
+commit 520f136416e9e947f4921fc44ad3de9dbb0a400b
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Fri Aug 14 20:12:51 2020 +0100
+
+    Update World.drawio
+
+commit 70cadffcd3b84c4ff183b35b708c04f481d47f8a
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Fri Aug 14 20:10:38 2020 +0100
+
+    Update World.drawio
+
+commit 5ad407ea8ec9da2e94b864de1652d2f2cebfa88b
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Fri Aug 14 19:50:57 2020 +0100
+
+    Update World.drawio
+
+commit 37c924dedf98ace341228db2ea1bd30ebc01293f
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Fri Aug 14 19:34:27 2020 +0100
+
+    Added World.drawio
+
+commit 88adfa506e04f1523acfd754395c4d9d7288c313
+Author: Bensmuth <>
+Date:   Fri Aug 14 19:33:32 2020 +0100
+
+    added draw.io folder
+
+commit 97acfea8414f2cf50e4380bd12e77a4117618ec9
+Author: Bensmuth <>
+Date:   Fri Aug 14 19:32:39 2020 +0100
+
+    Added the bottom panel
+
+commit 78e9d2e22b5fd90f18301d7257fd541799d66cfb
+Author: Bensmuth <>
+Date:   Fri Aug 14 00:59:35 2020 +0100
+
+    made imgui usable as debug menu
+
+commit 508b71c683a3595ef0b4434db69118ad4cba68a1
+Author: Bensmuth <>
+Date:   Thu Aug 13 23:46:06 2020 +0100
+
+    added imgui
+
+commit 3cde85a3bf69f12e89bd182bf779769e9b13053c
+Author: Bensmuth <>
+Date:   Thu Aug 13 22:01:12 2020 +0100
+
+    fixed a todo message
+
+commit 4da4424f48abbb1c69f74bf1620a8e31a83835b2
+Author: Bensmuth <>
+Date:   Thu Aug 13 21:51:00 2020 +0100
+
+    full (temporary) res bar implementation
+
+commit cabb11ac02b1ca0549decb492893bf54f2c321a4
+Author: Bensmuth <>
+Date:   Thu Aug 13 21:33:06 2020 +0100
+
+    test resource bar (not full implementation)
+
+commit 5c0e638533023fd57a5de80a868081d20f1f7538
+Author: Bensmuth <>
+Date:   Thu Aug 13 19:57:04 2020 +0100
+
+    moved components to their own folder
+
+commit cbfb3af83468feeae2b330129fab62b3c01c0e2b
+Merge: 5d52a4b 91d7aaf
+Author: Bensmuth <>
+Date:   Thu Aug 13 19:39:58 2020 +0100
+
+    Merge branch 'master' of https://github.com/Bensmuth/civ-like-a into master
+
+commit 5d52a4bd0d563e820c8dfb077251cfb6d5fd6661
+Author: Bensmuth <>
+Date:   Thu Aug 13 19:39:46 2020 +0100
+
+    changed player to a component cause i was doing it wrong
+
+commit 2104eaf5eb0b43ef0e369003e80bbf69e5a5ce5e
+Author: Bensmuth <>
+Date:   Thu Aug 13 19:39:26 2020 +0100
+
+    proper rescalc this time, fixed some lint warnings
+
+commit 91d7aaf7b2a87da543ad73a749f51cad701e233c
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Thu Aug 13 19:28:37 2020 +0100
+
+    Delete rust.yml
+
+commit 267776317996d0f49630ba434f8da5f0bbbb4203
+Author: Ben Kelly <31394095+Bensmuth@users.noreply.github.com>
+Date:   Thu Aug 13 19:25:30 2020 +0100
+
+    Create rust.yml
+
+commit bb6ce70b71c4e58329689177ec7f35f77a1a15a5
+Author: Bensmuth <>
+Date:   Thu Aug 13 19:17:19 2020 +0100
+
+    added building, inital resource system and camera speed up key
+
+commit 3fc48c3af40cf4a0884b1bdef9b0c3c7584c4b15
+Author: Bensmuth <>
+Date:   Wed Aug 12 22:32:58 2020 +0100
+
+    added: movment delta, shift speed, tile raycast
+
+commit 9e16963179a5c999cd9f8feba9190283252c4a1b
+Author: Bensmuth <>
+Date:   Wed Aug 12 00:11:03 2020 +0100
+
+    Added world Sheet layer 1 and cleaned up code
+
+commit 991826309a599b4f85a2efbe3650e7f241c8b00c
+Author: Bensmuth <>
+Date:   Tue Aug 11 14:39:24 2020 +0100
+
+    Removed deps and added lower text and ver num
+
+commit 9d31fb414d66bd769efae8e904e4afb3fa25d7b9
+Author: Bensmuth <>
+Date:   Tue Aug 11 13:17:19 2020 +0100
+
+    changed readme and menu text pos
+
+commit 9b3322aaebcb80866f339f7a1e8d43bfef752760
+Author: Bensmuth <>
+Date:   Tue Aug 11 13:14:48 2020 +0100
+
+    first commit

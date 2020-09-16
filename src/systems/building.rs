@@ -41,17 +41,17 @@ impl<'s> System<'s> for BuildSystem {
                     if clicked == ui_finder.find("Build_button").unwrap().id(){ 
                         self.build_toggle = !self.build_toggle;
                     } else if clicked == ui_finder.find("Demolish_button").unwrap().id() {
-                        build.mode = BuildingType::Demolish;
+                        build.mode = Some(BuildingType::Demolish);
                     } else if clicked == ui_finder.find("Center_button").unwrap().id() {
-                        build.mode = BuildingType::Center
+                        build.mode = Some(BuildingType::Center)
                     } else if clicked == ui_finder.find("WarBuilding_button").unwrap().id() {
-                        build.mode = BuildingType::WarBuilding
+                        build.mode = Some(BuildingType::WarBuilding)
                     } else if clicked == ui_finder.find("WoodBuilding_button").unwrap().id() {
-                        build.mode = BuildingType::WoodBuilding
+                        build.mode = Some(BuildingType::WoodBuilding)
                     } else if clicked == ui_finder.find("MetalBuilding_button").unwrap().id() {
-                        build.mode = BuildingType::MetalBuilding
+                        build.mode = Some(BuildingType::MetalBuilding)
                     } else if clicked == ui_finder.find("FaithBuilding_button").unwrap().id() {
-                        build.mode = BuildingType::FaithBuilding
+                        build.mode = Some(BuildingType::FaithBuilding)
                     }
                     
                 },

@@ -9,11 +9,11 @@ use amethyst::{
     renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
     },
-    shred::{Write, DispatcherBuilder},
+    shred::{DispatcherBuilder},
     shred::Dispatcher, input::{is_key_down, VirtualKeyCode}, 
     ui::{
-        Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode, UiEvent,
-    }, shrev::{EventChannel, ReaderId},
+        Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,
+    },
 };
 
 use super::systems;
@@ -64,7 +64,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
 
         initialise_camera(world);
         // TODO: move all these to their own init?
-        world.insert(Build {mode: BuildingType::None}); // * WORLD.INSERT WORKS WITH RESOURCES
+        world.insert(Build {mode: None}); // * WORLD.INSERT WORKS WITH RESOURCES
         // world.insert(CurrentPlayer{ playernum: 0}); 
         world.insert(MouseTilePos{ x:0 , y:0 });
         world.insert(Turn{num:0});
@@ -147,11 +147,11 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
 fn initialise_camera(world: &mut World) {
     // Setup camera in a way that our screen covers whole arena and (0, 0) is in the bottom left.
     let mut transform = Transform::default();
-    transform.set_translation_xyz(768./2.0, 432./2.0, 1.0); //TODO: increase unscaled res? - more tiles on screen
+    transform.set_translation_xyz(1280./2.0, 720./2.0, 1.0); //TODO: increase unscaled res? - more tiles on screen
 
     world
         .create_entity()
-        .with(Camera::standard_2d(768., 432.)) // * width is halved in spritesheet.ron                                   
+        .with(Camera::standard_2d(1280., 720.)) // * width is halved in spritesheet.ron                                   
         .with(transform)
         .build();
 }
@@ -172,7 +172,7 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, buildingtype: BuildingType::None, x, y})
+                .with(Tiles { player: 0, buildingtype: None, x, y})
                 .with(Layer1)
                 .build();
         }
@@ -195,7 +195,7 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, buildingtype: BuildingType::None, x, y})
+                .with(Tiles { player: 0, buildingtype: None, x, y})
                 .with(Layer2)
                 .build();
         }

@@ -1,8 +1,7 @@
-use crate::game::{Player, PlayersInfo, Turn};
+use crate::game::{PlayersInfo, Turn};
 
 use amethyst::{
-    derive::SystemDesc,
-    ecs::prelude::{Join, System, SystemData, WriteStorage, ReadExpect, WriteExpect}, ui::{UiEvent, UiText, UiEventType, UiFinder}, shred::{World, Write}, shrev::{ReaderId, EventChannel},
+    ecs::prelude::{System, SystemData, WriteExpect}, ui::{UiEvent, UiEventType, UiFinder}, shred::{World, Write}, shrev::{ReaderId, EventChannel},
 };
 
 
@@ -31,7 +30,7 @@ impl<'s> System<'s> for TurnSystem {
 
 
 
-    fn run(&mut self, (mut playersinfo, mut turn, mut ui_events, ui_finder): Self::SystemData) {
+    fn run(&mut self, (mut playersinfo, mut turn, ui_events, ui_finder): Self::SystemData) {
         // let reader = self
         //     .event_reader
         //     .as_mut()
