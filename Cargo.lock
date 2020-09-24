@@ -647,6 +647,7 @@ version = "0.1.0"
 dependencies = [
  "amethyst",
  "amethyst-imgui",
+ "rand 0.7.3",
 ]
 
 [[package]]

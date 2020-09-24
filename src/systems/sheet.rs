@@ -30,6 +30,7 @@ impl<'s> System<'s> for SheetSystem {
 
     fn run(&mut self, (mut tiles, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2): Self::SystemData) {
         // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
+        // TODO: convert some of these into functions cause they will be useful later (for enemies causing destruction)
         if build.mode.is_some(){
             if build.mode.unwrap() != BuildingType::Demolish{
                 for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {

@@ -17,7 +17,17 @@ use amethyst::{
 };
 
 use super::systems;
-pub use super::components::{Tiles, Player, PlayersInfo, Build, Building, BuildingType, Resbar, Layer1, Layer2, Layer3};
+pub use super::components::{
+    Tiles, 
+    Player, 
+    PlayersInfo, 
+    Build, 
+    Building, 
+    BuildingType, 
+    Resbar, 
+    Layer1, 
+    Layer2, 
+    Layer3};
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -39,9 +49,10 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
         dispatcher_builder.add(systems::BuildSystem::default(), "build_system", &["sheet_system", "camera_system"]); // https://doc.rust-lang.org/std/default/trait.Default.html
         dispatcher_builder.add(systems::TurnSystem::new(world), "turn_system", &["build_system"]); // * turn system depends on build system because build system inits the UiEvent reader into the world, turn system reads it
-        dispatcher_builder.add(systems::ResourceCalcSystem, "resourcecalc_system", &["sheet_system", "camera_system", "build_system", "turn_system"]);
+        dispatcher_builder.add(systems::ResourceCalcSystem{last_turn : -1}, "resourcecalc_system", &["sheet_system", "camera_system", "build_system", "turn_system"]);
         dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
-        
+        dispatcher_builder.add(systems::TerrainGenSystem::new(), "terraingen_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
+
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
             .with_pool((*world.read_resource::<ArcThreadPool>()).clone())
@@ -107,6 +118,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
+//todo: move into own component file?
 pub struct Turn{
     pub num: i32,
 }
@@ -163,8 +175,8 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
         sprite_sheet: sprite_sheet_handle,
         sprite_number: 0, // ground is the first sprite in the sprite_sheet
     };
-    for x in 0..20{
-        for y in 0..20{
+    for x in 0..50{
+        for y in 0..50{
             transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.0);
             // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
             // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;
@@ -186,8 +198,8 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
         sprite_sheet: sprite_sheet_handle, 
         sprite_number: 2 // blank sprite
     };
-    for x in 0..20{
-        for y in 0..20{
+    for x in 0..50{
+        for y in 0..50{
             transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.00001); // z > 0 so it is displayed above layer 0
             // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
             // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;

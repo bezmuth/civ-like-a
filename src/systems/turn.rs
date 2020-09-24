@@ -1,7 +1,7 @@
 use crate::game::{PlayersInfo, Turn};
 
 use amethyst::{
-    ecs::prelude::{System, SystemData, WriteExpect}, ui::{UiEvent, UiEventType, UiFinder}, shred::{World, Write}, shrev::{ReaderId, EventChannel},
+    ecs::prelude::{System, SystemData, WriteExpect}, ui::{UiEvent, UiEventType, UiFinder}, shred::{World, Read}, shrev::{ReaderId, EventChannel},
 };
 
 
@@ -24,7 +24,7 @@ impl<'s> System<'s> for TurnSystem {
     type SystemData = (
         WriteExpect<'s, PlayersInfo>,
         WriteExpect<'s, Turn>,
-        Write<'s, EventChannel<UiEvent>>,
+        Read<'s, EventChannel<UiEvent>>,
         UiFinder<'s>,
     );
 
