@@ -6,7 +6,7 @@ use amethyst::{
 };
 
 use rand::prelude::*;
-use rand_chacha::ChaCha20Rng;
+use lerp::*;
 
 // * https://en.wikipedia.org/wiki/Perlin_noise for reference
 // generates the 2d unit length gradient vectors
@@ -15,7 +15,7 @@ fn gradientGen() -> [[[f32 ; 2];100];100]{ // todo: convert this to a map
     let mut gradientArray = [[[0. ; 2];100];100]; 
     for x in 0..100{
         for y in 0..100{
-            let mut rng = ChaCha20Rng::from_entropy();;
+            let mut rng = rand::thread_rng();
             // todo: this might be a bit funky (v small x values) look into it a bit if terrain gets funky
             let gx = rng.gen::<f32>(); // here a random x value is genned, to get the y value of the unit vector
             let gy = (1.-(gx*gx)).sqrt();   // we perform the 1 = sqrt(x^2+y^2) rearranged
@@ -64,7 +64,7 @@ fn perlin(x : f32, y: f32, gradients : [[[f32 ; 2];100];100]) -> f32{
 
     let n0 = dotGridGradient(x0, y1, x, y, gradients);
     let n1 = dotGridGradient(x1, y1, x, y, gradients);
-    let ix1 = lerp(n0, n1, 0.);
+    let ix1 = lerp(n0, n1, sx);
 
     let value = lerp(ix0, ix1, sy);
     // println!("{}", value);
@@ -95,7 +95,7 @@ impl<'s> System<'s> for TerrainGenSystem {
     fn run(&mut self, (mut tiles, layer2, mut spriterenderers): Self::SystemData) {
         if !self.complete{
             for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, & layer2).join(){
-                if perlin(tile.x as f32 / 8.5, tile.y as f32 / 8.5 , self.gradients) < 0.13 { // divide by num to zoom into noise map
+                if perlin(tile.x as f32 / 8.5, tile.y as f32 / 8.5 , self.gradients) < 0.14 { // divide by num to zoom into noise map
                     spriterender.sprite_number = 1 as usize;
                 }
             }
