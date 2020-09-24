@@ -6,6 +6,7 @@ use amethyst::{
 };
 
 use rand::prelude::*;
+use rand_chacha::ChaCha20Rng;
 
 // * https://en.wikipedia.org/wiki/Perlin_noise for reference
 // generates the 2d unit length gradient vectors
@@ -14,7 +15,7 @@ fn gradientGen() -> [[[f32 ; 2];100];100]{ // todo: convert this to a map
     let mut gradientArray = [[[0. ; 2];100];100]; 
     for x in 0..100{
         for y in 0..100{
-            let mut rng = rand::thread_rng();
+            let mut rng = ChaCha20Rng::from_entropy();;
             // todo: this might be a bit funky (v small x values) look into it a bit if terrain gets funky
             let gx = rng.gen::<f32>(); // here a random x value is genned, to get the y value of the unit vector
             let gy = (1.-(gx*gx)).sqrt();   // we perform the 1 = sqrt(x^2+y^2) rearranged

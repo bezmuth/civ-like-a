@@ -8,6 +8,8 @@ edition = "2018"
 amethyst = "0.15.3"
 amethyst-imgui = { version = "0.7", features = ["vulkan"] }
 rand = "0.7.3"
+rand_core = "0.5.1"
+rand_chacha = "0.2.2"
 
 [features]
 default = ["vulkan"]

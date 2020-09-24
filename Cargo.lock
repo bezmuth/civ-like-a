@@ -648,6 +648,8 @@ dependencies = [
  "amethyst",
  "amethyst-imgui",
  "rand 0.7.3",
+ "rand_chacha 0.2.2",
+ "rand_core 0.5.1",
 ]
 
 [[package]]
