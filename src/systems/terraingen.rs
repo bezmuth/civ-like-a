@@ -6,7 +6,6 @@ use amethyst::{
 };
 
 use rand::prelude::*;
-use lerp::*;
 
 // * https://en.wikipedia.org/wiki/Perlin_noise for reference
 // generates the 2d unit length gradient vectors
@@ -64,7 +63,7 @@ fn perlin(x : f32, y: f32, gradients : [[[f32 ; 2];100];100]) -> f32{
 
     let n0 = dotGridGradient(x0, y1, x, y, gradients);
     let n1 = dotGridGradient(x1, y1, x, y, gradients);
-    let ix1 = lerp(n0, n1, sx);
+    let ix1 = lerp(n0, n1, 0.);
 
     let value = lerp(ix0, ix1, sy);
     // println!("{}", value);
@@ -95,7 +94,7 @@ impl<'s> System<'s> for TerrainGenSystem {
     fn run(&mut self, (mut tiles, layer2, mut spriterenderers): Self::SystemData) {
         if !self.complete{
             for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, & layer2).join(){
-                if perlin(tile.x as f32 / 8.5, tile.y as f32 / 8.5 , self.gradients) < 0.14 { // divide by num to zoom into noise map
+                if perlin(tile.x as f32 / 8., tile.y as f32 / 8. , self.gradients) < 0.13 { // divide by num to zoom into noise map
                     spriterender.sprite_number = 1 as usize;
                 }
             }
