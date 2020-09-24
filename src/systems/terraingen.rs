@@ -63,7 +63,7 @@ fn perlin(x : f32, y: f32, gradients : [[[f32 ; 2];100];100]) -> f32{
 
     let n0 = dotGridGradient(x0, y1, x, y, gradients);
     let n1 = dotGridGradient(x1, y1, x, y, gradients);
-    let ix1 = lerp(n0, n1, 0.);
+    let ix1 = lerp(n0, n1, 0.); // * fixed the perlin noise, accidently was using 0. instead of sx!
 
     let value = lerp(ix0, ix1, sy);
     // println!("{}", value);
