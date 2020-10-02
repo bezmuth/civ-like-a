@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-10-02T13:40:08.015Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="eivP-nGL1UM7RI6Wl9-S" version="13.7.7" type="github">
+<mxfile host="app.diagrams.net" modified="2020-10-02T13:40:33.410Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="yL2RMlRXsXITvUvPfH4I" version="13.7.7" type="github">
   <diagram id="mNBWHAvhoi2qbV-FVOZv" name="Page-1">
     <mxGraphModel dx="700" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -45,7 +45,7 @@
         <mxCell id="oq62Bot3fTl9Q8L02nLl-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FpV503ibzP503yleN7c3-12" target="oq62Bot3fTl9Q8L02nLl-1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="FpV503ibzP503yleN7c3-12" value="Take the dot product between each pair of gradient vector and offset vector" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
+        <mxCell id="FpV503ibzP503yleN7c3-12" value="Take the dot product between each pair of gradient vectors and offset vectors" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="400" y="820" width="120" height="60" as="geometry" />
         </mxCell>
         <mxCell id="oq62Bot3fTl9Q8L02nLl-1" value="Interpolate between all the dot products to smooth the noise" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
