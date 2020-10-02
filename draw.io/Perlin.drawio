@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-10-02T13:50:19.772Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="64xfm_x5IJsQpQ-a-j-Z" version="13.7.7" type="github">
+<mxfile host="app.diagrams.net" modified="2020-10-02T14:13:16.696Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="P3sPsXTwEoLPO8PwmsxH" version="13.7.7" type="github">
   <diagram id="mNBWHAvhoi2qbV-FVOZv" name="Page-1">
-    <mxGraphModel dx="2523" dy="908" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1391" dy="896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -59,6 +59,24 @@
         </mxCell>
         <mxCell id="oq62Bot3fTl9Q8L02nLl-5" value="&lt;b&gt;&lt;u&gt;&lt;font style=&quot;font-size: 17px&quot;&gt;Perlin Noise Sampling&lt;/font&gt;&lt;/u&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="190" y="340" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-7" value="&lt;b&gt;&lt;u&gt;&lt;font style=&quot;font-size: 17px&quot;&gt;Gradient&amp;nbsp;&lt;/font&gt;&lt;/u&gt;&lt;/b&gt;&lt;span style=&quot;font-size: 17px&quot;&gt;&lt;b&gt;&lt;u&gt;Generation&lt;/u&gt;&lt;/b&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-690" y="340" width="140" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="oq62Bot3fTl9Q8L02nLl-8" target="oq62Bot3fTl9Q8L02nLl-9">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-8" value="Create an empty 3 dimensional array (2 by 100 by 100) with empty floats" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-680" y="380" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="oq62Bot3fTl9Q8L02nLl-9" target="oq62Bot3fTl9Q8L02nLl-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-9" value="Iterate over each element in the array and assign each vector a random x value between 1 and 0&amp;nbsp;" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-680" y="520" width="120" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-11" value="Calculate y value using Pythagoras with the hypotenuse set to 1 (for a unit vector)" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="-680" y="705" width="120" height="75" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
