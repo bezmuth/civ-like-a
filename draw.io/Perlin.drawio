@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-10-02T14:13:16.696Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="P3sPsXTwEoLPO8PwmsxH" version="13.7.7" type="github">
+<mxfile host="app.diagrams.net" modified="2020-10-03T13:22:59.245Z" agent="5.0 (X11)" etag="LLoeTBo8gHgy_hObT7XA" version="13.7.7" type="github">
   <diagram id="mNBWHAvhoi2qbV-FVOZv" name="Page-1">
-    <mxGraphModel dx="1391" dy="896" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2849" dy="1132" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -42,40 +42,40 @@
         <mxCell id="FpV503ibzP503yleN7c3-10" value="Calculate the offset vector from the corner to the target point" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="400" y="680" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="FpV503ibzP503yleN7c3-12" target="oq62Bot3fTl9Q8L02nLl-1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="FpV503ibzP503yleN7c3-12" target="oq62Bot3fTl9Q8L02nLl-1" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="FpV503ibzP503yleN7c3-12" value="Take the dot product between each pair of gradient vectors and offset vectors" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="400" y="820" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-1" value="Interpolate between all the dot products to smooth the noise" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-1" value="Interpolate between all the dot products to smooth the noise" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="400" y="960" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-3" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-3" value="" style="strokeWidth=2;html=1;shape=mxgraph.flowchart.annotation_2;align=left;labelPosition=right;pointerEvents=1;" parent="1" vertex="1">
           <mxGeometry x="130" y="560" width="70" height="160" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-4" value="These two are not needed: &lt;br&gt;The dot product of the gradient vector and offset vector&amp;nbsp; &lt;br&gt;will return just the dot product gradient vector if the offset is 0" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-4" value="These two are not needed: &lt;br&gt;The dot product of the gradient vector and offset vector&amp;nbsp; &lt;br&gt;will return just the dot product gradient vector if the offset is 0" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;" parent="1" vertex="1">
           <mxGeometry x="-210" y="615" width="340" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-5" value="&lt;b&gt;&lt;u&gt;&lt;font style=&quot;font-size: 17px&quot;&gt;Perlin Noise Sampling&lt;/font&gt;&lt;/u&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-5" value="&lt;b&gt;&lt;u&gt;&lt;font style=&quot;font-size: 17px&quot;&gt;Perlin Noise Sampling&lt;/font&gt;&lt;/u&gt;&lt;/b&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="190" y="340" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-7" value="&lt;b&gt;&lt;u&gt;&lt;font style=&quot;font-size: 17px&quot;&gt;Gradient&amp;nbsp;&lt;/font&gt;&lt;/u&gt;&lt;/b&gt;&lt;span style=&quot;font-size: 17px&quot;&gt;&lt;b&gt;&lt;u&gt;Generation&lt;/u&gt;&lt;/b&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-7" value="&lt;b&gt;&lt;u&gt;&lt;font style=&quot;font-size: 17px&quot;&gt;Gradient&amp;nbsp;&lt;/font&gt;&lt;/u&gt;&lt;/b&gt;&lt;span style=&quot;font-size: 17px&quot;&gt;&lt;b&gt;&lt;u&gt;Generation&lt;/u&gt;&lt;/b&gt;&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-690" y="340" width="140" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="oq62Bot3fTl9Q8L02nLl-8" target="oq62Bot3fTl9Q8L02nLl-9">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="oq62Bot3fTl9Q8L02nLl-8" target="oq62Bot3fTl9Q8L02nLl-9" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-8" value="Create an empty 3 dimensional array (2 by 100 by 100) with empty floats" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-8" value="Create an empty 3 dimensional array (2 by 100 by 100) with empty floats" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="-680" y="380" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="oq62Bot3fTl9Q8L02nLl-9" target="oq62Bot3fTl9Q8L02nLl-11">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="oq62Bot3fTl9Q8L02nLl-9" target="oq62Bot3fTl9Q8L02nLl-11" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-9" value="Iterate over each element in the array and assign each vector a random x value between 1 and 0&amp;nbsp;" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-9" value="Iterate over each element in the array and assign each vector a random x value between 1 and 0&amp;nbsp;" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-680" y="520" width="120" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="oq62Bot3fTl9Q8L02nLl-11" value="Calculate y value using Pythagoras with the hypotenuse set to 1 (for a unit vector)" style="whiteSpace=wrap;html=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="oq62Bot3fTl9Q8L02nLl-11" value="Calculate y value using Pythagoras with the &lt;span class=&quot;module__title__link&quot;&gt;Hypotenuse&lt;/span&gt; set to 1 (for a unit vector)" style="whiteSpace=wrap;html=1;rounded=0;" parent="1" vertex="1">
           <mxGeometry x="-680" y="705" width="120" height="75" as="geometry" />
         </mxCell>
       </root>
