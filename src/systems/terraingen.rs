@@ -93,21 +93,17 @@ impl<'s> System<'s> for TerrainGenSystem {
 
     fn run(&mut self, (mut tiles, layer1, mut spriterenderers): Self::SystemData) {
         if !self.complete{ 
-            // * first pass creates trees 
             for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, & layer1).join(){
                 if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.06 { // divide by num to zoom into noise map
-                    spriterender.sprite_number = 2 as usize; // tree
+                    spriterender.sprite_number = 2 as usize; // trees
                 }
-            }
-            // self.gradients = gradient_gen();
-            // * second pass creates water and mountains 
-            for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, & layer1).join(){
-                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) < 0.01 { // divide by num to zoom into noise map
+                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.14 { 
+                    spriterender.sprite_number = 3 as usize; // mountains
+                }
+                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) < 0.01 { 
                     spriterender.sprite_number = 1 as usize; // water
                 }
-                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.14 { // divide by num to zoom into noise map
-                    spriterender.sprite_number = 3 as usize; // mountain
-                }
+
             }
 
         }
