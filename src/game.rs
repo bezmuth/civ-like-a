@@ -196,7 +196,7 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
     
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle, 
-        sprite_number: 2 // blank sprite
+        sprite_number: 4 // blank sprite
     };
     for x in 0..50{
         for y in 0..50{

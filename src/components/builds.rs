@@ -1,11 +1,11 @@
 use amethyst::ecs::prelude::{DenseVecStorage, Component};
 #[derive(Copy, Clone, PartialEq)]
 pub enum BuildingType{ // resource as it has no component implmentation, use READ and READEXPECT
-    Center = 3,
-    WarBuilding = 4,
-    WoodBuilding = 5,
-    MetalBuilding = 6,
-    FaithBuilding = 7,
+    Center = 5,
+    WarBuilding = 6,
+    WoodBuilding = 7,
+    MetalBuilding = 8,
+    FaithBuilding = 9,
     Demolish = 99,
 }
 

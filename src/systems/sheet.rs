@@ -58,7 +58,7 @@ impl<'s> System<'s> for SheetSystem {
                             for building in (&mut buildings).join(){
                                 if tile.buildingtype.is_some() && building.buildingtype == tile.buildingtype.unwrap() && building.playernum == playersinfo.current_player_num && tile.x == building.x && tile.y == building.y{
                                     entities.delete(ent).expect("Could not delete this building, does it exist?");
-                                    spriterender.sprite_number = 2;
+                                    spriterender.sprite_number = 4; // blank sprite;
                                     tile.buildingtype = None;
                                     break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
                                 }
