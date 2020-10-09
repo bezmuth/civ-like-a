@@ -34,7 +34,7 @@ impl<'s> System<'s> for ResourceCalcSystem {
                                 BuildingType::WarBuilding => {},
                                 BuildingType::WoodBuilding => player.wood += 20,
                                 BuildingType::MetalBuilding => player.metal += 20,
-                                BuildingType::FaithBuilding => player.faith += 20,
+                                BuildingType::ScienceBuilding => player.science += 20,
                                 _ => {}
                             }
                         }

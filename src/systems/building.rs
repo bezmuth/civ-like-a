@@ -50,8 +50,8 @@ impl<'s> System<'s> for BuildSystem {
                         build.mode = Some(BuildingType::WoodBuilding)
                     } else if clicked == ui_finder.find("MetalBuilding_button").unwrap().id() {
                         build.mode = Some(BuildingType::MetalBuilding)
-                    } else if clicked == ui_finder.find("FaithBuilding_button").unwrap().id() {
-                        build.mode = Some(BuildingType::FaithBuilding)
+                    } else if clicked == ui_finder.find("ScienceBuilding_button").unwrap().id() {
+                        build.mode = Some(BuildingType::ScienceBuilding)
                     }
                     
                 },

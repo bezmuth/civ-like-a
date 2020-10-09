@@ -25,7 +25,7 @@ impl<'s> System<'s> for ResourceDispSystem {
         for player in (players).join(){
             if player.num == playersinfo.current_player_num{
                 if let Some(text) = ui_text.get_mut(resbar.top) {
-                    text.text = format!("Wood: {}, Metal: {}, Faith: {}", player.wood, player.metal, player.faith);
+                    text.text = format!("Wood: {}, Metal: {}, Science: {}", player.wood, player.metal, player.science);
                 }
             }
         }

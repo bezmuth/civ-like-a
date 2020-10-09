@@ -7,7 +7,7 @@ pub struct Player{
     pub num: i32,
     pub wood: i32,
     pub metal: i32,
-    pub faith: i32,
+    pub science: i32,
 }
 impl Player {
     pub fn new(num: i32) -> Player {
@@ -15,7 +15,7 @@ impl Player {
             num,
             wood: 0,
             metal: 0,
-            faith: 0,
+            science: 0,
         }
     }
 }

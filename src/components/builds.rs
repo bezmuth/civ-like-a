@@ -5,7 +5,7 @@ pub enum BuildingType{ // resource as it has no component implmentation, use REA
     WarBuilding = 6,
     WoodBuilding = 7,
     MetalBuilding = 8,
-    FaithBuilding = 9,
+    ScienceBuilding = 9,
     Demolish = 99,
 }
 
