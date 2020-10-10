@@ -31,7 +31,7 @@ impl<'s> System<'s> for ResourceCalcSystem {
                         if player.num == playersinfo.current_player_num {
                             match building.buildingtype { // TODO: Ensure these are balanced
                                 BuildingType::Center => player.wood += 1,
-                                BuildingType::WarBuilding => {},
+                                BuildingType::Barrack => {},
                                 BuildingType::WoodBuilding => player.wood += 20,
                                 BuildingType::MetalBuilding => player.metal += 20,
                                 BuildingType::ScienceBuilding => player.science += 20,

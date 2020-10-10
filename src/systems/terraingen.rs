@@ -94,10 +94,10 @@ impl<'s> System<'s> for TerrainGenSystem {
     fn run(&mut self, (mut tiles, layer1, mut spriterenderers): Self::SystemData) {
         if !self.complete{ 
             for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, & layer1).join(){
-                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.06 { // divide by num to zoom into noise map
+                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.10 { // divide by num to zoom into noise map
                     spriterender.sprite_number = 2 as usize; // trees
                 }
-                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.14 { 
+                if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) > 0.18 { 
                     spriterender.sprite_number = 3 as usize; // mountains
                 }
                 if perlin(tile.x as f32 / 10., tile.y as f32 / 10. , self.gradients) < 0.01 { 

@@ -44,8 +44,8 @@ impl<'s> System<'s> for BuildSystem {
                         build.mode = Some(BuildingType::Demolish);
                     } else if clicked == ui_finder.find("Center_button").unwrap().id() {
                         build.mode = Some(BuildingType::Center)
-                    } else if clicked == ui_finder.find("WarBuilding_button").unwrap().id() {
-                        build.mode = Some(BuildingType::WarBuilding)
+                    } else if clicked == ui_finder.find("Barrack_button").unwrap().id() {
+                        build.mode = Some(BuildingType::Barrack)
                     } else if clicked == ui_finder.find("WoodBuilding_button").unwrap().id() {
                         build.mode = Some(BuildingType::WoodBuilding)
                     } else if clicked == ui_finder.find("MetalBuilding_button").unwrap().id() {
