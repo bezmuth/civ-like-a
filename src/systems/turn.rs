@@ -1,7 +1,10 @@
 use crate::game::{PlayersInfo, Turn};
 
 use amethyst::{
-    ecs::prelude::{System, SystemData, WriteExpect}, ui::{UiEvent, UiEventType, UiFinder}, shred::{World, Read}, shrev::{ReaderId, EventChannel},
+    ecs::prelude::{System, SystemData, WriteExpect}, 
+    ui::{UiEvent, UiEventType, UiFinder}, 
+    shred::{World, Read}, 
+    shrev::{ReaderId, EventChannel},
 };
 
 
@@ -13,10 +16,10 @@ pub struct TurnSystem{
 }
 
 impl TurnSystem {
-    pub fn new(world: &mut World) -> Self {
+    pub fn new(world: &mut World) -> Self { // * gotta do this whenever trying to read events, pulls the created event reader from the world
         <Self as System<'_>>::SystemData::setup(world);
         let event_reader = world.fetch_mut::<EventChannel<UiEvent>>().register_reader();
-        Self { event_reader } // * gotta do this whenever trying to read events
+        Self { event_reader } 
     }
 }
 

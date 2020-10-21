@@ -33,6 +33,7 @@ impl<'s> System<'s> for SheetSystem {
         // TODO: convert some of these into functions cause they will be useful later (for enemies causing destruction)
         if build.mode.is_some(){
             if build.mode.unwrap() != BuildingType::Demolish{
+                //todo: optimize this so the for loop is only run on left click?
                 for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {
                     if input.mouse_button_is_down(MouseButton::Left){
                         if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y) && tile.buildingtype.is_none(){
@@ -41,7 +42,7 @@ impl<'s> System<'s> for SheetSystem {
                             entities // add an entity of the build.mode type to the world, allows for resource calc
                                 .build_entity() 
                                 .with(Building {buildingtype: build.mode.unwrap() , playernum: playersinfo.current_player_num, x: tile.x, y: tile.y}, &mut buildings)
-                                .build();
+                                .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple
                             if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
                                 build.mode = None;
                             }

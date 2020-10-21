@@ -1,20 +1,9 @@
 use std::time::Duration;
-use amethyst::{
-    assets::{AssetStorage, Handle, Loader},
-    core::{
-        transform::Transform, ArcThreadPool,
-        frame_limiter::{FrameLimiter, FrameRateLimitStrategy},
-    },
-    prelude::*,
-    renderer::{
+use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, HiddenPropagate, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
-    },
-    shred::{DispatcherBuilder},
-    shred::Dispatcher, input::{is_key_down, VirtualKeyCode}, 
-    ui::{
+    }, shred::{DispatcherBuilder}, shred::Dispatcher, ui::{
         Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,
-    },
-};
+    }};
 
 use super::systems;
 pub use super::components::{
@@ -52,6 +41,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::ResourceCalcSystem{last_turn : -1}, "resourcecalc_system", &["sheet_system", "camera_system", "build_system", "turn_system"]);
         dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         dispatcher_builder.add(systems::TerrainGenSystem::new(), "terraingen_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
+        dispatcher_builder.add(systems::BuildingInteractSystem::new(world), "building_interact_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
+
 
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder
@@ -94,7 +85,9 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());    
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_res_disp(world);
-        initialise_lower_menu(world)
+        initialise_lower_menu(world);
+        initialise_interact_menus(world);
+
     }
 
     fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
@@ -259,3 +252,13 @@ fn initialise_lower_menu(world: &mut World){
         creator.create("ui/build_menu.ron", ());
     });           
 }
+
+fn initialise_interact_menus(world: &mut World){
+    //would use the UiButtonBuilder but that function seems to be broken
+    //TODO: ? fix in a pr
+    //seems that the .with_image() is broken and just the rest of the struct
+    world.exec(|mut creator: UiCreator<'_>| {
+        creator.create("ui/barracks_menu.ron", ());
+    });           
+}
+

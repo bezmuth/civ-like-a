@@ -4,7 +4,7 @@ Container(
         id: "lower_panel",
         anchor: BottomMiddle,
         stretch: X( x_margin: 0.), // makes bar take up full width
-        // y : 50 ensures full bar is shown
+        // y : 40 ensures full bar is shown
         y: 40.,
         height: 80.,
     ),
