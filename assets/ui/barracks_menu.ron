@@ -12,7 +12,7 @@ Container(
     children: [
         Container(
             transform: (
-                id: "center_button",
+                id: "warrior_button",
                 x: 64.,
                 y: 0.,
                 width: 100.,
@@ -23,15 +23,14 @@ Container(
             children: [
                 Button(
                     transform: (
-                        id: "Center_button",
+                        id: "Warrior_button",
                         tab_order: 1,
                         anchor: Middle,
                         stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
                         mouse_reactive: true,
                     ),
                     button: (
-                        text: "Center",
-                        font: File("font/square.ttf", ("TTF", ())),
+                        text: "",
                         font_size: 20.,
                         normal_text_color: (1.0, 1.0, 1.0, 1.),
                         normal_image: 
@@ -42,6 +41,35 @@ Container(
                             bottom: 0.138888888888889,
                             top: 0,
                         ),
+                    )
+                ),
+            ]
+        ),
+        Container(
+            transform: (
+                id: "location_button",
+                x: -64.,
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleRight,
+
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "Location_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "Location",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
                         hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
                         press_image: SolidColor(0.01, 0.02, 0.035, 1.),
                     )
