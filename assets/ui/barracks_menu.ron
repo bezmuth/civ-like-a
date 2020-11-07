@@ -38,8 +38,8 @@ Container(
                             tex: File("texture/spritesheet.png", ("IMAGE", ())),
                             left : 0.5,
                             right : 1, // * PERCENTAGE
-                            bottom: 0.138888888888889,
-                            top: 0,
+                            bottom: 0.285714285714286,
+                            top: 0.138888888888889,
                         ),
                     )
                 ),
