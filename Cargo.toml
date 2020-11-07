@@ -19,7 +19,7 @@ vulkan = ["amethyst/vulkan"]
 
 
 [profile.dev]
-opt-level = 0
+opt-level = 2
 debug = true
 panic = "unwind"
 
