@@ -1,4 +1,4 @@
-use crate::game::{PlayersInfo, Player, Building, BuildingType, Turn};
+use crate::game::{PlayersInfo, Player, Building, TileType, Turn};
 
 use amethyst::{
     ecs::prelude::{Join, System, WriteStorage, ReadExpect},
@@ -29,12 +29,12 @@ impl<'s> System<'s> for ResourceCalcSystem {
                 if building.playernum == playersinfo.current_player_num {
                     for player in (&mut players).join(){
                         if player.num == playersinfo.current_player_num {
-                            match building.buildingtype { // TODO: Ensure these are balanced
-                                BuildingType::Center => player.wood += 1,
-                                BuildingType::Barrack => {},
-                                BuildingType::WoodBuilding => player.wood += 20,
-                                BuildingType::MetalBuilding => player.metal += 20,
-                                BuildingType::ScienceBuilding => player.science += 20,
+                            match building.TileType { // TODO: Ensure these are balanced
+                                TileType::Center => player.wood += 1,
+                                TileType::Barrack => {},
+                                TileType::WoodBuilding => player.wood += 20,
+                                TileType::MetalBuilding => player.metal += 20,
+                                TileType::ScienceBuilding => player.science += 20,
                                 _ => {}
                             }
                         }

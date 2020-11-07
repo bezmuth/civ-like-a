@@ -1,4 +1,4 @@
-use crate::game::{Tiles, Build, BuildingType, PlayersInfo, Building, MouseTilePos, Layer2};
+use crate::game::{Build, Building, TileType, Layer2, MouseTilePos, PlayersInfo, TilePos, Tiles};
 use amethyst::{
     derive::SystemDesc,
     renderer::{SpriteRender},
@@ -17,50 +17,69 @@ pub struct SheetSystem;
 impl<'s> System<'s> for SheetSystem {
     type SystemData = (
         WriteStorage<'s, Tiles>,
+        WriteStorage<'s, TilePos>,
         Read<'s, InputHandler<StringBindings>>,
         WriteStorage<'s, SpriteRender>,
         WriteExpect<'s, Build>,
         ReadExpect<'s, PlayersInfo>,
         WriteStorage<'s, Building>,
         Entities<'s>,
-        ReadExpect<'s, MouseTilePos>,
+        WriteExpect<'s, MouseTilePos>,
         WriteStorage<'s, Layer2>, // can only join storages of the same read type
         //WriteStorage<'s, TileEnts>
     );
 
-    fn run(&mut self, (mut tiles, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2): Self::SystemData) {
-        // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
-        // TODO: convert some of these into functions cause they will be useful later (for enemies causing destruction)
-        if build.mode.is_some(){
-            if build.mode.unwrap() != BuildingType::Demolish{
-                //todo: optimize this so the for loop is only run on left click?
-                for (tile, spriterender, _) in (&mut tiles, &mut spriterenderers, &mut layer2).join() {
-                    if input.mouse_button_is_down(MouseButton::Left){
-                        if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y) && tile.buildingtype.is_none(){
+    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2): Self::SystemData) {
+        if input.mouse_button_is_down(MouseButton::Left){ // * this entire system only runs if the left mouse button is pressed
+            // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
+            // TODO: convert some of these into functions cause they will be useful later (for enemies causing destruction)
+            if let Some(build_mode) = build.mode{
+                
+                // build code
+                if build_mode != TileType::Demolish{
+                    // * This is split into two parts as one "cannot borrow `tileposs` as mutable more than once at a time" (ie in the for loop then in the entity creation)
+                    let mut future_building: Option<Building> = None;
+                    let mut future_pos: Option<TilePos> = None;
+
+
+                    // iteration which sets the sprite render, finds the tile position, 
+                    for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {
+                        if (& mouse_tile_pos.pos == tilepos) && tile.TileType.is_none(){
                             spriterender.sprite_number = build.mode.unwrap() as usize;
-                            tile.buildingtype = build.mode; 
-                            entities // add an entity of the build.mode type to the world, allows for resource calc
-                                .build_entity() 
-                                .with(Building {buildingtype: build.mode.unwrap() , playernum: playersinfo.current_player_num, x: tile.x, y: tile.y}, &mut buildings)
-                                .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple
+                            tile.TileType = Some(build_mode);
+                            if tilepos.x == 49{
+                                future_building = Some(Building {TileType: build_mode , playernum: playersinfo.current_player_num, out_x: tilepos.x - 1, out_y : tilepos.y});
+                            } else {
+                                future_building = Some(Building {TileType: build_mode , playernum: playersinfo.current_player_num, out_x: tilepos.x + 1, out_y : tilepos.y});
+                            }
+                            future_pos = Some(tilepos.clone());
+
                             if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
                                 build.mode = None;
                             }
                         }
                     }
+
+
+                    // actual creation of the entity
+                    if future_building.is_some(){
+                        entities // add an entity of the build.mode type to the world, allows for resource calc
+                        .build_entity() 
+                        .with(future_building.unwrap(), &mut buildings)
+                        .with(future_pos.unwrap(), &mut tileposs)
+                        .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
+                    }
                 }
-            }
-        }
-        if build.mode.is_some(){
-            if build.mode.unwrap() == BuildingType::Demolish{ // else if ensures build.mode cannot be set to None before interaction 
-                for (tile, spriterender, ent, _) in (&mut tiles, &mut spriterenderers, &*entities, &mut layer2).join() {
-                    if input.mouse_button_is_down(MouseButton::Left){
-                        if (mouse_tile_pos.x == tile.x) && (mouse_tile_pos.y == tile.y){
-                            for building in (&mut buildings).join(){
-                                if tile.buildingtype.is_some() && building.buildingtype == tile.buildingtype.unwrap() && building.playernum == playersinfo.current_player_num && tile.x == building.x && tile.y == building.y{
+
+                // demolish code
+                if build_mode == TileType::Demolish{ // else if ensures build.mode cannot be set to None before interaction 
+                    for (tile, spriterender, pos, _) in (&mut tiles, &mut spriterenderers,  &mut tileposs, &mut layer2).join() {
+                        if (& mouse_tile_pos.pos == pos){
+                            for (building, ent) in (&mut buildings, &*entities,).join(){
+                                if tile.TileType.is_some() && building.playernum == playersinfo.current_player_num {
                                     entities.delete(ent).expect("Could not delete this building, does it exist?");
                                     spriterender.sprite_number = 4; // blank sprite;
-                                    tile.buildingtype = None;
+                                    tile.TileType = None;
                                     break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
                                 }
                             }
@@ -71,11 +90,8 @@ impl<'s> System<'s> for SheetSystem {
                     }
                 }
             }
+
+
         }
-        
-        
-
-
-
     }
 }

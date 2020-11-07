@@ -1,4 +1,4 @@
-use crate::game::{Build, BuildingType};
+use crate::game::{Build, TileType};
 use amethyst::{
     ecs::{prelude::{System, WriteExpect, Write}, WriteStorage},
     ui::{UiFinder, UiEvent, UiEventType}, 
@@ -51,17 +51,17 @@ impl<'s> System<'s> for BuildSystem {
                                 }
                             } else {
                                 if clicked == ui_finder.find("Demolish_button").unwrap().id() {
-                                    build.mode = Some(BuildingType::Demolish);
+                                    build.mode = Some(TileType::Demolish);
                                 } else if clicked == ui_finder.find("Center_button").unwrap().id() {
-                                    build.mode = Some(BuildingType::Center)
+                                    build.mode = Some(TileType::Center)
                                 } else if clicked == ui_finder.find("Barrack_button").unwrap().id() {
-                                    build.mode = Some(BuildingType::Barrack)
+                                    build.mode = Some(TileType::Barrack)
                                 } else if clicked == ui_finder.find("WoodBuilding_button").unwrap().id() {
-                                    build.mode = Some(BuildingType::WoodBuilding)
+                                    build.mode = Some(TileType::WoodBuilding)
                                 } else if clicked == ui_finder.find("MetalBuilding_button").unwrap().id() {
-                                    build.mode = Some(BuildingType::MetalBuilding)
+                                    build.mode = Some(TileType::MetalBuilding)
                                 } else if clicked == ui_finder.find("ScienceBuilding_button").unwrap().id() {
-                                    build.mode = Some(BuildingType::ScienceBuilding)
+                                    build.mode = Some(TileType::ScienceBuilding)
                                 }
                                 let _  = hidden_propagates.insert(build_menu, HiddenPropagate::new()).unwrap();
                             }

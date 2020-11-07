@@ -1,5 +1,5 @@
 use std::time::Duration;
-use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, HiddenPropagate, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
+use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, HiddenPropagate, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, ecs::{Component, DenseVecStorage, NullStorage}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
     }, shred::{DispatcherBuilder}, shred::Dispatcher, ui::{
         Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,
@@ -7,12 +7,13 @@ use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, Hid
 
 use super::systems;
 pub use super::components::{
-    Tiles, 
+    Tiles,
+    TilePos, 
     Player, 
     PlayersInfo, 
     Build, 
     Building, 
-    BuildingType, 
+    TileType, 
     Resbar, 
     Layer1, 
     Layer2, 
@@ -34,6 +35,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         //todo: reorder these
         dispatcher_builder.add(systems::Imgui{toggled: false}, "imgui", &[]);
         dispatcher_builder.add(systems::M2TileSystem, "m2tile_system", &[]);
+        dispatcher_builder.add(systems::UIDetect, "uidetect_system", &[]);
         dispatcher_builder.add(systems::SheetSystem, "sheet_system", &["m2tile_system"]);
         dispatcher_builder.add(systems::CameraSystem{multiplier:1.}, "camera_system", &["sheet_system"]);
         dispatcher_builder.add(systems::BuildSystem::default(), "build_system", &["sheet_system", "camera_system"]); // https://doc.rust-lang.org/std/default/trait.Default.html
@@ -42,6 +44,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::ResourceDispSystem, "resourcedisp_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         dispatcher_builder.add(systems::TerrainGenSystem::new(), "terraingen_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         dispatcher_builder.add(systems::BuildingInteractSystem::new(world), "building_interact_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
+        dispatcher_builder.add(systems::TileMouseFollow, "tile_mouse_follow_system", &["sheet_system", "build_system", "building_interact_system"]);
 
 
         // Build and setup the `Dispatcher`.
@@ -68,7 +71,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // TODO: move all these to their own init?
         world.insert(Build {mode: None}); // * WORLD.INSERT WORKS WITH RESOURCES
         // world.insert(CurrentPlayer{ playernum: 0}); 
-        world.insert(MouseTilePos{ x:0 , y:0 });
+        world.insert(MouseTilePos{ pos : TilePos{x:0 , y:0} });
+        world.insert(OnUi{case: false});
         world.insert(Turn{num:0});
 
 
@@ -81,7 +85,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
                 .build();
         } 
 
-
+        initialise_follow_ent(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());    
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_res_disp(world);
@@ -111,14 +115,24 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
-//todo: move into own component file?
+//todo: move all these into a "component" file?
 pub struct Turn{
     pub num: i32,
 }
-
+#[derive(PartialEq, Eq)] // Partial Eq and Eq for comparisons with TilePos
 pub struct MouseTilePos{
-    pub x: i32,
-    pub y: i32,
+    pub pos: TilePos,
+}
+
+pub struct OnUi{ // if the mouse is on a Ui Element this will be true
+    pub case: bool,
+}
+
+pub struct Follower{
+    pub kind : TileType,
+} // contains data that describes what type of tile the follower is // ! this is a component that is not in a component file
+impl Component for Follower {
+    type Storage = DenseVecStorage<Self>;
 }
 
 fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
@@ -177,7 +191,8 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, buildingtype: None, x, y})
+                .with(Tiles { player: 0, TileType: None})
+                .with(TilePos{x, y})
                 .with(Layer1)
                 .build();
         }
@@ -194,13 +209,12 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
     for x in 0..50{
         for y in 0..50{
             transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.00001); // z > 0 so it is displayed above layer 0
-            // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
-            // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;
             world
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, buildingtype: None, x, y})
+                .with(Tiles { player: 0, TileType: None})
+                .with(TilePos{x, y})
                 .with(Layer2)
                 .build();
         }
@@ -262,3 +276,21 @@ fn initialise_interact_menus(world: &mut World){
     });           
 }
 
+fn initialise_follow_ent(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) { // * inits the entity that will follow the mouse when tile_mouse_follow is running
+    let transform = Transform::default();                                // * this is not part of the sheet, thats so I dont have to constantly r&w to the sheet
+                                                                                        // * store what was on the tile and replace it when the mouse moves etc etc
+                                                                                        // * this way I only move a sprite to the translation of a tile instead of on the sheet
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet_handle, 
+        sprite_number: 4 as usize,
+    };
+
+    world
+        .create_entity()
+        .with(sprite_render.clone())
+        .with(transform.clone())
+        .with(Follower{kind: TileType::Empty})
+        .build();
+
+
+}

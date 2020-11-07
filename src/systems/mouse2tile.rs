@@ -1,4 +1,4 @@
-use crate::game::{MouseTilePos};
+use crate::game::{MouseTilePos, Tiles, Layer1, Layer2, Layer3};
 use amethyst::{
     core::{
         geometry::Plane,
@@ -29,6 +29,7 @@ impl<'s> System<'s> for M2TileSystem {
         ReadStorage<'s, Camera>,
         ReadExpect<'s, ScreenDimensions>,
         WriteExpect<'s, MouseTilePos>,
+
         //WriteStorage<'s, TileEnts>
     );
 
@@ -50,8 +51,8 @@ impl<'s> System<'s> for M2TileSystem {
             let mouse_world_position = ray.at_distance(distance);
             // todo: !ENSURE RAY IS NOT OVERLAPPING WITH ANY MENUS!
             let pos = screen_to_tile(mouse_world_position.x, mouse_world_position.y);
-            mouse_tile_pos.x = pos.0;
-            mouse_tile_pos.y = pos.1;
+            mouse_tile_pos.pos.x = pos.0;
+            mouse_tile_pos.pos.y = pos.1;
             // println!("{} {}", mouse_world_position.x, mouse_world_position.y);
     
             // * old method, does not work properly, keeping for documentation purposes
@@ -59,7 +60,6 @@ impl<'s> System<'s> for M2TileSystem {
             // let pos = screen_to_tile(inputloc.0 + Cpos.0, inputloc.1 + Cpos.1);
             // println!("{} {}", pos.0, pos.1);
         }
-
     }
     
 }
