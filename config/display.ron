@@ -1,4 +1,5 @@
 (
   title: "civ-like-a",
   dimensions: Some((1920, 1080)),
+  resizable : false,
 )
