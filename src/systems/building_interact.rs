@@ -1,5 +1,5 @@
 use crate::game::{Build, Building, TileType, Layer2, MouseTilePos, OnUi, PlayersInfo, TilePos, Tiles, Follower};
-use amethyst::{core::{Transform, HiddenPropagate}, derive::SystemDesc, ui::UiEventType, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiTransform, winit::MouseButton};
+use amethyst::{core::{Transform, HiddenPropagate}, derive::SystemDesc, ui::UiEventType, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiImage, winit::MouseButton};
 
 
 
@@ -31,41 +31,40 @@ impl<'s> System<'s> for BuildingInteractSystem {
         WriteExpect<'s, Build>,
         ReadExpect<'s, OnUi>,
         WriteStorage<'s, Follower>,
+        WriteStorage<'s, UiImage>,
         ); 
         // * quick note on wanting to do a small menu above the tile, the location of a Ui element (a UiTransform) cannot be written to
         // * therefore I either have to create a static menu, for instance a menu that replaces the lower panel like aoe2
         // * OR I could move the camera so the menu apears above the tile
-    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower): Self::SystemData) {        
+    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut ui_images): Self::SystemData) {        
         if !self.location_mode{ // if operating normally
-            
             for fol in (&mut follower).join(){ fol.kind = TileType::Empty }
-            
 
             if self.first_run{ // * runs on first execute to ensure the barracks menu is hidden
                 if let Some(interact_menu) = ui_finder.find("barracks_menu"){
                     let _  = hidden_propagates.insert(interact_menu, HiddenPropagate::new()).unwrap();
                     self.first_run = false;
                 }
-            } 
-    
+            }
+
             if !onui.case{ // first check that the ui is not being interacted with
                 if input.mouse_button_is_down(MouseButton::Left) && (build.mode.is_none() || build.mode.unwrap() != TileType::Demolish) && !self.focused{  // dont interact with buildings when in build mode
                     for (building, building_tile_pos) in (&buildings, &tileposs).join(){
                         if (& mouse_tile_pos.pos == building_tile_pos) //todo: the "this tile has been clicked" should really be its own function/event
                         && building.playernum == playersinfo.current_player_num 
                         {
-                            if building.TileType == TileType::Barrack{ // if clicking on barrack
+                            if building.tile_type == TileType::Barrack{ // if clicking on barrack
                                 if let (Some(interact_menu), Some(lower_panel)) = (ui_finder.find("barracks_menu"), ui_finder.find("lower_panel")){
                                     if hidden_propagates.contains(interact_menu){
                                         let _  = hidden_propagates.remove(interact_menu).unwrap(); // todo: implement a "menu cooldown" so the menus stay open or closed instead of flashing
                                         let _  = hidden_propagates.insert(lower_panel, HiddenPropagate::new()).unwrap(); 
                                         self.focused = true;
-                                        
+
                                     } else  {
                                         let _  = hidden_propagates.insert(interact_menu, HiddenPropagate::new()).unwrap();
                                         let _  = hidden_propagates.remove(lower_panel).unwrap();
                                         self.focused = false;
-                                        
+
                                     }
                                 }
                             }
@@ -78,9 +77,8 @@ impl<'s> System<'s> for BuildingInteractSystem {
                         self.focused = false;
                     }
                 }
-            } 
-            
-            
+            }
+
 
         } else {
             for fol in (&mut follower).join(){ fol.kind = TileType::Location }
@@ -93,6 +91,15 @@ impl<'s> System<'s> for BuildingInteractSystem {
 
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
                     self.location_mode = !self.location_mode;
+                } else if clicked == ui_finder.find("Stack_Button1").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button2").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button3").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button4").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button5").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button6").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button7").unwrap().id()
+                    || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other i cannot make one big "stack" button, instead I have to address each stack button in this if statement
+                    println!("stack")
                 }
             }
         }

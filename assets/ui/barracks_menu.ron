@@ -36,15 +36,338 @@ Container(
                         normal_image: 
                         PartialTexture(
                             tex: File("texture/spritesheet.png", ("IMAGE", ())),
-                            left : 0.5,
-                            right : 1, // * PERCENTAGE
-                            bottom: 0.285714285714286,
-                            top: 0.138888888888889,
+                            left : 0.3333333333333333,
+                            right : 0.666666666666666, // * PERCENTAGE
+                            bottom: 0.25263157894,
+                            top: 0.12280701754,
                         ),
                     )
                 ),
             ]
         ),
+
+        // Stack Buttons Start
+        Container(
+            transform:(
+                id: "Stack_buttons",
+                anchor: MiddleRight,
+                x: -204.,
+                y: 0.,
+                width: 230.,
+                height: 50.
+            ),
+            children: [
+
+                Container(
+                    transform: (
+                        id: "stack_button1",
+                        x: 50.,
+                        y: 12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button1",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+                Container(
+                    transform: (
+                        id: "stack_button2",
+                        x: 100.,
+                        y: 12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button2",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+                Container(
+                    transform: (
+                        id: "stack_button3",
+                        x: 150.,
+                        y: 12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button3",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+                Container(
+                    transform: (
+                        id: "stack_button4",
+                        x: 200.,
+                        y: 12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button4",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+
+
+
+                Container(
+                    transform: (
+                        id: "stack_button5",
+                        x: 50.,
+                        y: -12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button5",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+                Container(
+                    transform: (
+                        id: "stack_button6",
+                        x: 100.,
+                        y: -12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button6",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+                Container(
+                    transform: (
+                        id: "stack_button7",
+                        x: 150.,
+                        y: -12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button7",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+                Container(
+                    transform: (
+                        id: "stack_button8",
+                        x: 200,
+                        y: -12.5,
+                        width: 50.,
+                        height: 25.,
+                        anchor: MiddleLeft,
+
+                    ),
+                    children: [
+                        Button(
+                            transform: (
+                                id: "Stack_Button8",
+                                tab_order: 1,
+                                anchor: MiddleLeft,
+                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                                mouse_reactive: true,
+                            ),
+                            button: (
+                                text: "",
+                                font_size: 20.,
+                                normal_text_color: (1.0, 1.0, 1.0, 1.),
+                                normal_image: 
+                                PartialTexture(
+                                    tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                                    left : 0.3333333333333333,
+                                    right : 0.666666666666666, // * PERCENTAGE
+                                    bottom: 0.25263157894,
+                                    top: 0.12280701754,
+                                ),
+
+                            ),
+                        )
+                    ]
+                ),
+
+
+
+
+
+            ],
+        ),
+
+
+
+        // Stack Buttons End
+
         Container(
             transform: (
                 id: "location_button",
