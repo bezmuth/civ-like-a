@@ -8,16 +8,18 @@ use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, Hid
 use super::systems;
 pub use super::components::{
     Tiles,
-    TilePos, 
-    Player, 
-    PlayersInfo, 
-    Build, 
-    Building, 
-    TileType, 
-    Resbar, 
-    Layer1, 
-    Layer2, 
-    Layer3};
+    TilePos,
+    Player,
+    PlayersInfo,
+    Build,
+    Building,
+    TileType,
+    Resbar,
+    Layer1,
+    Layer2,
+    Layer3,
+    UnitStack
+};
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -191,7 +193,7 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, TileType: None})
+                .with(Tiles { player: 0, tile_type: None})
                 .with(TilePos{x, y})
                 .with(Layer1)
                 .build();
@@ -213,7 +215,7 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, TileType: None})
+                .with(Tiles { player: 0, tile_type: None})
                 .with(TilePos{x, y})
                 .with(Layer2)
                 .build();
