@@ -26,7 +26,7 @@ pub enum TileType{ // resource as it has no component implmentation, use READ an
 
 pub struct Tiles{ 
     pub player: i32,
-    pub TileType: Option<TileType>,
+    pub tile_type: Option<TileType>,
 }
 impl Component for Tiles { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;

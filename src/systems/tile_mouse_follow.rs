@@ -1,5 +1,5 @@
-use crate::game::{Follower, MouseTilePos, OnUi, TilePos, Tiles};
-use amethyst::{renderer::SpriteRender, core::Transform, derive::SystemDesc, ecs::{Join, ReadStorage, WriteStorage, prelude::{Read, System, SystemData, WriteExpect}}, input::{InputHandler, StringBindings}, shred::ReadExpect};
+use crate::game::{Follower, MouseTilePos, TilePos, Tiles};
+use amethyst::{renderer::SpriteRender, core::Transform, derive::SystemDesc, ecs::{Join, ReadStorage, WriteStorage, prelude::{System, SystemData}}, shred::ReadExpect};
 
 #[derive(SystemDesc)] 
 pub struct TileMouseFollow; // * Detects if mouse is on UI elements, if so onui.case is set to true
