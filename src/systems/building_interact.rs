@@ -1,7 +1,10 @@
-use crate::game::{Build, Building, TileType, MouseTilePos, OnUi, PlayersInfo, TilePos, Follower, UnitStack};
+use crate::game::{Build, Building, TileType, MouseTilePos, OnUi, PlayersInfo, TilePos, Follower, UnitStack, Unit};
 use amethyst::ecs::Entities;
 use amethyst::ecs::Entity;
-use amethyst::{core::HiddenPropagate, ui::UiEventType, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiButton, winit::MouseButton};
+use amethyst::ecs::Storage;
+use amethyst::ecs::storage;
+
+use amethyst::{core::HiddenPropagate, ui::{UiEventType, UiText}, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiButton, winit::MouseButton};
 
 
 
@@ -21,6 +24,30 @@ impl BuildingInteractSystem {
     }
 }
 
+fn StackUiUpdate(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Storage<'_, UiText, amethyst::shred::FetchMut<'_, storage::MaskedStorage<UiText>>, >){ // * this function updates the stack ui elements, its a bit a gross function but I cannot iterate over Ui elements from arbritary indexes
+    if let Some(peeked) = stack.peek(){
+        let mut button_text = "undefined";
+        match peeked.UnitType{
+            TileType::Warrior => button_text = "W",
+            _ => button_text = "undefined",
+        }
+        // This is ugly but self explanitory
+        match stack.top{
+            7 => ui_text.get_mut(ui_finder.find("Stack_Button8").unwrap()).unwrap().text = button_text.to_string(),
+            6 => ui_text.get_mut(ui_finder.find("Stack_Button7").unwrap()).unwrap().text = button_text.to_string(),
+            5 => ui_text.get_mut(ui_finder.find("Stack_Button6").unwrap()).unwrap().text = button_text.to_string(),
+            4 => ui_text.get_mut(ui_finder.find("Stack_Button5").unwrap()).unwrap().text = button_text.to_string(),
+            3 => ui_text.get_mut(ui_finder.find("Stack_Button4").unwrap()).unwrap().text = button_text.to_string(),
+            2 => ui_text.get_mut(ui_finder.find("Stack_Button3").unwrap()).unwrap().text = button_text.to_string(),
+            1 => ui_text.get_mut(ui_finder.find("Stack_Button2").unwrap()).unwrap().text = button_text.to_string(),
+            0 => ui_text.get_mut(ui_finder.find("Stack_Button1").unwrap()).unwrap().text = button_text.to_string(),
+
+        }
+
+    } 
+
+}
+
 impl<'s> System<'s> for BuildingInteractSystem {
     type SystemData = (
         ReadStorage<'s, TilePos>,
@@ -36,11 +63,12 @@ impl<'s> System<'s> for BuildingInteractSystem {
         WriteStorage<'s, Follower>,
         WriteStorage<'s, UnitStack>,
         Entities<'s>,
+        WriteStorage<'s, UiText>,
         ); 
         // * quick note on wanting to do a small menu above the tile, the location of a Ui element (a UiTransform) cannot be written to
         // * therefore I either have to create a static menu, for instance a menu that replaces the lower panel like aoe2
         // * OR I could move the camera so the menu apears above the tile
-    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities): Self::SystemData) {        
+    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, mut ui_text): Self::SystemData) {        
         if !self.location_mode{ // if operating normally
             for fol in (&mut follower).join(){ fol.kind = TileType::Empty }
 
@@ -91,9 +119,13 @@ impl<'s> System<'s> for BuildingInteractSystem {
         }
 
         for event in events.read(&mut self.event_reader){
+            let focusedstack : Option<&mut UnitStack> = None; // TODO: move to parent loop, make a loop that handles updating the stack
             if event.event_type == UiEventType::Click{
                 let clicked = event.target.id();
                 if clicked == ui_finder.find("Warrior_button").unwrap().id(){
+                    focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
+                    focusedstack.unwrap().push(Unit{UnitType: TileType::Warrior, Health: 0}); // TODO: decide on health values for units!
+
 
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
                     self.location_mode = !self.location_mode;
@@ -104,12 +136,16 @@ impl<'s> System<'s> for BuildingInteractSystem {
                     || clicked == ui_finder.find("Stack_Button5").unwrap().id()
                     || clicked == ui_finder.find("Stack_Button6").unwrap().id()
                     || clicked == ui_finder.find("Stack_Button7").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other i cannot make one big "stack" button, instead I have to address each stack button in this if statement
+                    || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other I cannot make one big "stack" button, instead I have to address each stack button in this if statement
 
-                        let focusedstack = unitstacks.get_mut(self.focused_ent.unwrap()).unwrap();
-                        let test = focusedstack.pop().unwrap().type;
-                        println!("Popped: {}", focusedstack.pop().unwrap());
+                        focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
+                        let test = focusedstack.unwrap().pop().unwrap().UnitType;
+                        println!("Popped: {}", test as i32);
+
                 }
+            }
+            if let Some(focusedstack_unwrap) = focusedstack{ // had to move here because of borrow checker
+                StackUiUpdate(focusedstack_unwrap, ui_finder, ui_text);
             }
         }
     }

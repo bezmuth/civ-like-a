@@ -18,7 +18,8 @@ pub use super::components::{
     Layer1,
     Layer2,
     Layer3,
-    UnitStack
+    UnitStack,
+    Unit,
 };
 
 #[derive(Default)]

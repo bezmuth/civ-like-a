@@ -1,11 +1,12 @@
 use amethyst::ecs::{Component, DenseVecStorage};
+use crate::components::TileType;
 
+#[derive(Copy, Clone)]
 pub struct UnitStack{
-    top: i8,
+    pub top: i8,
     arr: [Option<Unit>; 8],
     pub repeat: bool,
 }
-
 impl UnitStack{
     fn new() -> UnitStack{
         UnitStack{top: 0, arr: [None; 8], repeat: false}
@@ -24,6 +25,18 @@ impl UnitStack{
         }
     }
 
+    pub fn peek(&mut self) -> Option<Unit>{
+        if self.top == 0{
+            return None
+        } else {
+            if self.repeat{
+                return self.arr[self.top as usize];
+            } else {
+                return self.arr[(self.top) as usize];
+            }
+        }
+    }
+
     pub fn push(&mut self, unit : Unit) {
         let unote = Some(unit);
         self.arr[self.top as usize] = Some(unit);
@@ -37,7 +50,8 @@ impl Component for UnitStack{
 
 #[derive(Copy, Clone)]
 pub struct Unit{
-    
+    pub UnitType : TileType,
+    pub Health: i32,
 }
 impl Component for Unit {
     type Storage = DenseVecStorage<Self>;

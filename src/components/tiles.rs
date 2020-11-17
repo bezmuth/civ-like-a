@@ -20,7 +20,8 @@ pub enum TileType{ // resource as it has no component implmentation, use READ an
     WoodBuilding = 100, // not implemented
     MetalBuilding = 101, // not implemented
     ScienceBuilding = 102, // not implemented
-    Location = 7,
+    Location = 103, // not implemented
+    Warrior = 7,
     Demolish = 99,
 }
 
