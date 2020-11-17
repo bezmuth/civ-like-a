@@ -15,6 +15,7 @@ pub struct SheetSystem;
 
 // TODO: split this up into multiple components?
 impl<'s> System<'s> for SheetSystem {
+
     type SystemData = (
         WriteStorage<'s, Tiles>,
         WriteStorage<'s, TilePos>,
@@ -72,7 +73,7 @@ impl<'s> System<'s> for SheetSystem {
                             .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
                         } else {
                             entities // add an entity of the build.mode type to the world, allows for resource calc
-                            .build_entity() 
+                            .build_entity()
                             .with(future_build, &mut buildings)
                             .with(future_pos.unwrap(), &mut tileposs)
                             .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
@@ -84,7 +85,7 @@ impl<'s> System<'s> for SheetSystem {
                 // demolish code
                 if build_mode == TileType::Demolish{ // else if ensures build.mode cannot be set to None before interaction 
                     for (tile, spriterender, pos, _) in (&mut tiles, &mut spriterenderers,  &mut tileposs, &mut layer2).join() {
-                        if (& mouse_tile_pos.pos == pos){
+                        if & mouse_tile_pos.pos == pos{
                             for (building, ent) in (&mut buildings, &*entities,).join(){
                                 if tile.tile_type.is_some() && building.playernum == playersinfo.current_player_num {
                                     entities.delete(ent).expect("Could not delete this building, does it exist?");

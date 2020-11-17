@@ -11,7 +11,7 @@ impl UnitStack{
         UnitStack{top: 0, arr: [None; 8], repeat: false}
     }
 
-    fn pop(&mut self) -> Option<Unit>{
+    pub fn pop(&mut self) -> Option<Unit>{
         if self.top == 0{
             return None
         } else {
@@ -24,7 +24,7 @@ impl UnitStack{
         }
     }
 
-    fn push(&mut self, unit : Unit) {
+    pub fn push(&mut self, unit : Unit) {
         let unote = Some(unit);
         self.arr[self.top as usize] = Some(unit);
         self.top = self.top + 1;

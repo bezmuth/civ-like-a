@@ -1,5 +1,7 @@
-use crate::game::{Build, Building, TileType, Layer2, MouseTilePos, OnUi, PlayersInfo, TilePos, Tiles, Follower};
-use amethyst::{core::{Transform, HiddenPropagate}, derive::SystemDesc, ui::UiEventType, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiImage, winit::MouseButton};
+use crate::game::{Build, Building, TileType, MouseTilePos, OnUi, PlayersInfo, TilePos, Follower, UnitStack};
+use amethyst::ecs::Entities;
+use amethyst::ecs::Entity;
+use amethyst::{core::HiddenPropagate, ui::UiEventType, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiButton, winit::MouseButton};
 
 
 
@@ -8,13 +10,14 @@ pub struct BuildingInteractSystem{
     first_run: bool,
     focused: bool,
     location_mode: bool,
+    focused_ent: Option<Entity>,
 }
 
 impl BuildingInteractSystem {
     pub fn new(world: &mut World) -> Self {
         <Self as System<'_>>::SystemData::setup(world);
         let event_reader = world.fetch_mut::<EventChannel<UiEvent>>().register_reader(); // * gotta do this whenever trying to read events
-        Self {  event_reader, first_run:true , focused: false, location_mode: false } 
+        Self {  event_reader, first_run:true , focused: false, location_mode: false, focused_ent : None, } 
     }
 }
 
@@ -31,12 +34,13 @@ impl<'s> System<'s> for BuildingInteractSystem {
         WriteExpect<'s, Build>,
         ReadExpect<'s, OnUi>,
         WriteStorage<'s, Follower>,
-        WriteStorage<'s, UiImage>,
+        WriteStorage<'s, UnitStack>,
+        Entities<'s>,
         ); 
         // * quick note on wanting to do a small menu above the tile, the location of a Ui element (a UiTransform) cannot be written to
         // * therefore I either have to create a static menu, for instance a menu that replaces the lower panel like aoe2
         // * OR I could move the camera so the menu apears above the tile
-    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut ui_images): Self::SystemData) {        
+    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities): Self::SystemData) {        
         if !self.location_mode{ // if operating normally
             for fol in (&mut follower).join(){ fol.kind = TileType::Empty }
 
@@ -49,7 +53,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
 
             if !onui.case{ // first check that the ui is not being interacted with
                 if input.mouse_button_is_down(MouseButton::Left) && (build.mode.is_none() || build.mode.unwrap() != TileType::Demolish) && !self.focused{  // dont interact with buildings when in build mode
-                    for (building, building_tile_pos) in (&buildings, &tileposs).join(){
+                    for (building, building_tile_pos, ent) in (&buildings, &tileposs, &entities).join(){
                         if (& mouse_tile_pos.pos == building_tile_pos) //todo: the "this tile has been clicked" should really be its own function/event
                         && building.playernum == playersinfo.current_player_num 
                         {
@@ -58,12 +62,14 @@ impl<'s> System<'s> for BuildingInteractSystem {
                                     if hidden_propagates.contains(interact_menu){
                                         let _  = hidden_propagates.remove(interact_menu).unwrap(); // todo: implement a "menu cooldown" so the menus stay open or closed instead of flashing
                                         let _  = hidden_propagates.insert(lower_panel, HiddenPropagate::new()).unwrap(); 
-                                        self.focused = true;
+                                        self.focused = true; // TODO: this .focused can be replaced with just a .is_some()
+                                        self.focused_ent = Some(ent);
 
                                     } else  {
                                         let _  = hidden_propagates.insert(interact_menu, HiddenPropagate::new()).unwrap();
                                         let _  = hidden_propagates.remove(lower_panel).unwrap();
                                         self.focused = false;
+                                        self.focused_ent = None; 
 
                                     }
                                 }
@@ -99,12 +105,12 @@ impl<'s> System<'s> for BuildingInteractSystem {
                     || clicked == ui_finder.find("Stack_Button6").unwrap().id()
                     || clicked == ui_finder.find("Stack_Button7").unwrap().id()
                     || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other i cannot make one big "stack" button, instead I have to address each stack button in this if statement
-                    println!("stack")
+
+                        let focusedstack = unitstacks.get_mut(self.focused_ent.unwrap()).unwrap();
+                        let test = focusedstack.pop().unwrap().type;
+                        println!("Popped: {}", focusedstack.pop().unwrap());
                 }
             }
         }
-        
-
     }
-    
 }
