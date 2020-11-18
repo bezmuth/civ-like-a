@@ -1,5 +1,5 @@
 use amethyst::ecs::prelude::{DenseVecStorage, Component};
-use super::{unit::Unit, tiles::TileType};
+use super::tiles::TileType;
 
 
 

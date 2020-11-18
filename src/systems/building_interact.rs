@@ -4,25 +4,7 @@ use amethyst::ecs::Entity;
 use amethyst::ecs::Storage;
 use amethyst::ecs::storage;
 
-use amethyst::{core::HiddenPropagate, ui::{UiEventType, UiText}, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, ui::UiButton, winit::MouseButton};
-
-
-
-pub struct BuildingInteractSystem{
-    event_reader: ReaderId<UiEvent>,
-    first_run: bool,
-    focused: bool,
-    location_mode: bool,
-    focused_ent: Option<Entity>,
-}
-
-impl BuildingInteractSystem {
-    pub fn new(world: &mut World) -> Self {
-        <Self as System<'_>>::SystemData::setup(world);
-        let event_reader = world.fetch_mut::<EventChannel<UiEvent>>().register_reader(); // * gotta do this whenever trying to read events
-        Self {  event_reader, first_run:true , focused: false, location_mode: false, focused_ent : None, } 
-    }
-}
+use amethyst::{core::HiddenPropagate, ui::{UiEventType, UiText}, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, winit::MouseButton};
 
 fn StackUiUpdate(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Storage<'_, UiText, amethyst::shred::FetchMut<'_, storage::MaskedStorage<UiText>>, >){ // * this function updates the stack ui elements, its a bit a gross function but I cannot iterate over Ui elements from arbritary indexes
     if let Some(peeked) = stack.peek(){
@@ -41,11 +23,27 @@ fn StackUiUpdate(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Sto
             2 => ui_text.get_mut(ui_finder.find("Stack_Button3").unwrap()).unwrap().text = button_text.to_string(),
             1 => ui_text.get_mut(ui_finder.find("Stack_Button2").unwrap()).unwrap().text = button_text.to_string(),
             0 => ui_text.get_mut(ui_finder.find("Stack_Button1").unwrap()).unwrap().text = button_text.to_string(),
-
+            _ => panic!("What, how?")
         }
 
     } 
 
+}
+
+pub struct BuildingInteractSystem{
+    event_reader: ReaderId<UiEvent>,
+    first_run: bool,
+    focused: bool,
+    location_mode: bool,
+    focused_ent: Option<Entity>,
+}
+
+impl BuildingInteractSystem {
+    pub fn new(world: &mut World) -> Self {
+        <Self as System<'_>>::SystemData::setup(world);
+        let event_reader = world.fetch_mut::<EventChannel<UiEvent>>().register_reader(); // * gotta do this whenever trying to read events
+        Self {  event_reader, first_run:true , focused: false, location_mode: false, focused_ent : None, } 
+    }
 }
 
 impl<'s> System<'s> for BuildingInteractSystem {
@@ -117,15 +115,15 @@ impl<'s> System<'s> for BuildingInteractSystem {
         } else {
             for fol in (&mut follower).join(){ fol.kind = TileType::Location }
         }
-
+        
+        let mut focusedstack : Option<&mut UnitStack> = None;
+        
         for event in events.read(&mut self.event_reader){
-            let focusedstack : Option<&mut UnitStack> = None; // TODO: move to parent loop, make a loop that handles updating the stack
             if event.event_type == UiEventType::Click{
                 let clicked = event.target.id();
                 if clicked == ui_finder.find("Warrior_button").unwrap().id(){
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(Unit{UnitType: TileType::Warrior, Health: 0}); // TODO: decide on health values for units!
                     focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
-                    focusedstack.unwrap().push(Unit{UnitType: TileType::Warrior, Health: 0}); // TODO: decide on health values for units!
-
 
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
                     self.location_mode = !self.location_mode;
@@ -138,15 +136,19 @@ impl<'s> System<'s> for BuildingInteractSystem {
                     || clicked == ui_finder.find("Stack_Button7").unwrap().id()
                     || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other I cannot make one big "stack" button, instead I have to address each stack button in this if statement
 
-                        focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
-                        let test = focusedstack.unwrap().pop().unwrap().UnitType;
+                        let test = unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop().unwrap().UnitType;
                         println!("Popped: {}", test as i32);
+
+                        focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
+
 
                 }
             }
-            if let Some(focusedstack_unwrap) = focusedstack{ // had to move here because of borrow checker
-                StackUiUpdate(focusedstack_unwrap, ui_finder, ui_text);
-            }
         }
+
+        if let Some(focusedstack_unwrap) = focusedstack{ // had to move here because of borrow checker
+            StackUiUpdate(focusedstack_unwrap, ui_finder, ui_text);
+        }
+
     }
 }

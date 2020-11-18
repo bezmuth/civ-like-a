@@ -1,4 +1,4 @@
-use crate::game::{MouseTilePos, Tiles, Layer1, Layer2, Layer3};
+use crate::game::MouseTilePos;
 use amethyst::{
     core::{
         geometry::Plane,
