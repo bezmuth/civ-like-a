@@ -6,10 +6,10 @@ use amethyst::ecs::storage;
 
 use amethyst::{core::HiddenPropagate, ui::{UiEventType, UiText}, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, winit::MouseButton};
 
-fn StackUiUpdate(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Storage<'_, UiText, amethyst::shred::FetchMut<'_, storage::MaskedStorage<UiText>>, >){ // * this function updates the stack ui elements, its a bit a gross function but I cannot iterate over Ui elements from arbritary indexes
+fn stack_ui_update(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Storage<'_, UiText, amethyst::shred::FetchMut<'_, storage::MaskedStorage<UiText>>, >){ // * this function updates the stack ui elements, its a bit a gross function but I cannot iterate over Ui elements from arbritary indexes
     if let Some(peeked) = stack.peek(){
-        let mut button_text = "undefined";
-        match peeked.UnitType{
+        let button_text: &str;
+        match peeked.unit_type{
             TileType::Warrior => button_text = "W",
             _ => button_text = "undefined",
         }
@@ -66,7 +66,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
         // * quick note on wanting to do a small menu above the tile, the location of a Ui element (a UiTransform) cannot be written to
         // * therefore I either have to create a static menu, for instance a menu that replaces the lower panel like aoe2
         // * OR I could move the camera so the menu apears above the tile
-    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, mut ui_text): Self::SystemData) {        
+    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, ui_text): Self::SystemData) {        
         if !self.location_mode{ // if operating normally
             for fol in (&mut follower).join(){ fol.kind = TileType::Empty }
 
@@ -122,7 +122,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
             if event.event_type == UiEventType::Click{
                 let clicked = event.target.id();
                 if clicked == ui_finder.find("Warrior_button").unwrap().id(){
-                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(Unit{UnitType: TileType::Warrior, Health: 0}); // TODO: decide on health values for units!
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(Unit{unit_type: TileType::Warrior, health: 0}); // TODO: decide on health values for units!
                     focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
 
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
@@ -136,7 +136,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
                     || clicked == ui_finder.find("Stack_Button7").unwrap().id()
                     || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other I cannot make one big "stack" button, instead I have to address each stack button in this if statement
 
-                        let test = unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop().unwrap().UnitType;
+                        let test = unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop().unwrap().unit_type;
                         println!("Popped: {}", test as i32);
 
                         focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
@@ -147,7 +147,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
         }
 
         if let Some(focusedstack_unwrap) = focusedstack{ // had to move here because of borrow checker
-            StackUiUpdate(focusedstack_unwrap, ui_finder, ui_text);
+            stack_ui_update(focusedstack_unwrap, ui_finder, ui_text);
         }
 
     }

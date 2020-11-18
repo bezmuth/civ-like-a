@@ -8,7 +8,7 @@ pub struct UnitStack{
     pub repeat: bool,
 }
 impl UnitStack{
-    fn new() -> UnitStack{
+    pub fn new() -> UnitStack{
         UnitStack{top: 0, arr: [None; 8], repeat: false}
     }
 
@@ -38,7 +38,6 @@ impl UnitStack{
     }
 
     pub fn push(&mut self, unit : Unit) {
-        let unote = Some(unit);
         self.arr[self.top as usize] = Some(unit);
         self.top = self.top + 1;
     }
@@ -50,8 +49,8 @@ impl Component for UnitStack{
 
 #[derive(Copy, Clone)]
 pub struct Unit{
-    pub UnitType : TileType,
-    pub Health: i32,
+    pub unit_type : TileType,
+    pub health: i32,
 }
 impl Component for Unit {
     type Storage = DenseVecStorage<Self>;

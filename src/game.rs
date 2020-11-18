@@ -1,5 +1,5 @@
 use std::time::Duration;
-use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, ecs::{Component, DenseVecStorage, NullStorage}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
+use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, ecs::{Component, DenseVecStorage}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
     }, shred::{DispatcherBuilder}, shred::Dispatcher, ui::{
         Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,

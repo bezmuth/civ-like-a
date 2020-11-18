@@ -70,6 +70,7 @@ impl<'s> System<'s> for SheetSystem {
                             .build_entity() 
                             .with(future_build, &mut buildings)
                             .with(future_pos.unwrap(), &mut tileposs)
+                            .with(UnitStack::new(), &mut unitstacks)
                             .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
                         } else {
                             entities // add an entity of the build.mode type to the world, allows for resource calc
