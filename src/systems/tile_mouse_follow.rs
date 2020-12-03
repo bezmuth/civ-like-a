@@ -22,13 +22,10 @@ impl<'s> System<'s> for TileMouseFollow {
                 cloned_transform = tile_transform.clone();
             }
         }
-        if cloned_transform != Transform::default(){
-            for (follower_transform, follower_spriterender, fol) in (&mut transforms, &mut spriterenders, &mut follower).join(){
-                follower_spriterender.sprite_number = fol.kind as usize;
-                *follower_transform = cloned_transform;
-                break;
-            }
+        for (follower_transform, follower_spriterender, fol) in (&mut transforms, &mut spriterenders, &mut follower).join(){
+            follower_spriterender.sprite_number = fol.kind as usize;
+            *follower_transform = cloned_transform;
+            break;
         }
     }
-    
 }

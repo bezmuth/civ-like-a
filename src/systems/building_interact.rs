@@ -1,4 +1,5 @@
-use crate::game::{Build, Building, TileType, MouseTilePos, OnUi, PlayersInfo, TilePos, Follower, UnitStack, Unit};
+use crate::game::{Build, Building, TileType, MouseTilePos, OnUi, PlayersInfo, TilePos, Follower, UnitStack, Unit, OutPos};
+use TileType::Empty;
 use amethyst::ecs::Entities;
 use amethyst::ecs::Entity;
 use amethyst::ecs::Storage;
@@ -6,29 +7,12 @@ use amethyst::ecs::storage;
 
 use amethyst::{core::HiddenPropagate, ui::{UiEventType, UiText}, ecs::WriteStorage, ecs::prelude::{System, ReadStorage, ReadExpect, SystemData, Join, WriteExpect}, input::{InputHandler, StringBindings}, shred::Read, shred::World, shred::Write, shrev::EventChannel, shrev::ReaderId, ui::UiEvent, ui::UiFinder, winit::MouseButton};
 
-fn stack_ui_update(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Storage<'_, UiText, amethyst::shred::FetchMut<'_, storage::MaskedStorage<UiText>>, >){ // * this function updates the stack ui elements, its a bit a gross function but I cannot iterate over Ui elements from arbritary indexes
-    if let Some(peeked) = stack.peek(){
-        let button_text: &str;
-        match peeked.unit_type{
-            TileType::Warrior => button_text = "W",
-            _ => button_text = "undefined",
-        }
-        // This is ugly but self explanitory
-        match stack.top{
-            7 => ui_text.get_mut(ui_finder.find("Stack_Button8").unwrap()).unwrap().text = button_text.to_string(),
-            6 => ui_text.get_mut(ui_finder.find("Stack_Button7").unwrap()).unwrap().text = button_text.to_string(),
-            5 => ui_text.get_mut(ui_finder.find("Stack_Button6").unwrap()).unwrap().text = button_text.to_string(),
-            4 => ui_text.get_mut(ui_finder.find("Stack_Button5").unwrap()).unwrap().text = button_text.to_string(),
-            3 => ui_text.get_mut(ui_finder.find("Stack_Button4").unwrap()).unwrap().text = button_text.to_string(),
-            2 => ui_text.get_mut(ui_finder.find("Stack_Button3").unwrap()).unwrap().text = button_text.to_string(),
-            1 => ui_text.get_mut(ui_finder.find("Stack_Button2").unwrap()).unwrap().text = button_text.to_string(),
-            0 => ui_text.get_mut(ui_finder.find("Stack_Button1").unwrap()).unwrap().text = button_text.to_string(),
-            _ => panic!("What, how?")
-        }
+//fn stack_ui_update(stack : &mut UnitStack, ui_finder : UiFinder, mut ui_text : Storage<'_, UiText, amethyst::shred::FetchMut<'_, storage::MaskedStorage<UiText>>, >){ // * this function updates the stack ui elements, its a bit a gross function but I cannot iterate over Ui elements from arbritary indexes
 
-    } 
+    // ! HERES THE THING, AMETHYST DOES NOT ALLOW PREFABED BUTTON TEXT TO BE ACCESSED, SO THE UI METHOD OF STACK DISPLAY IS IMPOSSIBLE
 
-}
+//}
+
 
 pub struct BuildingInteractSystem{
     event_reader: ReaderId<UiEvent>,
@@ -61,14 +45,14 @@ impl<'s> System<'s> for BuildingInteractSystem {
         WriteStorage<'s, Follower>,
         WriteStorage<'s, UnitStack>,
         Entities<'s>,
-        WriteStorage<'s, UiText>,
+        WriteStorage<'s, OutPos>
         ); 
         // * quick note on wanting to do a small menu above the tile, the location of a Ui element (a UiTransform) cannot be written to
         // * therefore I either have to create a static menu, for instance a menu that replaces the lower panel like aoe2
         // * OR I could move the camera so the menu apears above the tile
-    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, ui_text): Self::SystemData) {        
+    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, mut outposs): Self::SystemData) {        
         if !self.location_mode{ // if operating normally
-            for fol in (&mut follower).join(){ fol.kind = TileType::Empty }
+            for fol in (&mut follower).join(){ fol.kind = Empty }
 
             if self.first_run{ // * runs on first execute to ensure the barracks menu is hidden
                 if let Some(interact_menu) = ui_finder.find("barracks_menu"){
@@ -113,42 +97,35 @@ impl<'s> System<'s> for BuildingInteractSystem {
 
 
         } else {
-            for fol in (&mut follower).join(){ fol.kind = TileType::Location }
+            // Checks if position selector is in range of tile, if not hide it
+            println!("ent tile pos:{} {}", tileposs.get(self.focused_ent.unwrap()).unwrap().x, tileposs.get(self.focused_ent.unwrap()).unwrap().y);
+            if (mouse_tile_pos.pos.x >= tileposs.get(self.focused_ent.unwrap()).unwrap().x -2 && mouse_tile_pos.pos.x <= tileposs.get(self.focused_ent.unwrap()).unwrap().x + 2) && (mouse_tile_pos.pos.y >= tileposs.get(self.focused_ent.unwrap()).unwrap().y -2 && mouse_tile_pos.pos.y <= tileposs.get(self.focused_ent.unwrap()).unwrap().y + 2){
+                for fol in (&mut follower).join(){
+                    fol.kind = TileType::Location; // TODO show output location when focused?
+                };
+                if input.mouse_button_is_down(MouseButton::Left) && self.focused {
+                    outposs.get_mut(self.focused_ent.unwrap()).unwrap().pos = mouse_tile_pos.pos.clone();
+                    self.location_mode = false;
+                }
+            } else {
+                for fol in (&mut follower).join(){ fol.kind = TileType::Empty  }
+            }
         }
-        
-        let mut focusedstack : Option<&mut UnitStack> = None;
-        
+
+
         for event in events.read(&mut self.event_reader){
             if event.event_type == UiEventType::Click{
                 let clicked = event.target.id();
                 if clicked == ui_finder.find("Warrior_button").unwrap().id(){
-                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(Unit{unit_type: TileType::Warrior, health: 0}); // TODO: decide on health values for units!
-                    focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
-
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(TileType::Warrior); // TODO: decide on health values for units!
+                    // TODO add some visual feedback for when a unit is pushed to the stack. Im thinking some text above the build menu that fades after 10s?
+                    // TODO implement repeat button
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
                     self.location_mode = !self.location_mode;
-                } else if clicked == ui_finder.find("Stack_Button1").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button2").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button3").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button4").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button5").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button6").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button7").unwrap().id()
-                    || clicked == ui_finder.find("Stack_Button8").unwrap().id() { // * As UI elements cannot be layered on top of each other I cannot make one big "stack" button, instead I have to address each stack button in this if statement
-
-                        let test = unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop().unwrap().unit_type;
-                        println!("Popped: {}", test as i32);
-
-                        focusedstack = unitstacks.get_mut(self.focused_ent.unwrap());
-
-
+                } else if clicked == ui_finder.find("Cancel_button").unwrap().id(){ // TODO Cancel isnt very descriptive, try replacing with remove_unit?
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop();
                 }
             }
         }
-
-        if let Some(focusedstack_unwrap) = focusedstack{ // had to move here because of borrow checker
-            stack_ui_update(focusedstack_unwrap, ui_finder, ui_text);
-        }
-
     }
 }

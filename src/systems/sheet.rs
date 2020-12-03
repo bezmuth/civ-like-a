@@ -1,3 +1,4 @@
+use crate::game::OutPos;
 use crate::game::{Build, Building, TileType, Layer2, MouseTilePos, PlayersInfo, TilePos, Tiles, UnitStack};
 use amethyst::{
     derive::SystemDesc,
@@ -14,7 +15,7 @@ use amethyst::{
 pub struct SheetSystem;
 
 // TODO: split this up into multiple components?
-impl<'s> System<'s> for SheetSystem {
+impl<'s> System<'s> for SheetSystem { // handles user interaction with building to the sheet
 
     type SystemData = (
         WriteStorage<'s, Tiles>,
@@ -28,20 +29,21 @@ impl<'s> System<'s> for SheetSystem {
         WriteExpect<'s, MouseTilePos>,
         WriteStorage<'s, Layer2>, // can only join storages of the same read type
         WriteStorage<'s, UnitStack>,
+        WriteStorage<'s, OutPos>
         //WriteStorage<'s, TileEnts>
     );
 
-    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks): Self::SystemData) {
+    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes): Self::SystemData) {
         if input.mouse_button_is_down(MouseButton::Left){ // * this entire system only runs if the left mouse button is pressed
             // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
             // TODO: convert some of these into functions cause they will be useful later (for enemies causing destruction)
             if let Some(build_mode) = build.mode{
-                
                 // build code
                 if build_mode != TileType::Demolish{
                     // * This is split into two parts as one "cannot borrow `tileposs` as mutable more than once at a time" (ie in the for loop then in the entity creation)
                     let mut future_building: Option<Building> = None;
                     let mut future_pos: Option<TilePos> = None;
+                    let mut future_outpos: Option<OutPos> = None;
 
 
                     // iteration which sets the sprite render, finds the tile position, 
@@ -49,11 +51,13 @@ impl<'s> System<'s> for SheetSystem {
                         if (& mouse_tile_pos.pos == tilepos) && tile.tile_type.is_none(){
                             spriterender.sprite_number = build.mode.unwrap() as usize;
                             tile.tile_type = Some(build_mode);
-                            if tilepos.x == 49{
-                                future_building = Some(Building {tile_type: build_mode , playernum: playersinfo.current_player_num, out_x: tilepos.x - 1, out_y : tilepos.y});
+                            if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
+                                // TODO update to support dynamic pull of tilemap size?
+                                future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
                             } else {
-                                future_building = Some(Building {tile_type: build_mode , playernum: playersinfo.current_player_num, out_x: tilepos.x + 1, out_y : tilepos.y});
+                                future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
                             }
+                            future_building = Some(Building {tile_type: build_mode , playernum: playersinfo.current_player_num});
                             future_pos = Some(tilepos.clone());
 
                             if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
@@ -71,6 +75,7 @@ impl<'s> System<'s> for SheetSystem {
                             .with(future_build, &mut buildings)
                             .with(future_pos.unwrap(), &mut tileposs)
                             .with(UnitStack::new(), &mut unitstacks)
+                            .with(future_outpos.unwrap(), &mut outposes)
                             .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
                         } else {
                             entities // add an entity of the build.mode type to the world, allows for resource calc
@@ -79,7 +84,6 @@ impl<'s> System<'s> for SheetSystem {
                             .with(future_pos.unwrap(), &mut tileposs)
                             .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
                         }
-                        
                     }
                 }
 

@@ -20,6 +20,8 @@ pub use super::components::{
     Layer3,
     UnitStack,
     Unit,
+    OutPos,
+    Stat,
 };
 
 #[derive(Default)]
@@ -48,7 +50,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::TerrainGenSystem::new(), "terraingen_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         dispatcher_builder.add(systems::BuildingInteractSystem::new(world), "building_interact_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         dispatcher_builder.add(systems::TileMouseFollow, "tile_mouse_follow_system", &["sheet_system", "build_system", "building_interact_system"]);
-
+        dispatcher_builder.add(systems::UnitTurnSystem{last_turn : -1}, "unit_turn_system", &["sheet_system", "build_system", "building_interact_system", "turn_system", "resourcecalc_system"]);
 
         // Build and setup the `Dispatcher`.
         let mut dispatcher = dispatcher_builder

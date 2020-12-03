@@ -46,283 +46,37 @@ Container(
             ]
         ),
 
-        // Stack Buttons Start
         Container(
-            transform:(
-                id: "Stack_buttons",
-                anchor: MiddleRight,
-                x: -204.,
+            transform: (
+                id: "cancel_button",
+                x: -174.,
                 y: 0.,
-                width: 230.,
-                height: 50.
+                width: 100.,
+                height: 50.,
+                anchor: MiddleRight,
+
             ),
             children: [
-
-                Container(
+                Button(
                     transform: (
-                        id: "stack_button1",
-                        x: 50.,
-                        y: 12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
+                        id: "Cancel_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
                     ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button1",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-                            ),
-                        )
-                    ]
+                    button: (
+                        text: "Cancel",
+                        font: File("font/square.ttf", ("TTF", ())),
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
+                        hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
+                        press_image: SolidColor(0.01, 0.02, 0.035, 1.),
+                    )
                 ),
-
-                Container(
-                    transform: (
-                        id: "stack_button2",
-                        x: 100.,
-                        y: 12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button2",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-
-                            ),
-                        )
-                    ]
-                ),
-
-                Container(
-                    transform: (
-                        id: "stack_button3",
-                        x: 150.,
-                        y: 12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button3",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-
-                            ),
-                        )
-                    ]
-                ),
-
-                Container(
-                    transform: (
-                        id: "stack_button4",
-                        x: 200.,
-                        y: 12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button4",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-                            ),
-                        ),
-                    ]
-                ),
-
-
-
-
-                Container(
-                    transform: (
-                        id: "stack_button5",
-                        x: 50.,
-                        y: -12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button5",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-
-                            ),
-                        )
-                    ]
-                ),
-
-                Container(
-                    transform: (
-                        id: "stack_button6",
-                        x: 100.,
-                        y: -12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button6",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-                            ),
-                        )
-                    ]
-                ),
-
-                Container(
-                    transform: (
-                        id: "stack_button7",
-                        x: 150.,
-                        y: -12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button7",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-
-                            ),
-                        )
-                    ]
-                ),
-
-                Container(
-                    transform: (
-                        id: "stack_button8",
-                        x: 200,
-                        y: -12.5,
-                        width: 50.,
-                        height: 25.,
-                        anchor: MiddleLeft,
-
-                    ),
-                    children: [
-                        Button(
-                            transform: (
-                                id: "Stack_Button8",
-                                tab_order: 1,
-                                anchor: MiddleLeft,
-                                stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
-                                mouse_reactive: true,
-                            ),
-                            button: (
-                                text: "W",
-                                font_size: 10.,
-                                normal_text_color: (1.0, 1.0, 1.0, 1.),
-                                normal_image: SolidColor(0.02, 0.03, 0.06, 1.),
-                                hover_image: SolidColor(0.02, 0.02, 0.035, 1.),
-                                press_image: SolidColor(0.01, 0.02, 0.035, 1.),
-                            ),
-                        )
-                    ]
-                ),
-
-
-
-
-
-            ],
+            ]
         ),
-
-
-
-        // Stack Buttons End
 
         Container(
             transform: (
