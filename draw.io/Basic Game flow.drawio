@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-04T15:04:32.271Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="PxH61LS32CrWwmCSiq82" version="13.10.9" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-04T15:05:18.671Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="xBZtkooPRwEvnLIjAwVO" version="13.10.9" type="github">
   <diagram id="C5RBs43oDa-KdzZeNtuy" name="Page-1">
     <mxGraphModel dx="1422" dy="772" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -62,9 +62,13 @@
         <mxCell id="pVxUWkFdO_DaniVyaewb-5" value="Spend resources" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="234" y="640" width="100" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="pVxUWkFdO_DaniVyaewb-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="pVxUWkFdO_DaniVyaewb-8" source="WIyWlLk6GJQsqaUBKTNV-12">
+        <mxCell id="pVxUWkFdO_DaniVyaewb-7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" target="pVxUWkFdO_DaniVyaewb-8" source="WIyWlLk6GJQsqaUBKTNV-12">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="614" y="530" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="474" y="580" />
+              <mxPoint x="544" y="580" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="pVxUWkFdO_DaniVyaewb-8" value="Explore Map" style="rhombus;whiteSpace=wrap;html=1;shadow=0;fontFamily=Helvetica;fontSize=12;align=center;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
@@ -126,8 +130,14 @@
         <mxCell id="pVxUWkFdO_DaniVyaewb-28" value="Add flat&amp;nbsp;&lt;br&gt;resource count to resources" style="whiteSpace=wrap;html=1;shadow=0;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="420" y="910" width="120" height="50" as="geometry" />
         </mxCell>
+        <mxCell id="pVxUWkFdO_DaniVyaewb-34" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="WIyWlLk6GJQsqaUBKTNV-1" source="pVxUWkFdO_DaniVyaewb-29" target="pVxUWkFdO_DaniVyaewb-33">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="pVxUWkFdO_DaniVyaewb-29" value="No other enemy city centers?" style="rhombus;whiteSpace=wrap;html=1;shadow=0;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
           <mxGeometry x="297.5" y="1028" width="85" height="85" as="geometry" />
+        </mxCell>
+        <mxCell id="pVxUWkFdO_DaniVyaewb-33" value="Enter Win State" style="whiteSpace=wrap;html=1;shadow=0;strokeWidth=1;spacing=6;spacingTop=-4;" vertex="1" parent="WIyWlLk6GJQsqaUBKTNV-1">
+          <mxGeometry x="280" y="1205.5" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
