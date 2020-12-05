@@ -121,7 +121,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
-//todo: move all these into a "component" file?
+//todo: move all these into a "component" file?36
 pub struct Turn{
     pub num: i32,
 }
