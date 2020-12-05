@@ -32,7 +32,7 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
         WriteStorage<'s, OutPos>
         //WriteStorage<'s, TileEnts>
     );
-
+    // handles building to the sheet, should maybe be called build_sheet?
     fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes): Self::SystemData) {
         if input.mouse_button_is_down(MouseButton::Left){ // * this entire system only runs if the left mouse button is pressed
             // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
@@ -45,6 +45,9 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                     let mut future_pos: Option<TilePos> = None;
                     let mut future_outpos: Option<OutPos> = None;
 
+                    // Instead of drawing to the screen, most rendering is handelled by setting the spriterender of a tile on a layer to a certain value
+                    // This is a method of programming to an interface instead of directly creating a new spritrender and transform each time I want to create a new
+                    // building, I instead change the value of a tile's spriterender.
 
                     // iteration which sets the sprite render, finds the tile position, 
                     for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {

@@ -86,12 +86,13 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         for x in 0..(playercount){
             world // * WORLD.INSERT DOES NOT WORK WITH COMPONENTS
                 .create_entity()
-                .with(Player::new(x))                                   
+                .with(Player::new(x))
                 .build();
         } 
 
         initialise_follow_ent(world, self.sprite_sheet_handle.clone().unwrap());
-        initialise_overlay_sheet(world, self.sprite_sheet_handle.clone().unwrap());    
+        initialise_unit_sheet(world, self.sprite_sheet_handle.clone().unwrap());
+        initialise_building_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_world_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_res_disp(world);
         initialise_lower_menu(world);
@@ -206,11 +207,11 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
     }
 }
 
-fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let mut transform = Transform::default();
     
     let sprite_render = SpriteRender {
-        sprite_sheet: sprite_sheet_handle, 
+        sprite_sheet: sprite_sheet_handle,
         sprite_number: 4 // blank sprite
     };
     for x in 0..50{
@@ -227,6 +228,29 @@ fn initialise_overlay_sheet(world: &mut World, sprite_sheet_handle: Handle<Sprit
         }
     }
 }
+
+fn initialise_unit_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+    let mut transform = Transform::default();
+    let sprite_render = SpriteRender {
+        sprite_sheet: sprite_sheet_handle,
+        sprite_number: 4 // blank sprite
+    };
+    for x in 0..50{
+        for y in 0..50{
+            transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.00001); // z > 0 so it is displayed above layer 0
+            world
+                .create_entity()
+                .with(sprite_render.clone())
+                .with(transform.clone())
+                .with(Tiles { player: 0, tile_type: None})
+                .with(TilePos{x, y})
+                .with(Layer3)
+                .build();
+        }
+    }
+}
+
+
 
 fn initialise_res_disp(world: &mut World){
     let font = world.read_resource::<Loader>().load(

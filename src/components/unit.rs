@@ -59,7 +59,7 @@ impl Component for UnitStack{
 #[derive(Copy, Clone)]
 pub struct Unit{
     pub unit_type : TileType,
-    pub playernum: i32;
+    pub playernum: i32,
 }
 impl Component for Unit {
     type Storage = DenseVecStorage<Self>;

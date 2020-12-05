@@ -2,57 +2,62 @@ List((
     texture_width: 192, 
     texture_height: 285,
     sprites: [
-        (
-            x: 0,
-            y: 0,
-            width: 64,
-            height: 35,
-        ),
-        (
-            x: 0,
-            y: 36,
-            width: 64,
-            height: 35,
-        ),
-        (
-            x: 0,
-            y: 72,
-            width: 64,
-            height: 35,
-        ),
-        (
-            x: 0,
-            y: 108,
-            width: 64,
-            height: 35,
-        ),
-        (
-            x: 0,
-            y: 144,
-            width: 64,
-            height: 35,
-        ),
-        (
-            x: 0,
-            y: 180,
-            width: 64,
-            height: 35,
-        ),
-        (
-            x: 0,
-            y: 216,
-            width: 64,
-            height: 35,
-        ),
+            (
+                x: 0,
+                y: 0,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 0,
+                y: 36,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 0,
+                y: 72,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 0,
+                y: 108,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 0,
+                y: 144,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 0,
+                y: 180,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 0,
+                y: 216,
+                width: 64,
+                height: 35,
+            ),
 
 
-
-
-        (
-            x: 65, // warrior or something
-            y: 0,
-            width: 64,
-            height: 35,
-        ),
+            // col 2
+            (
+                x: 65,
+                y: 0,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 65,
+                y: 36,
+                width: 64,
+                height: 35,
+            ),
     ],
 ))
