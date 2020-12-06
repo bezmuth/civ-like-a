@@ -1,4 +1,5 @@
 use std::time::Duration;
+use rand::prelude::*;
 use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, ecs::{Component, DenseVecStorage}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
         Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
     }, shred::{DispatcherBuilder}, shred::Dispatcher, ui::{
@@ -23,6 +24,8 @@ pub use super::components::{
     OutPos,
     Stat,
 };
+
+
 
 #[derive(Default)]
 pub struct Civ<'a, 'b> {
@@ -75,7 +78,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         initialise_camera(world);
         // TODO: move all these to their own init?
         world.insert(Build {mode: None}); // * WORLD.INSERT WORKS WITH RESOURCES
-        // world.insert(CurrentPlayer{ playernum: 0}); 
+        // world.insert(CurrentPlayer{ playernum: 0});
         world.insert(MouseTilePos{ pos : TilePos{x:0 , y:0} });
         world.insert(OnUi{case: false});
         world.insert(Turn{num:0});
@@ -88,7 +91,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
                 .create_entity()
                 .with(Player::new(x))
                 .build();
-        } 
+        }
 
         initialise_follow_ent(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_unit_sheet(world, self.sprite_sheet_handle.clone().unwrap());
@@ -178,38 +181,53 @@ fn initialise_camera(world: &mut World) {
 
     world
         .create_entity()
-        .with(Camera::standard_2d(1280., 720.)) // * width is halved in spritesheet.ron                                   
+        .with(Camera::standard_2d(1280., 720.)) // * width is halved in spritesheet.ron
         .with(transform)
         .build();
 }
 
 fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let mut transform = Transform::default();
-    
-    let sprite_render = SpriteRender {
-        sprite_sheet: sprite_sheet_handle,
-        sprite_number: 0, // ground is the first sprite in the sprite_sheet
+
+    let mut sprite_render = SpriteRender {
+            sprite_sheet: sprite_sheet_handle,
+            sprite_number: TileType::Grass as usize, // ground is the first sprite in the sprite_sheet
     };
     for x in 0..50{
         for y in 0..50{
             transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.0);
             // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
             // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;
-            world
+
+            let mut rng = rand::thread_rng();
+            if rng.gen::<f32>() > 0.99 { // this randomly generates the ruins that the centers are built upon
+                sprite_render.sprite_number = TileType::Ruins as usize;
+                world
                 .create_entity()
                 .with(sprite_render.clone())
                 .with(transform.clone())
-                .with(Tiles { player: 0, tile_type: None})
+                .with(Tiles { player: 0, tile_type: Some(TileType::Ruins)})
                 .with(TilePos{x, y})
                 .with(Layer1)
                 .build();
+            } else{
+                sprite_render.sprite_number = TileType::Grass as usize;
+                world
+                .create_entity()
+                .with(sprite_render.clone())
+                .with(transform.clone())
+                .with(Tiles { player: 0, tile_type: Some(TileType::Grass)})
+                .with(TilePos{x, y})
+                .with(Layer1)
+                .build();
+            }
         }
     }
 }
 
 fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let mut transform = Transform::default();
-    
+
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle,
         sprite_number: 4 // blank sprite

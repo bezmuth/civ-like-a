@@ -1,5 +1,5 @@
 use crate::game::OutPos;
-use crate::game::{Build, Building, TileType, Layer2, MouseTilePos, PlayersInfo, TilePos, Tiles, UnitStack};
+use crate::game::{Build, Building, TileType, Layer2, Layer1, MouseTilePos, PlayersInfo, TilePos, Tiles, UnitStack, Follower};
 use amethyst::{
     derive::SystemDesc,
     renderer::{SpriteRender},
@@ -29,15 +29,65 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
         WriteExpect<'s, MouseTilePos>,
         WriteStorage<'s, Layer2>, // can only join storages of the same read type
         WriteStorage<'s, UnitStack>,
-        WriteStorage<'s, OutPos>
+        WriteStorage<'s, OutPos>,
+        WriteStorage<'s, Follower>,
+        WriteStorage<'s, Layer1>
         //WriteStorage<'s, TileEnts>
     );
     // handles building to the sheet, should maybe be called build_sheet?
-    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes): Self::SystemData) {
-        if input.mouse_button_is_down(MouseButton::Left){ // * this entire system only runs if the left mouse button is pressed
-            // TODO: combine these 2 code blocks? and refactor this code is garbage. Most of the if statments should be replacable with a .join implementation in the object definition
-            // TODO: convert some of these into functions cause they will be useful later (for enemies causing destruction)
-            if let Some(build_mode) = build.mode{
+    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes, mut follower, mut layer1): Self::SystemData) {
+        if let Some(build_mode) = build.mode{
+
+            let mut placeable = false;
+
+            // iteration which checks if a tile is placeable upon
+            for (tile, tilepos, _) in (& tiles, & tileposs, & layer1).join(){
+                if let Some(current_tile_type) = tile.tile_type{
+                    if (& mouse_tile_pos.pos == tilepos) {
+                        match build_mode{
+                            TileType::Center => placeable = current_tile_type == TileType::Ruins, // doing a comparison instead of an entire if statement cause I'm cool
+                            TileType::Barrack => {
+                                // We need to check that we are within range of a city centre
+                                // We do this by checking if a city centre is in a 4 by 4 range of the mouse by pythag.
+                                if current_tile_type == TileType::Grass{
+                                    for (building, tilepos2) in (&buildings, &tileposs).join(){
+                                        if building.tile_type == TileType::Center{
+                                            if ((mouse_tile_pos.pos.x - tilepos2.x).pow(2) as f32 + (mouse_tile_pos.pos.y - tilepos2.y).pow(2) as f32).sqrt() <= 4.{
+                                                placeable = true;
+                                                break;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            TileType::WoodBuilding => placeable = current_tile_type == TileType::Forest,
+                            TileType::MetalBuilding => placeable = current_tile_type == TileType::Mountains,
+                            _ => placeable = false,
+                        }
+                    }
+                }
+            }
+
+            if placeable{ // this sets the follower
+                for fol in (&mut follower).join(){
+                    if build_mode != TileType::Demolish{
+                        fol.kind = build_mode;
+                    }
+                };
+            } else {
+                for fol in (&mut follower).join(){
+                    if build_mode != TileType::Demolish{
+                        fol.kind = TileType::Empty;
+                    }
+                };
+            }
+
+
+
+
+            if input.mouse_button_is_down(MouseButton::Left){ // * this entire system only runs if the left mouse button is pressed
+                // TODO: combine these 2 code blocks? and refactor this code is kinda painful. Most of the if statments should be replacable with a .join implementation in the object definition
+                // TODO: convert some of these into functions cause they might be useful later (for enemies causing destruction?)
                 // build code
                 if build_mode != TileType::Demolish{
                     // * This is split into two parts as one "cannot borrow `tileposs` as mutable more than once at a time" (ie in the for loop then in the entity creation)
@@ -49,43 +99,42 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                     // This is a method of programming to an interface instead of directly creating a new spritrender and transform each time I want to create a new
                     // building, I instead change the value of a tile's spriterender.
 
-                    // iteration which sets the sprite render, finds the tile position, 
-                    for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {
-                        if (& mouse_tile_pos.pos == tilepos) && tile.tile_type.is_none(){
-                            spriterender.sprite_number = build.mode.unwrap() as usize;
-                            tile.tile_type = Some(build_mode);
-                            if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
-                                // TODO update to support dynamic pull of tilemap size?
-                                future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
-                            } else {
-                                future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
-                            }
-                            future_building = Some(Building {tile_type: build_mode , playernum: playersinfo.current_player_num});
-                            future_pos = Some(tilepos.clone());
+                    if placeable {
+                        // iteration which sets the sprite render, finds the tile position,
+                        for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {
+                            if (& mouse_tile_pos.pos == tilepos) && tile.tile_type.is_none(){
+                                spriterender.sprite_number = build.mode.unwrap() as usize;
+                                tile.tile_type = Some(build_mode);
+                                if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
+                                    // TODO update to support dynamic pull of tilemap size?
+                                    future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
+                                } else {
+                                    future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
+                                }
+                                future_building = Some(Building {tile_type: build_mode , playernum: playersinfo.current_player_num});
+                                future_pos = Some(tilepos.clone());
 
-                            if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
-                                build.mode = None;
                             }
                         }
-                    }
 
 
-                    // actual creation of the entity
-                    if let Some(future_build) = future_building{
-                        if future_build.tile_type == TileType::Barrack{
-                            entities // add an entity of the build.mode type to the world, allows for resource calc
-                            .build_entity() 
-                            .with(future_build, &mut buildings)
-                            .with(future_pos.unwrap(), &mut tileposs)
-                            .with(UnitStack::new(), &mut unitstacks)
-                            .with(future_outpos.unwrap(), &mut outposes)
-                            .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
-                        } else {
-                            entities // add an entity of the build.mode type to the world, allows for resource calc
-                            .build_entity()
-                            .with(future_build, &mut buildings)
-                            .with(future_pos.unwrap(), &mut tileposs)
-                            .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
+                        // actual creation of the entity
+                        if let Some(future_build) = future_building{
+                            if future_build.tile_type == TileType::Barrack{
+                                entities // add an entity of the build.mode type to the world, allows for resource calc
+                                    .build_entity() 
+                                    .with(future_build, &mut buildings)
+                                    .with(future_pos.unwrap(), &mut tileposs)
+                                    .with(UnitStack::new(), &mut unitstacks)
+                                    .with(future_outpos.unwrap(), &mut outposes)
+                                    .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
+                            } else {
+                                entities // add an entity of the build.mode type to the world, allows for resource calc
+                                    .build_entity()
+                                    .with(future_build, &mut buildings)
+                                    .with(future_pos.unwrap(), &mut tileposs)
+                                    .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
+                            }
                         }
                     }
                 }
@@ -102,15 +151,17 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                                     break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
                                 }
                             }
-                            if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
-                                build.mode = None;
-                            }
+
                         }
                     }
                 }
+                if !input.action_is_down("extend").unwrap(){ // allows multiple buildings to be placed without pressing build a bunch of times
+                    build.mode = None;
+                    for fol in (&mut follower).join(){
+                        fol.kind = TileType::Empty;
+                    };
+                }
             }
-
-
         }
     }
 }

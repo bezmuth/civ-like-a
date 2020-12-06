@@ -14,20 +14,25 @@ impl Component for TilePos{
 
 #[derive(Copy, Clone, PartialEq)]
 pub enum TileType{ // resource as it has no component implmentation, use READ and READEXPECT
+    Grass = 0,
+    Sea = 1,
+    Forest = 2,
+    Mountains = 3,
     Empty = 4,
     Center = 5,
     Barrack = 6,
-    WoodBuilding = 100, // not implemented
-    MetalBuilding = 101, // not implemented
-    ScienceBuilding = 102, // not implemented
-    Location = 7, // not implemented
-    Warrior = 8,
+    Ruins = 7,
+    WoodBuilding = 8, // not implemented
+    MetalBuilding = 9, // not implemented
+    ScienceBuilding = 10, // not implemented
+    Location = 11,
+    Warrior = 12,
     Demolish = 99,
 }
 
 pub struct Tiles{ 
     pub player: i32,
-    pub tile_type: Option<TileType>,
+    pub tile_type: Option<TileType>, // Option Might Not be required anymore? Check through codebase for use
 }
 impl Component for Tiles { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;

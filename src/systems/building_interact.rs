@@ -52,12 +52,16 @@ impl<'s> System<'s> for BuildingInteractSystem {
         // * OR I could move the camera so the menu apears above the tile
     fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, mut outposs): Self::SystemData) {        
         if !self.location_mode{ // if operating normally
-            for fol in (&mut follower).join(){ fol.kind = Empty }
-
             if self.first_run{ // * runs on first execute to ensure the barracks menu is hidden
                 if let Some(interact_menu) = ui_finder.find("barracks_menu"){
                     let _  = hidden_propagates.insert(interact_menu, HiddenPropagate::new()).unwrap();
                     self.first_run = false;
+                }
+            }
+
+            for fol in (&mut follower).join(){
+                if fol.kind == TileType::Location{
+                    fol.kind = TileType::Empty
                 }
             }
 
@@ -98,7 +102,6 @@ impl<'s> System<'s> for BuildingInteractSystem {
 
         } else {
             // Checks if position selector is in range of tile, if not hide it
-            println!("ent tile pos:{} {}", tileposs.get(self.focused_ent.unwrap()).unwrap().x, tileposs.get(self.focused_ent.unwrap()).unwrap().y);
             if (mouse_tile_pos.pos.x >= tileposs.get(self.focused_ent.unwrap()).unwrap().x -2 && mouse_tile_pos.pos.x <= tileposs.get(self.focused_ent.unwrap()).unwrap().x + 2) && (mouse_tile_pos.pos.y >= tileposs.get(self.focused_ent.unwrap()).unwrap().y -2 && mouse_tile_pos.pos.y <= tileposs.get(self.focused_ent.unwrap()).unwrap().y + 2){
                 for fol in (&mut follower).join(){
                     fol.kind = TileType::Location; // TODO show output location when focused?
@@ -122,6 +125,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
                     // TODO implement repeat button
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
                     self.location_mode = !self.location_mode;
+                    for fol in (&mut follower).join(){ fol.kind = Empty };
                 } else if clicked == ui_finder.find("Cancel_button").unwrap().id(){ // TODO Cancel isnt very descriptive, try replacing with remove_unit?
                     unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop();
                 }

@@ -29,11 +29,11 @@ impl<'s> System<'s> for ResourceCalcSystem {
                 if building.playernum == playersinfo.current_player_num {
                     for player in (&mut players).join(){
                         if player.num == playersinfo.current_player_num {
-                            match building.tile_type { // TODO: Ensure these are balanced
-                                TileType::Center => player.wood += 1,
+                            match building.tile_type { // These seem pretty balanced
+                                TileType::Center => { player.wood += 5; player.metal += 5; player.science += 5},
                                 TileType::Barrack => {},
-                                TileType::WoodBuilding => player.wood += 20,
-                                TileType::MetalBuilding => player.metal += 20,
+                                TileType::WoodBuilding => player.wood += 10,
+                                TileType::MetalBuilding => player.metal += 10,
                                 TileType::ScienceBuilding => player.science += 20,
                                 _ => {}
                             }

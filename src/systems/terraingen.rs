@@ -1,4 +1,4 @@
-use crate::game::{Layer1, TilePos, Tiles};
+use crate::game::{Layer1, TilePos, TileType, Tiles};
 
 use amethyst::{
     ecs::prelude::{Join, System, WriteStorage},
@@ -93,16 +93,19 @@ impl<'s> System<'s> for TerrainGenSystem {
     );
 
     fn run(&mut self, (mut tiles, layer1, mut spriterenderers, tileposses): Self::SystemData) {
-        if !self.complete{ 
-            for (_, spriterender, pos, _) in (&mut tiles, &mut spriterenderers, & tileposses, & layer1).join(){
-                if perlin(pos.x as f32 / 10., pos.y as f32 / 10. , self.gradients) > 0.10 { // divide by num to zoom into noise map
-                    spriterender.sprite_number = 2 as usize; // trees
+        if !self.complete{
+            for (tile, spriterender, pos, _) in (&mut tiles, &mut spriterenderers, & tileposses, & layer1).join(){
+                if perlin(pos.x as f32 / 10., pos.y as f32 / 10. , self.gradients) > 0.1 { // divide by num to zoom into noise map
+                    spriterender.sprite_number = TileType::Forest as usize;
+                    tile.tile_type = Some(TileType::Forest);
                 }
                 if perlin(pos.x as f32 / 10., pos.y as f32 / 10. , self.gradients) > 0.18 { 
-                    spriterender.sprite_number = 3 as usize; // mountains
+                    spriterender.sprite_number = TileType::Mountains as usize; // mountains
+                    tile.tile_type = Some(TileType::Mountains);
                 }
-                if perlin(pos.x as f32 / 10., pos.y as f32 / 10. , self.gradients) < 0.01 { 
-                    spriterender.sprite_number = 1 as usize; // water
+                if perlin(pos.x as f32 / 10., pos.y as f32 / 10. , self.gradients) < 0.025 { 
+                    spriterender.sprite_number = TileType::Sea as usize; // sea
+                    tile.tile_type = Some(TileType::Sea);
                 }
 
             }
