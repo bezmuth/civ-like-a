@@ -22,11 +22,13 @@ pub enum TileType{ // resource as it has no component implmentation, use READ an
     Center = 5,
     Barrack = 6,
     Ruins = 7,
-    WoodBuilding = 8, // not implemented
-    MetalBuilding = 9, // not implemented
-    ScienceBuilding = 10, // not implemented
-    Location = 11,
-    Warrior = 12,
+    WoodBuilding = 8,
+    MetalBuilding = 9,
+    ScienceBuilding = 109, // not implemented
+    Location = 10,
+    Warrior = 11,
+    Heavy = 12,
+    Monk = 13,
     Demolish = 99,
 }
 

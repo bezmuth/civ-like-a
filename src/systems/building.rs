@@ -27,7 +27,7 @@ impl<'s> System<'s> for BuildSystem {
         let reader = self
             .event_reader
             .as_mut()
-            .expect("BuildSystem::setup was not called correctly, try adding component with ::default()");
+            .expect("BuildSystem::setup was not called correctly, try adding component with ::default()!");
         if !self.run{
             if let Some(build_menu) = ui_finder.find("build_menu"){
                 let _  = hidden_propagates.insert(build_menu, HiddenPropagate::new()).unwrap();
@@ -39,9 +39,8 @@ impl<'s> System<'s> for BuildSystem {
                 for event in events.read(reader) {
                     match event.event_type{
                         UiEventType::Click => { // Todo: block sheet input if clicking on a ui element
-                            
+
                             let clicked = event.target.id();
-                            
                             // * tried to use match but it didnt work? Got variable not used warnings?
                             if clicked == ui_finder.find("Build_button").unwrap().id(){ 
                                 if !hidden_propagates.contains(build_menu){ // todo: adapt this to a hidden_propagates.contains
@@ -65,12 +64,12 @@ impl<'s> System<'s> for BuildSystem {
                                 }
                                 let _  = hidden_propagates.insert(build_menu, HiddenPropagate::new()).unwrap();
                             }
-                            
+
                         },
                         _ => {}
                     }
                 }
-            }    
+            }
         }
 
 

@@ -80,5 +80,17 @@ List((
                 width: 64,
                 height: 35,
             ),
+            (
+                x: 65,
+                y: 72,
+                width: 64,
+                height: 35,
+            ),
+            (
+                x: 65,
+                y: 108,
+                width: 64,
+                height: 35,
+            ),
     ],
 ))

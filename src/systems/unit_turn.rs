@@ -25,14 +25,15 @@ impl<'s> System<'s> for UnitTurnSystem {
         ReadExpect<'s, PlayersInfo>,
         WriteStorage<'s, Unit>,
         WriteStorage<'s, Stat>,
-        Entities<'s>,
+        WriteStorage<'s, Player>,
+        Entities<'s>
     );
 
     // one of the main issues that arose with this system is that if a unit
     // already exists in the output location of the building creating it then
     // the unit wont be created properly. This can be accounted for however it
     // is not within the scope of this project.
-    fn run(&mut self, (mut buildings, mut unitstacks, mut outposs, turn, mut tiles, mut spriterenderers, mut tileposs, mut layer3, playersinfo, mut units, mut stats, mut entities): Self::SystemData) {
+    fn run(&mut self, (mut buildings, mut unitstacks, mut outposs, turn, mut tiles, mut spriterenderers, mut tileposs, mut layer3, playersinfo, mut units, mut stats, mut players, mut entities): Self::SystemData) {
 
 
         if turn.num > self.last_turn{
@@ -44,37 +45,72 @@ impl<'s> System<'s> for UnitTurnSystem {
                         let mut future_stats = Stat::default();
                         let mut future_pos = outpos.pos.clone();
                         let mut future_unit = Unit{unit_type : future_unit_type, playernum : building.playernum};
+                        let mut current_player : Player;
 
-                        // iteration which sets the sprite render on the sheet
-                        for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer3).join() {
-                            if (& future_pos == tilepos) && tile.tile_type.is_none(){
-                                spriterender.sprite_number = future_unit_type as usize;
-                                tile.tile_type = Some(future_unit_type);
+                        // iteration that finds the current player
+                        for current_player in (&mut players).join(){
+                            if current_player.num == playersinfo.current_player_num {
+
+                                // iteration which sets the sprite render on the sheet
+                                for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer3).join() {
+                                    if (& future_pos == tilepos) && tile.tile_type.is_none(){
+                                        spriterender.sprite_number = future_unit_type as usize;
+                                        tile.tile_type = Some(future_unit_type);
+                                    }
+                                }
+
+                                match future_unit_type{
+                                    TileType::Warrior => {
+                                        future_stats = Stat{
+                                            health: 20.,
+                                            attack: 5.,
+                                            resistance: 0.2, // chance to not take damage
+                                            regen: 0.,
+                                            vampire: 0.,
+                                            multi_hit_chance: 0., // chance to multi hit
+                                            multi_hit_amount: 0., // how many times to multi hit
+                                            crit_chance: 0.1, //chance to do a random crit
+                                        };
+                                        current_player.wood -= 10;
+                                    },
+                                    TileType::Heavy => {
+                                        future_stats = Stat{
+                                            health: 50.,
+                                            attack: 5.,
+                                            resistance: 0., // chance to not take damage
+                                            regen: 0.,
+                                            vampire: 0.,
+                                            multi_hit_chance: 0., // chance to multi hit
+                                            multi_hit_amount: 0., // how many times to multi hit
+                                            crit_chance: 0., //chance to do a random crit
+                                        };
+                                        current_player.wood -= 20;
+                                        current_player.metal -= 25
+                                    },
+                                    TileType::Monk => {
+                                        future_stats = Stat{
+                                            health: 10.,
+                                            attack: 3.,
+                                            resistance: 0., // chance to not take damage
+                                            regen: 0.,
+                                            vampire: 0.,
+                                            multi_hit_chance: 0.8, // chance to multi hit
+                                            multi_hit_amount: 3., // how many times to multi hit
+                                            crit_chance: 0.3, //chance to do a random crit
+                                        };
+                                        current_player.wood -= 5;
+                                        current_player.metal -= 30
+                                    }
+                                    _ => future_stats = Stat::default()
+                                }
                             }
+                            entities
+                                .build_entity()
+                                .with(future_unit, &mut units)
+                                .with(future_pos, &mut tileposs)
+                                .with(future_stats, &mut stats)
+                                .build();
                         }
-
-                        match future_unit_type{
-                            TileType::Warrior => future_stats = Stat{
-                                health: 20.,
-                                attack: 5.,
-                                resistance: 5., // chance to not take damage
-                                regen: 0.,
-                                vampire: 0.,
-                                multi_hit_chance: 0., // chance to multi hit
-                                multi_hit_amount: 0., // how many times to multi hit
-                                crit_chance: 0.1, //chance to do a random crit
-                            },
-                            _ => future_stats = Stat::default()
-                        }
-
-                        entities
-                            .build_entity()
-                            .with(future_unit, &mut units)
-                            .with(future_pos, &mut tileposs)
-                            .with(future_stats, &mut stats)
-                            .build();
-
-
                     }
                 }
             }
@@ -82,4 +118,3 @@ impl<'s> System<'s> for UnitTurnSystem {
         }
     }
 }
-
