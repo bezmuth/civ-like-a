@@ -46,18 +46,11 @@ impl<'s> System<'s> for UnitTurnSystem {
                         let mut future_pos = outpos.pos.clone();
                         let mut future_unit = Unit{unit_type : future_unit_type, playernum : building.playernum};
                         let mut current_player : Player;
+                        let mut had_res = true;
 
                         // iteration that finds the current player
                         for current_player in (&mut players).join(){
                             if current_player.num == playersinfo.current_player_num {
-
-                                // iteration which sets the sprite render on the sheet
-                                for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer3).join() {
-                                    if (& future_pos == tilepos) && tile.tile_type.is_none(){
-                                        spriterender.sprite_number = future_unit_type as usize;
-                                        tile.tile_type = Some(future_unit_type);
-                                    }
-                                }
 
                                 match future_unit_type{
                                     TileType::Warrior => {
@@ -71,7 +64,7 @@ impl<'s> System<'s> for UnitTurnSystem {
                                             multi_hit_amount: 0., // how many times to multi hit
                                             crit_chance: 0.1, //chance to do a random crit
                                         };
-                                        current_player.wood -= 10;
+                                        had_res = current_player.sub_wood(10); // checks if user had enough of the resources
                                     },
                                     TileType::Heavy => {
                                         future_stats = Stat{
@@ -84,8 +77,7 @@ impl<'s> System<'s> for UnitTurnSystem {
                                             multi_hit_amount: 0., // how many times to multi hit
                                             crit_chance: 0., //chance to do a random crit
                                         };
-                                        current_player.wood -= 20;
-                                        current_player.metal -= 25
+                                        had_res = current_player.sub_wood(20) && current_player.sub_metal(25); // checks if user had enough of the resources
                                     },
                                     TileType::Monk => {
                                         future_stats = Stat{
@@ -98,18 +90,30 @@ impl<'s> System<'s> for UnitTurnSystem {
                                             multi_hit_amount: 3., // how many times to multi hit
                                             crit_chance: 0.3, //chance to do a random crit
                                         };
-                                        current_player.wood -= 5;
-                                        current_player.metal -= 30
+                                        had_res = current_player.sub_wood(5) && current_player.sub_metal(30); // checks if user had enough of the resources
                                     }
                                     _ => future_stats = Stat::default()
                                 }
                             }
-                            entities
-                                .build_entity()
-                                .with(future_unit, &mut units)
-                                .with(future_pos, &mut tileposs)
-                                .with(future_stats, &mut stats)
-                                .build();
+
+                            if had_res{
+                                entities
+                                    .build_entity()
+                                    .with(future_unit, &mut units)
+                                    .with(future_pos, &mut tileposs)
+                                    .with(future_stats, &mut stats)
+                                    .build();
+                                // iteration which sets the sprite render on the sheet
+                                for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer3).join() {
+                                    if (& future_pos == tilepos) && tile.tile_type.is_none(){
+                                        spriterender.sprite_number = future_unit_type as usize;
+                                        tile.tile_type = Some(future_unit_type);
+                                    }
+                                }
+                            } else {
+                                unitstack.push(future_unit_type); // due to how we pop the unit stack, if the user does not have the currency we gotta put the unit back on the unit stack
+                            }
+
                         }
                     }
                 }

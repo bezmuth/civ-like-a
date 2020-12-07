@@ -13,11 +13,32 @@ impl Player {
     pub fn new(num: i32) -> Player {
         Player {
             num,
-            wood: 0,
-            metal: 0,
+            wood: 50,
+            metal: 25,
             science: 0,
         }
     }
+
+    pub fn sub_wood(&mut self, amount : i32) -> bool {
+        let result = self.wood - amount;
+        if result < 0{
+            return false
+        } else {
+            self.wood = result;
+            return true
+        }
+    }
+
+    pub fn sub_metal(&mut self, amount : i32) -> bool {
+        let result = self.metal - amount;
+        if result < 0{
+            return false
+        } else {
+            self.metal = result;
+            return true
+        }
+    }
+
 }
 impl Component for Player { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;
