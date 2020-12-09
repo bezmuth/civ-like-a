@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-09T11:14:47.863Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="30Krqohj5wDbT9OBjOpm" version="14.0.0" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-09T11:17:27.902Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.97 Safari/537.36" etag="48vFFSH9BhL6_n_M99V2" version="14.0.0" type="github">
   <diagram id="dAtz1YwK6WuvTJzpH8qe" name="Page-1">
     <mxGraphModel dx="317" dy="503" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -45,6 +45,15 @@
         </mxCell>
         <mxCell id="QCEYu4sghAliCAPdEdUp-11" value="Cancel" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="350" y="385" width="40" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="QCEYu4sghAliCAPdEdUp-12" value="Unit buttons, these when clicked add units to the unit stack of the building" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="10" y="320" width="210" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="QCEYu4sghAliCAPdEdUp-13" value="Pops a unit from the building&#39;s unit stack without adding it to the TileMap" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="295" y="460" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="QCEYu4sghAliCAPdEdUp-15" value="Switches the system into location mode, allowing the user to select an output location for the building" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="360" y="310" width="160" height="20" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
