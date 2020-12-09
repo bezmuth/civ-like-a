@@ -35,7 +35,12 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
         WriteStorage<'s, Player>
         //WriteStorage<'s, TileEnts>
     );
-    // handles building to the sheet, should maybe be called build_sheet?
+    // handles building to the sheet, should maybe be called build_sheet? This
+    // is a bit of a monalith of a system. All the functionality is related,
+    // however its hard to manage and can be dificult to understand what the
+    // code actually means some of the time even with heavy commenting. Its also
+    // one of the few systems that directly communicates with other systems
+    // using build.mode 
     fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes, mut follower, mut layer1, mut players): Self::SystemData) {
         if let Some(build_mode) = build.mode{
 
@@ -69,7 +74,7 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                 }
             }
 
-            if placeable{ // this sets the follower
+            if placeable{ // this sets the follower when a tile is placeable upon
                 for fol in (&mut follower).join(){
                     if build_mode != TileType::Demolish{
                         fol.kind = build_mode;
@@ -86,70 +91,73 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
 
 
 
-            if input.mouse_button_is_down(MouseButton::Left){ // * this entire system only runs if the left mouse button is pressed
+            if input.mouse_button_is_down(MouseButton::Left){ // this entire block only runs if the left mouse button is pressed
                 // TODO: combine these 2 code blocks? and refactor this code is kinda painful. Most of the if statments should be replacable with a .join implementation in the object definition
                 // TODO: convert some of these into functions cause they might be useful later (for enemies causing destruction?)
                 // build code
                 if build_mode != TileType::Demolish{
                     // * This is split into two parts as one "cannot borrow `tileposs` as mutable more than once at a time" (ie in the for loop then in the entity creation)
-                    let mut future_building: Option<Building> = None;
+                    let mut future_building: Building = Building {tile_type: build_mode , playernum: playersinfo.current_player_num};
                     let mut future_pos: Option<TilePos> = None;
                     let mut future_outpos: Option<OutPos> = None;
 
-                    // Instead of drawing to the screen, most rendering is handelled by setting the spriterender of a tile on a layer to a certain value
-                    // This is a method of programming to an interface instead of directly creating a new spritrender and transform each time I want to create a new
-                    // building, I instead change the value of a tile's spriterender.
 
                     if placeable {
-                        // iteration which sets the sprite render, finds the tile position,
-                        for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {
-                            if (& mouse_tile_pos.pos == tilepos) && tile.tile_type.is_none(){
-                                spriterender.sprite_number = build.mode.unwrap() as usize;
-                                tile.tile_type = Some(build_mode);
-                                if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
-                                    // TODO update to support dynamic pull of tilemap size?
-                                    future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
-                                } else {
-                                    future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
+                        //creation of the entity
+                        let mut had_res = true; // check if the player had the resources to do this operation
+                        // iteration that attempts to charge player
+                        for player in (&mut players).join(){
+                            if playersinfo.current_player_num == player.num{
+                                match future_building.tile_type{
+                                    TileType::Barrack => {had_res = player.sub_wood(30) && player.sub_metal(10)},
+                                    TileType::WoodBuilding => {had_res = player.sub_wood(20)},
+                                    TileType::MetalBuilding =>{had_res = player.sub_wood(10) && player.sub_metal(45)},
+                                    _ => {}
                                 }
-                                future_building = Some(Building {tile_type: build_mode , playernum: playersinfo.current_player_num});
-                                future_pos = Some(tilepos.clone());
-
                             }
                         }
 
+                        if had_res{
 
-                        // actual creation of the entity
-                        if let Some(future_build) = future_building{
-                            let mut had_res = true; // check if the player had the resources to do this operation
-                            // iteration that attempts to charge player
-                            for player in (&mut players).join(){
-                                if playersinfo.current_player_num == player.num{
-                                    match future_build.tile_type{
-                                        TileType::Barrack => {had_res = player.sub_wood(30) && player.sub_metal(10)},
-                                        TileType::WoodBuilding => {had_res = player.sub_wood(20)},
-                                        TileType::MetalBuilding =>{had_res = player.sub_wood(10) && player.sub_metal(45)},
-                                        _ => {}
+                            // iteration which sets the sprite render, finds the tile position,
+
+                            // Instead of drawing to the screen, most rendering is
+                            // handelled by setting the spriterender of a tile on a
+                            // layer to a certain value This is a method of programming
+                            // to an interface instead of directly creating a new
+                            // spritrender and transform each time I want to create a
+                            // new building, I instead change the value of a tile's
+                            // spriterender.
+                            for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {
+                                if (& mouse_tile_pos.pos == tilepos) && tile.tile_type.is_none(){
+                                    spriterender.sprite_number = build.mode.unwrap() as usize;
+                                    tile.tile_type = Some(build_mode);
+                                    if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
+                                        // TODO update to support dynamic pull of tilemap size?
+                                        future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
+                                    } else {
+                                        future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
                                     }
+                                    future_pos = Some(tilepos.clone());
+
                                 }
                             }
 
-                            if had_res{
-                                if future_build.tile_type == TileType::Barrack{
-                                    entities // add an entity of the build.mode type to the world, allows for resource calc
-                                        .build_entity() 
-                                        .with(future_build, &mut buildings)
-                                        .with(future_pos.unwrap(), &mut tileposs)
-                                        .with(UnitStack::new(), &mut unitstacks)
-                                        .with(future_outpos.unwrap(), &mut outposes)
-                                        .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
-                                } else {
-                                    entities // add an entity of the build.mode type to the world, allows for resource calc
-                                        .build_entity()
-                                        .with(future_build, &mut buildings)
-                                        .with(future_pos.unwrap(), &mut tileposs)
-                                        .build(); // todo: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
-                                }
+
+                            if future_building.tile_type == TileType::Barrack{
+                                entities // add an entity of the build.mode type to the world, allows for resource calc
+                                    .build_entity() 
+                                    .with(future_building, &mut buildings)
+                                    .with(future_pos.unwrap(), &mut tileposs)
+                                    .with(UnitStack::new(), &mut unitstacks)
+                                    .with(future_outpos.unwrap(), &mut outposes)
+                                    .build(); // Done: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
+                            } else {
+                                entities // add an entity of the build.mode type to the world, allows for resource calc
+                                    .build_entity()
+                                    .with(future_building, &mut buildings)
+                                    .with(future_pos.unwrap(), &mut tileposs)
+                                    .build();
                             }
                         }
                     }

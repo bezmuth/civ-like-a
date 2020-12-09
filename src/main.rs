@@ -15,20 +15,17 @@ use amethyst::{
         RenderingBundle,
     },
     ui::{RenderUi, UiBundle},
-    utils::application_root_dir, 
+    utils::application_root_dir,
 };
 
 use amethyst_imgui::RenderImgui;
-
+// this is mostly boilerplate that sets up the amethyst window then switches to the main menu state.
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
 
     let app_root = application_root_dir()?;
     let display_config_path = app_root.join("config/display.ron");
 
-    
-    // This line is not mentioned in the pong tutorial as it is specific to the context
-    // of the git repository. It only is a different location to load the assets from.
     let assets_dir = app_root.join("assets");
 
     let game_data = GameDataBuilder::default()
@@ -48,13 +45,13 @@ fn main() -> amethyst::Result<()> {
                     RenderToWindow::from_config_path(display_config_path)?
                         .with_clear([0.0, 0.0, 0.0, 1.0]),
                 )
-                // RenderFlat2D plugin is used to render entities with `SpriteRender` component.
+                // RenderFlat2D plugin is used to render entities with SpriteRender component.
                 .with_plugin(RenderFlat2D::default())
                 .with_plugin(RenderImgui::<StringBindings>::default())
                 .with_plugin(RenderUi::default())
 
         )?
-        .with_system_desc(HideHierarchySystemDesc, "hidehierarchysystemdesc", &[]); // * lets all the widgets of a panel be hidden
+        .with_system_desc(HideHierarchySystemDesc, "hidehierarchysystemdesc", &[]); // lets all the widgets of a panel be hidden
 
     let mut game = Application::new(assets_dir, Menu::default(), game_data)?;
     game.run();

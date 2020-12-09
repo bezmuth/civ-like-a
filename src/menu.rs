@@ -10,6 +10,8 @@ use amethyst::{
 use crate::game::Civ;
 
 
+// This is a simple menu that is used to bring the user into the main game.
+
 #[derive(Default)]
 pub struct Menu {
 }
@@ -39,11 +41,6 @@ impl SimpleState for Menu {
         Trans::None
     }
 
-    // This code tells Amethyst to run all the systems in your game data.
-    // fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
-    //     data.data.update(&data.world);
-    //     Trans::None
-    // }
 
     fn on_resume(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
@@ -51,7 +48,6 @@ impl SimpleState for Menu {
     }
 }
 
-/// Initialise the camera. // TODO: reimplement camera
 fn initialise_camera(world: &mut World) {
     let transform = Transform::default();
 

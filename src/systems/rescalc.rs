@@ -24,12 +24,15 @@ impl<'s> System<'s> for ResourceCalcSystem {
         // TODO: integrate with turn system 
 
 
-        if turn.num > self.last_turn{ // checks if a turn has passed, if it has add resources to current player
+        if turn.num > self.last_turn{
+            // checks if a turn has passed, if it has add resources to current
+            // player based on their number of buildings
             for building in (buildings).join(){
                 if building.playernum == playersinfo.current_player_num {
                     for player in (&mut players).join(){
                         if player.num == playersinfo.current_player_num {
-                            match building.tile_type { // These seem pretty balanced
+                            match building.tile_type { // Matches are similar to case statements.
+                                // These seem pretty balanced
                                 TileType::Center => { player.wood += 5; player.metal += 5; player.science += 5},
                                 TileType::Barrack => {},
                                 TileType::WoodBuilding => player.wood += 10,

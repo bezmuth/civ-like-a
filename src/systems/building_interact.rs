@@ -18,15 +18,15 @@ pub struct BuildingInteractSystem{
     event_reader: ReaderId<UiEvent>,
     first_run: bool,
     focused: bool,
-    location_mode: bool,
+    location_mode: bool, // location mode is when the user tries to chang the output location of a unit producing building
     focused_ent: Option<Entity>,
 }
 
 impl BuildingInteractSystem {
     pub fn new(world: &mut World) -> Self {
         <Self as System<'_>>::SystemData::setup(world);
-        let event_reader = world.fetch_mut::<EventChannel<UiEvent>>().register_reader(); // * gotta do this whenever trying to read events
-        Self {  event_reader, first_run:true , focused: false, location_mode: false, focused_ent : None, } 
+        let event_reader = world.fetch_mut::<EventChannel<UiEvent>>().register_reader(); // Do this whenever trying to read events
+        Self {  event_reader, first_run:true , focused: false, location_mode: false, focused_ent : None, }
     }
 }
 
@@ -46,11 +46,15 @@ impl<'s> System<'s> for BuildingInteractSystem {
         WriteStorage<'s, UnitStack>,
         Entities<'s>,
         WriteStorage<'s, OutPos>
-        ); 
-        // * quick note on wanting to do a small menu above the tile, the location of a Ui element (a UiTransform) cannot be written to
-        // * therefore I either have to create a static menu, for instance a menu that replaces the lower panel like aoe2
-        // * OR I could move the camera so the menu apears above the tile
-    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, mut outposs): Self::SystemData) {        
+        );
+        // * quick note on wanting to do a small menu above the tile, the
+        // location of a Ui element (a UiTransform) cannot be written to
+        // therefore I either have to create a static menu, for instance a menu
+        // that replaces the lower panel like aoe2 OR I could move the camera
+        // so the menu apears above the tile
+
+        // In the end I decided on drawing over the bottom panel, aoe2 style
+    fn run(&mut self, (tileposs, mouse_tile_pos, ui_finder, input, mut hidden_propagates, playersinfo, buildings, events, build, onui, mut follower, mut unitstacks, entities, mut outposs): Self::SystemData) {
         if !self.location_mode{ // if operating normally
             if self.first_run{ // * runs on first execute to ensure the barracks menu is hidden
                 if let Some(interact_menu) = ui_finder.find("barracks_menu"){
@@ -59,6 +63,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
                 }
             }
 
+            // when we leave location mode, return the follower tile to that of an empty sprite
             for fol in (&mut follower).join(){
                 if fol.kind == TileType::Location{
                     fol.kind = TileType::Empty
@@ -68,8 +73,8 @@ impl<'s> System<'s> for BuildingInteractSystem {
             if !onui.case{ // first check that the ui is not being interacted with
                 if input.mouse_button_is_down(MouseButton::Left) && (build.mode.is_none() || build.mode.unwrap() != TileType::Demolish) && !self.focused{  // dont interact with buildings when in build mode
                     for (building, building_tile_pos, ent) in (&buildings, &tileposs, &entities).join(){
-                        if (& mouse_tile_pos.pos == building_tile_pos) //todo: the "this tile has been clicked" should really be its own function/event
-                        && building.playernum == playersinfo.current_player_num 
+                        if (& mouse_tile_pos.pos == building_tile_pos) //todo: the "this tile has been clicked" should really be its own function/event. Can I make my own events in amethyst?
+                        && building.playernum == playersinfo.current_player_num
                         {
                             if building.tile_type == TileType::Barrack{ // if clicking on barrack
                                 if let (Some(interact_menu), Some(lower_panel)) = (ui_finder.find("barracks_menu"), ui_finder.find("lower_panel")){
@@ -101,7 +106,7 @@ impl<'s> System<'s> for BuildingInteractSystem {
 
 
         } else {
-            // Checks if position selector is in range of tile, if not hide it
+            // Checks if output location selector is in range of tile, if not hide it
             if (mouse_tile_pos.pos.x >= tileposs.get(self.focused_ent.unwrap()).unwrap().x -2 && mouse_tile_pos.pos.x <= tileposs.get(self.focused_ent.unwrap()).unwrap().x + 2) && (mouse_tile_pos.pos.y >= tileposs.get(self.focused_ent.unwrap()).unwrap().y -2 && mouse_tile_pos.pos.y <= tileposs.get(self.focused_ent.unwrap()).unwrap().y + 2){
                 for fol in (&mut follower).join(){
                     fol.kind = TileType::Location; // TODO show output location when focused?
@@ -115,19 +120,20 @@ impl<'s> System<'s> for BuildingInteractSystem {
             }
         }
 
-
+        // This iterator detects whenever some of the buttons within the
+        // interact menu are clicked, if so perform the appropriate action
         for event in events.read(&mut self.event_reader){
             if event.event_type == UiEventType::Click{
                 let clicked = event.target.id();
                 if clicked == ui_finder.find("Warrior_button").unwrap().id(){
-                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(TileType::Warrior); // TODO: decide on health values for units!
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(TileType::Warrior); // Push a tile of type warrior to the focused building's unit stack
+                    // Done: decide on health values for units!
                     // TODO add some visual feedback for when a unit is pushed to the stack. Im thinking some text above the build menu that fades after 10s?
-                    // TODO implement repeat button
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
-                    self.location_mode = !self.location_mode;
+                    self.location_mode = !self.location_mode; // Toggle location mode
                     for fol in (&mut follower).join(){ fol.kind = Empty };
-                } else if clicked == ui_finder.find("Cancel_button").unwrap().id(){ // TODO Cancel isnt very descriptive, try replacing with remove_unit?
-                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop();
+                } else if clicked == ui_finder.find("Cancel_button").unwrap().id(){ // TODO Cancel isnt very descriptive, try replacing with remove unit / pop unit?
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().pop(); // pop a unit from the stack
                 }
             }
         }

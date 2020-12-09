@@ -20,7 +20,8 @@ impl<'s> System<'s> for ResourceDispSystem {
         WriteExpect<'s, Resbar>,
     );
 
-
+    // This system is pretty simple, it updates the text at the top of the screen.
+    // Its so simple that it really could be a part of rescalc.rs
     fn run(&mut self, (playersinfo, players, mut ui_text, resbar): Self::SystemData) {
         for player in (players).join(){
             if player.num == playersinfo.current_player_num{

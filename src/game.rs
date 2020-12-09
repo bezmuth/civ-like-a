@@ -23,6 +23,7 @@ pub use super::components::{
     Unit,
     OutPos,
     Stat,
+
 };
 
 
@@ -32,13 +33,12 @@ pub struct Civ<'a, 'b> {
     sprite_sheet_handle: Option<Handle<SpriteSheet>>,
     dispatcher: Option<Dispatcher<'a, 'b>>,
 }
-// TODO: !! implement turn system !!
 
 impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
 
-        // Create the `DispatcherBuilder` and register some `System`s that should only run for this `State`.
+        // Create the DispatcherBuilder and register some Systems that should only run for this State.
         let mut dispatcher_builder = DispatcherBuilder::new();
         //todo: reorder these
         dispatcher_builder.add(systems::Imgui{toggled: false}, "imgui", &[]);
@@ -55,15 +55,15 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::TileMouseFollow, "tile_mouse_follow_system", &["sheet_system", "build_system", "building_interact_system"]);
         dispatcher_builder.add(systems::UnitTurnSystem{last_turn : -1}, "unit_turn_system", &["sheet_system", "build_system", "building_interact_system", "turn_system", "resourcecalc_system"]);
 
-        // Build and setup the `Dispatcher`.
+        // Build and setup the Dispatcher.
         let mut dispatcher = dispatcher_builder
             .with_pool((*world.read_resource::<ArcThreadPool>()).clone())
             .build();
         dispatcher.setup(world);
         self.dispatcher = Some(dispatcher);
         // Load the spritesheet necessary to render the graphics.
-        // `spritesheet` is the layout of the sprites on the image;
-        // `texture` is the pixel data.
+        // spritesheet is the layout of the sprites on the image;
+        // texture is the pixel data.
         self.sprite_sheet_handle.replace(load_sprite_sheet(world));
 
 
@@ -77,14 +77,18 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
 
         initialise_camera(world);
         // TODO: move all these to their own init?
-        world.insert(Build {mode: None}); // * WORLD.INSERT WORKS WITH RESOURCES
-        // world.insert(CurrentPlayer{ playernum: 0});
+
+        // RESOURCE INIT
+        world.insert(Build {mode: None}); // * WORLD.INSERT WORKS WITH
+        // RESOURCES, RESOURCES are like components except they only hold a single
+        // struct as opposed to multiple structs, they are accessed in a similar way
         world.insert(MouseTilePos{ pos : TilePos{x:0 , y:0} });
         world.insert(OnUi{case: false});
         world.insert(Turn{num:0});
 
 
-        let playercount = 2; // todo: move this and the player gen logic to a system?
+        // This inits the players
+        let playercount = 2;
         world.insert(PlayersInfo{count: playercount, current_player_num:0});
         for x in 0..(playercount){
             world // * WORLD.INSERT DOES NOT WORK WITH COMPONENTS
@@ -93,6 +97,7 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
                 .build();
         }
 
+        // COMPONENT INIT
         initialise_follow_ent(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_unit_sheet(world, self.sprite_sheet_handle.clone().unwrap());
         initialise_building_sheet(world, self.sprite_sheet_handle.clone().unwrap());
@@ -106,12 +111,13 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     fn handle_event(&mut self, data: StateData<'_, GameData<'_, '_>>, event: StateEvent) -> SimpleTrans {
         if let StateEvent::Window(event) = &event {
             if is_key_down(&event, VirtualKeyCode::Escape){
-                // Go back to the Menu state.
+                // Go back to the Menu state when escape pressed.
                 data.world.delete_all();
                 return Trans::Pop;
             }
         }
-        // Escape isn't pressed, so we stay in this State.
+        // Escape isn't pressed, so we stay in this State. The function requires
+        // a return so we return the "None" type for the state transition enum
         Trans::None
     }
 
@@ -124,11 +130,11 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 }
 
-//todo: move all these into a "component" file?36
+//todo: move all these into a "component" file?
 pub struct Turn{
     pub num: i32,
 }
-#[derive(PartialEq, Eq)] // Partial Eq and Eq for comparisons with TilePos
+#[derive(PartialEq, Eq)] // Partial Eq and Eq required for comparisons with TilePos
 pub struct MouseTilePos{
     pub pos: TilePos,
 }
@@ -137,9 +143,12 @@ pub struct OnUi{ // if the mouse is on a Ui Element this will be true
     pub case: bool,
 }
 
+// contains data that describes what type of tile the follower is. This
+// couldnt realy be grouped with other components in the component folder, so
+// here it shall remain
 pub struct Follower{
     pub kind : TileType,
-} // contains data that describes what type of tile the follower is // ! this is a component that is not in a component file
+}
 impl Component for Follower {
     type Storage = DenseVecStorage<Self>;
 }
@@ -149,8 +158,8 @@ impl Component for Follower {
 fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
     // Load the sprite sheet necessary to render the graphics.
     // The texture is the pixel data
-    // `sprite_sheet` is the layout of the sprites on the image
-    // `texture_handle` is a cloneable reference to the texture
+    // sprite_sheet is the layout of the sprites on the image
+    // texture_handle is a cloneable reference to the texture
 
     let texture_handle = {
         let loader = world.read_resource::<Loader>();
@@ -163,6 +172,8 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
         )
     };
 
+    // This loads the file describing where the individual sprites in the sprite
+    // sheet are located.
     let loader = world.read_resource::<Loader>();
     let sprite_sheet_store = world.read_resource::<AssetStorage<SpriteSheet>>();
     loader.load(
@@ -173,11 +184,10 @@ fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
     )
 }
 
-/// Initialise the camera.
 fn initialise_camera(world: &mut World) {
     // Setup camera in a way that our screen covers whole arena and (0, 0) is in the bottom left.
     let mut transform = Transform::default();
-    transform.set_translation_xyz(1280./2.0, 720./2.0, 1.0); //TODO: increase unscaled res? - more tiles on screen
+    transform.set_translation_xyz(1280./2.0, 720./2.0, 1.0); //TODO: increase unscaled res? - more tiles on screen?
 
     world
         .create_entity()
@@ -186,16 +196,26 @@ fn initialise_camera(world: &mut World) {
         .build();
 }
 
+// This function inits the lowest layer of the tilesheet, creating a layer of
+// tiles which only contain grass tiles for now, until the terrain gen system
+// replaces them with the appropriate titles.
 fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+    // This lambda just makes it easier to understand what is going on later in
+    // the code, it converts a tile map position to a screen/world position. It
+    // is pretty important and underpins most of my isometric graphics. The
+    // inverse of it is used in the mouse2tile system.
+    let tile_to_screen = |x,y| (((x-y) as f32 * 32.), ((x+y) as f32 * 17.)); // 0 is x pos, 1 is y pos
+
     let mut transform = Transform::default();
 
     let mut sprite_render = SpriteRender {
             sprite_sheet: sprite_sheet_handle,
-            sprite_number: TileType::Grass as usize, // ground is the first sprite in the sprite_sheet
+            sprite_number: TileType::Grass as usize,
     };
+
     for x in 0..50{
         for y in 0..50{
-            transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.0);
+            transform.set_translation_xyz(tile_to_screen(x,y).0, tile_to_screen(x,y).1, 0.0);
             // screen.x = (map.x - map.y) * TILE_WIDTH_HALF;
             // screen.y = (map.x + map.y) * TILE_HEIGHT_HALF;
 
@@ -225,7 +245,11 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
     }
 }
 
+// This initalises the layer above the terrain sheet which displayes player
+// created buildings
 fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+    let tile_to_screen = |x,y| (((x-y) as f32 * 32.), ((x+y) as f32 * 17.)); // 0 is x pos, 1 is y pos
+
     let mut transform = Transform::default();
 
     let sprite_render = SpriteRender {
@@ -234,7 +258,7 @@ fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<Spri
     };
     for x in 0..50{
         for y in 0..50{
-            transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.00001); // z > 0 so it is displayed above layer 0
+            transform.set_translation_xyz(tile_to_screen(x,y).0, tile_to_screen(x,y).1, 0.00001); // z > 0 so it is displayed above layer 0
             world
                 .create_entity()
                 .with(sprite_render.clone())
@@ -247,7 +271,10 @@ fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<Spri
     }
 }
 
+// This is the third layer, it contains units.
 fn initialise_unit_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+    let tile_to_screen = |x,y| (((x-y) as f32 * 32.), ((x+y) as f32 * 17.)); // 0 is x pos, 1 is y pos
+
     let mut transform = Transform::default();
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle,
@@ -255,7 +282,7 @@ fn initialise_unit_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSh
     };
     for x in 0..50{
         for y in 0..50{
-            transform.set_translation_xyz((x - y) as f32 * 32. , (x + y) as f32 * 17., 0.00001); // z > 0 so it is displayed above layer 0
+            transform.set_translation_xyz(tile_to_screen(x,y).0, tile_to_screen(x,y).1, 0.00001); // z > 0 so it is displayed above layer 0
             world
                 .create_entity()
                 .with(sprite_render.clone())
@@ -305,32 +332,31 @@ fn initialise_res_disp(world: &mut World){
     world.insert(Resbar {top});
 }
 
-// TODO: prefabs for other elements?
+// Dynamically loads the lower menu from a .ron file. These are called prefabs
+// in amethyst
 fn initialise_lower_menu(world: &mut World){
-    //would use the UiButtonBuilder but that function seems to be broken
-    //TODO: ? fix in a pr
-    //seems that the .with_image() is broken and just the rest of the struct
     world.exec(|mut creator: UiCreator<'_>| {
         creator.create("ui/lower_panel.ron", ());
         creator.create("ui/build_menu.ron", ());
-    });           
+    });
 }
 
+// Another prefab load, this one handles when the user clicks on a barrack
 fn initialise_interact_menus(world: &mut World){
-    //would use the UiButtonBuilder but that function seems to be broken
-    //TODO: ? fix in a pr
-    //seems that the .with_image() is broken and just the rest of the struct
     world.exec(|mut creator: UiCreator<'_>| {
         creator.create("ui/barracks_menu.ron", ());
-    });           
+    });
 }
-
-fn initialise_follow_ent(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) { // * inits the entity that will follow the mouse when tile_mouse_follow is running
-    let transform = Transform::default();                                // * this is not part of the sheet, thats so I dont have to constantly r&w to the sheet
-                                                                                        // * store what was on the tile and replace it when the mouse moves etc etc
-                                                                                        // * this way I only move a sprite to the translation of a tile instead of on the sheet
+// inits the entity that will follow the mouse when tile_mouse_follow is running
+fn initialise_follow_ent(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
+    let transform = Transform::default();
+    // This entity is not part of the sheet, thats so I dont have to constantly
+    // r&w to the sheet. Removes the need to store what was on the tile and
+    // replace it when the mouse moves. This way I only move a sprite to the
+    // translation of a tile instead of on the sheet. If it had been part of the
+    // sheet it would have probably gone on layer3 (the unit layer)
     let sprite_render = SpriteRender {
-        sprite_sheet: sprite_sheet_handle, 
+        sprite_sheet: sprite_sheet_handle,
         sprite_number: 4 as usize,
     };
 

@@ -29,7 +29,7 @@ impl<'s> System<'s> for UnitTurnSystem {
         Entities<'s>
     );
 
-    // one of the main issues that arose with this system is that if a unit
+    // One of the main issues that arose with this system is that if a unit
     // already exists in the output location of the building creating it then
     // the unit wont be created properly. This can be accounted for however it
     // is not within the scope of this project.
