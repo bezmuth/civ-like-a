@@ -63,9 +63,14 @@ impl<'s> System<'s> for BuildingInteractSystem {
                 }
             }
 
-            // when we leave location mode, return the follower tile to that of an empty sprite
+            // when we leave location mode, return the follower tile to that of
+            // an empty sprite This is kinda haky but I didnt see the point of
+            // adding a "just focused" variable, instead we check if the focused
+            // ent is set to something, if thats the case then we must have just
+            // left focused mode.
             for fol in (&mut follower).join(){
-                if fol.kind == TileType::Location{
+                if fol.kind == TileType::Location && self.focused_ent.is_some(){
+                    self.focused_ent = None;
                     fol.kind = TileType::Empty
                 }
             }
@@ -95,11 +100,25 @@ impl<'s> System<'s> for BuildingInteractSystem {
                             }
                         }
                     }
-                } else if input.mouse_button_is_down(MouseButton::Left) && self.focused{ // if focused and click anywhere on the game map, unfocus
+                } else if input.mouse_button_is_down(MouseButton::Left) && self.focused{ // if
+                    // focused and click anywhere on the game map, unfocus all
+                    // this code checks that the tile clicked is not that of the
+                    // focused entity, if we didnt click on the focused entity
+                    // then exit focus mode. This is a pretty important UX
+                    // function as it stops the ui elements from flashing.
+                    let mut cfocus = false;
+                    for (building, build_tile_pos) in (&buildings, &tileposs).join(){
+                        if &mouse_tile_pos.pos == build_tile_pos{
+                            cfocus = true;
+                            break
+                        }
+                    }
                     if let (Some(interact_menu), Some(lower_panel)) = (ui_finder.find("barracks_menu"), ui_finder.find("lower_panel")){
-                        let _  = hidden_propagates.insert(interact_menu, HiddenPropagate::new()).unwrap();
-                        let _  = hidden_propagates.remove(lower_panel).unwrap();
-                        self.focused = false;
+                        if !cfocus{
+                            let _  = hidden_propagates.insert(interact_menu, HiddenPropagate::new()).unwrap();
+                            let _  = hidden_propagates.remove(lower_panel).unwrap();
+                            self.focused = false;
+                        }
                     }
                 }
             }
@@ -128,7 +147,11 @@ impl<'s> System<'s> for BuildingInteractSystem {
                 if clicked == ui_finder.find("Warrior_button").unwrap().id(){
                     unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(TileType::Warrior); // Push a tile of type warrior to the focused building's unit stack
                     // Done: decide on health values for units!
-                    // TODO add some visual feedback for when a unit is pushed to the stack. Im thinking some text above the build menu that fades after 10s?
+                    // TODO add some visual feedback for when a unit is pushed to the stack. Im thinking some text above the build menu that fades after 10s? - Not in scope
+                }else if clicked == ui_finder.find("Heavy_button").unwrap().id(){
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(TileType::Heavy); // Push a tile of type heavy to the focused building's unit stack
+                }else if clicked == ui_finder.find("Monk_button").unwrap().id(){
+                    unitstacks.get_mut(self.focused_ent.unwrap()).unwrap().push(TileType::Monk); // Push a tile of type monk to the focused building's unit stack
                 } else if clicked == ui_finder.find("Location_button").unwrap().id(){
                     self.location_mode = !self.location_mode; // Toggle location mode
                     for fol in (&mut follower).join(){ fol.kind = Empty };

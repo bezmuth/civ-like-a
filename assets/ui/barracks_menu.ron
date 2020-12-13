@@ -38,8 +38,80 @@ Container(
                             tex: File("texture/spritesheet.png", ("IMAGE", ())),
                             left : 0.3333333333333333,
                             right : 0.666666666666666, // * PERCENTAGE
-                            bottom: 0.25263157894,
-                            top: 0.12280701754,
+                            bottom: 0.12631578947,
+                            top: 0.06315789464,
+                        ),
+                    )
+                ),
+            ]
+        ),
+
+        Container(
+            transform: (
+                id: "heavy_button",
+                x: 174.,
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleLeft,
+
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "Heavy_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "",
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: 
+                        PartialTexture(
+                            tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                            left : 0.3333333333333333,
+                            right : 0.666666666666666, // * PERCENTAGE
+                            bottom: 0.18771929825,
+                            top: 0.12631578947,
+                        ),
+                    )
+                ),
+            ]
+        ),
+
+        Container(
+            transform: (
+                id: "monk_button",
+                x: 284.,
+                y: 0.,
+                width: 100.,
+                height: 50.,
+                anchor: MiddleLeft,
+
+            ),
+            children: [
+                Button(
+                    transform: (
+                        id: "Monk_button",
+                        tab_order: 1,
+                        anchor: Middle,
+                        stretch: XY(x_margin: 0., y_margin: 0., keep_aspect_ratio: false),
+                        mouse_reactive: true,
+                    ),
+                    button: (
+                        text: "",
+                        font_size: 20.,
+                        normal_text_color: (1.0, 1.0, 1.0, 1.),
+                        normal_image: 
+                        PartialTexture(
+                            tex: File("texture/spritesheet.png", ("IMAGE", ())),
+                            left : 0.3333333333333333,
+                            right : 0.666666666666666, // * PERCENTAGE
+                            bottom: 0.25263157895,
+                            top: 0.18947368421
                         ),
                     )
                 ),

@@ -1,5 +1,6 @@
 mod game;
 mod menu;
+mod win;
 mod systems;
 mod components;
 

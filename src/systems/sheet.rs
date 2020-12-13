@@ -2,7 +2,7 @@ use crate::game::OutPos;
 use crate::game::{Build, Building, TileType, Layer2, Layer1, MouseTilePos, PlayersInfo, TilePos, Tiles, UnitStack, Follower, Player};
 use amethyst::{
     derive::SystemDesc,
-    renderer::{SpriteRender},
+    renderer::{SpriteRender, resources::Tint, palette::Srgba,},
     ecs::{prelude::{Join, Read, System, SystemData, WriteStorage, ReadExpect, WriteExpect, Entities}},
     input::{InputHandler, StringBindings}, 
     winit::MouseButton,
@@ -32,7 +32,8 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
         WriteStorage<'s, OutPos>,
         WriteStorage<'s, Follower>,
         WriteStorage<'s, Layer1>,
-        WriteStorage<'s, Player>
+        WriteStorage<'s, Player>,
+        WriteStorage<'s, Tint>,
         //WriteStorage<'s, TileEnts>
     );
     // handles building to the sheet, should maybe be called build_sheet? This
@@ -41,7 +42,7 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
     // code actually means some of the time even with heavy commenting. Its also
     // one of the few systems that directly communicates with other systems
     // using build.mode 
-    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes, mut follower, mut layer1, mut players): Self::SystemData) {
+    fn run(&mut self, (mut tiles, mut tileposs, input, mut spriterenderers, mut build, playersinfo, mut buildings, entities, mouse_tile_pos, mut layer2, mut unitstacks, mut outposes, mut follower, mut layer1, mut players, mut tints): Self::SystemData) {
         if let Some(build_mode) = build.mode{
 
             let mut placeable = false;
@@ -109,16 +110,15 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                         for player in (&mut players).join(){
                             if playersinfo.current_player_num == player.num{
                                 match future_building.tile_type{
-                                    TileType::Barrack => {had_res = player.sub_wood(30) && player.sub_metal(10)},
+                                    TileType::Barrack => {had_res = player.sub_both(30, 10)},
                                     TileType::WoodBuilding => {had_res = player.sub_wood(20)},
-                                    TileType::MetalBuilding =>{had_res = player.sub_wood(10) && player.sub_metal(45)},
+                                    TileType::MetalBuilding =>{had_res = player.sub_both(10, 45)},
                                     _ => {}
                                 }
                             }
                         }
 
                         if had_res{
-
                             // iteration which sets the sprite render, finds the tile position,
 
                             // Instead of drawing to the screen, most rendering is
@@ -128,10 +128,15 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                             // spritrender and transform each time I want to create a
                             // new building, I instead change the value of a tile's
                             // spriterender.
-                            for (tile, spriterender, tilepos, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut layer2).join() {
+                            for (tile, spriterender, tilepos,tint, _) in (&mut tiles, &mut spriterenderers, &mut tileposs, &mut tints, &mut layer2).join() {
                                 if (& mouse_tile_pos.pos == tilepos) && tile.tile_type.is_none(){
                                     spriterender.sprite_number = build.mode.unwrap() as usize;
                                     tile.tile_type = Some(build_mode);
+                                    //tint = &mut Tint(Srgba::new(playersinfo.current_player_num as f32 * 0.5 % 1., playersinfo.current_player_num as f32 * 0.05 % 1., playersinfo.current_player_num as f32 * 0.3 % 1., 1.0));
+                                    tint.0.red = 1. - playersinfo.current_player_num as f32 * 0.4 % 1.;
+                                    tint.0.blue = 1. - playersinfo.current_player_num as f32 * 0.5 % 1.;
+                                    tint.0.green = 1. - playersinfo.current_player_num as f32 * 0.0 % 1.;
+                                    tint.0.alpha = 0.1;
                                     if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
                                         // TODO update to support dynamic pull of tilemap size?
                                         future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
@@ -151,7 +156,7 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                                     .with(future_pos.unwrap(), &mut tileposs)
                                     .with(UnitStack::new(), &mut unitstacks)
                                     .with(future_outpos.unwrap(), &mut outposes)
-                                    .build(); // Done: figure out how to add a component to a entity after the entity has been created, this would make checking if a tile had a building on it really simple (because it would be irrelavent)
+                                    .build();
                             } else {
                                 entities // add an entity of the build.mode type to the world, allows for resource calc
                                     .build_entity()
@@ -170,7 +175,7 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                             for (building, ent) in (&mut buildings, &*entities,).join(){
                                 if tile.tile_type.is_some() && building.playernum == playersinfo.current_player_num {
                                     entities.delete(ent).expect("Could not delete this building, does it exist?");
-                                    spriterender.sprite_number = 4; // blank sprite;
+                                    spriterender.sprite_number = TileType::Empty as usize; // blank sprite;
                                     tile.tile_type = None;
                                     break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
                                 }

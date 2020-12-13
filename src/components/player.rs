@@ -39,6 +39,18 @@ impl Player {
         }
     }
 
+    pub fn sub_both(&mut self, amount_wood : i32, amount_metal : i32) -> bool {
+        let result_wood = self.wood - amount_wood;
+        let result_metal = self.metal - amount_metal;
+        if result_wood < 0 || result_metal < 0{
+            return false
+        } else {
+            self.metal = result_metal;
+            self.wood = result_wood;
+            return true
+        }
+    }
+
 }
 impl Component for Player { // Component therefore use ReadStorage  an
     type Storage = DenseVecStorage<Self>;

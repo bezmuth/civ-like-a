@@ -1,7 +1,7 @@
 use std::time::Duration;
 use rand::prelude::*;
 use amethyst::{assets::{AssetStorage, Handle, Loader}, core::{ArcThreadPool, frame_limiter::{FrameLimiter, FrameRateLimitStrategy}, transform::Transform}, ecs::{Component, DenseVecStorage}, input::{is_key_down, VirtualKeyCode}, prelude::*, renderer::{
-        Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,
+    Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture,  resources::Tint, palette::Srgba,
     }, shred::{DispatcherBuilder}, shred::Dispatcher, ui::{
         Anchor, UiCreator, UiText, UiTransform, TtfFormat, LineMode,
     }};
@@ -25,6 +25,8 @@ pub use super::components::{
     Stat,
 
 };
+
+use crate::win::Win;
 
 
 
@@ -54,6 +56,8 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         dispatcher_builder.add(systems::BuildingInteractSystem::new(world), "building_interact_system", &["sheet_system", "camera_system", "build_system", "resourcecalc_system", "turn_system"]);
         dispatcher_builder.add(systems::TileMouseFollow, "tile_mouse_follow_system", &["sheet_system", "build_system", "building_interact_system"]);
         dispatcher_builder.add(systems::UnitTurnSystem{last_turn : -1}, "unit_turn_system", &["sheet_system", "build_system", "building_interact_system", "turn_system", "resourcecalc_system"]);
+        dispatcher_builder.add(systems::UnitInteractSystem::new(world), "unit_interact_system", &["sheet_system", "build_system", "building_interact_system", "turn_system", "resourcecalc_system", "unit_turn_system"]);
+        dispatcher_builder.add(systems::WinCheckSystem, "win_check_system", &["sheet_system", "build_system"]);
 
         // Build and setup the Dispatcher.
         let mut dispatcher = dispatcher_builder
@@ -81,10 +85,11 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
         // RESOURCE INIT
         world.insert(Build {mode: None}); // * WORLD.INSERT WORKS WITH
         // RESOURCES, RESOURCES are like components except they only hold a single
-        // struct as opposed to multiple structs, they are accessed in a similar way
+        // struct as opposed to a list of structs, they are accessed in a similar way
         world.insert(MouseTilePos{ pos : TilePos{x:0 , y:0} });
         world.insert(OnUi{case: false});
         world.insert(Turn{num:0});
+        world.insert(WinState{case:false, num_winner : 0});
 
 
         // This inits the players
@@ -122,11 +127,19 @@ impl<'a, 'b> SimpleState for Civ<'a, 'b> {
     }
 
     fn update(&mut self, data: &mut StateData<'_, GameData<'_, '_>>) -> SimpleTrans {
+
         // updates systems when update occurs
         if let Some(dispatcher) = self.dispatcher.as_mut() {
             dispatcher.dispatch(&data.world);
         }
-        Trans::None
+
+        let winstate = data.world.read_resource::<WinState>();
+        if winstate.case{
+            println!("WINSATE PUSHED");
+            return Trans::Push(Box::new(Win{winner : winstate.num_winner}));
+        } else {
+            Trans::None
+        }
     }
 }
 
@@ -153,6 +166,12 @@ impl Component for Follower {
     type Storage = DenseVecStorage<Self>;
 }
 
+#[derive(Default)]
+pub struct WinState{
+    pub case : bool,
+    pub num_winner : i32,
+
+}
 
 
 fn load_sprite_sheet(world: &mut World) -> Handle<SpriteSheet> {
@@ -207,7 +226,6 @@ fn initialise_world_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteS
     let tile_to_screen = |x,y| (((x-y) as f32 * 32.), ((x+y) as f32 * 17.)); // 0 is x pos, 1 is y pos
 
     let mut transform = Transform::default();
-
     let mut sprite_render = SpriteRender {
             sprite_sheet: sprite_sheet_handle,
             sprite_number: TileType::Grass as usize,
@@ -252,6 +270,8 @@ fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<Spri
 
     let mut transform = Transform::default();
 
+    let tint = Tint(Srgba::new(1.0, 1., 1., 1.));
+
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle,
         sprite_number: 4 // blank sprite
@@ -266,6 +286,7 @@ fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<Spri
                 .with(Tiles { player: 0, tile_type: None})
                 .with(TilePos{x, y})
                 .with(Layer2)
+                .with(tint)
                 .build();
         }
     }
@@ -274,7 +295,7 @@ fn initialise_building_sheet(world: &mut World, sprite_sheet_handle: Handle<Spri
 // This is the third layer, it contains units.
 fn initialise_unit_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSheet>) {
     let tile_to_screen = |x,y| (((x-y) as f32 * 32.), ((x+y) as f32 * 17.)); // 0 is x pos, 1 is y pos
-
+    let tint = Tint(Srgba::new(1.0, 1., 1., 1.));
     let mut transform = Transform::default();
     let sprite_render = SpriteRender {
         sprite_sheet: sprite_sheet_handle,
@@ -290,6 +311,7 @@ fn initialise_unit_sheet(world: &mut World, sprite_sheet_handle: Handle<SpriteSh
                 .with(Tiles { player: 0, tile_type: None})
                 .with(TilePos{x, y})
                 .with(Layer3)
+                .with(tint)
                 .build();
         }
     }
