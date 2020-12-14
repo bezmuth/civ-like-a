@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2020-12-14T03:19:15.241Z" agent="5.0 (X11)" etag="1ePDv8quDdbE3TCy_aGI" version="14.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-14T03:20:55.323Z" agent="5.0 (X11)" etag="3-nOwCjQjOTrCvLUEbXK" version="14.0.1" type="github">
   <diagram id="3ddYDju-GY4ESvOwRW6C" name="Page-1">
-    <mxGraphModel dx="981" dy="539" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <mxGraphModel dx="2424" dy="1332" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -85,8 +85,35 @@
         <mxCell id="_KzIcOepq-4StEWX0fqk-20" value="Deal damage equal to the focused unit&#39;s attack" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="354" y="790" width="120" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="_KzIcOepq-4StEWX0fqk-22" value="Iterate through multi_hit_amount" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;rounded=0;" vertex="1" parent="1">
+        <mxCell id="_KzIcOepq-4StEWX0fqk-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-22" target="_KzIcOepq-4StEWX0fqk-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-22" value="&lt;div&gt;Iterate through &lt;br&gt;&lt;/div&gt;&lt;div&gt;multi hit amount&lt;/div&gt;" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;rounded=0;" vertex="1" parent="1">
           <mxGeometry x="354" y="870" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-27" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-24" target="_KzIcOepq-4StEWX0fqk-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-24" value="Generate random number" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="960" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-29" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-26" target="_KzIcOepq-4StEWX0fqk-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-26" value="&lt;div&gt;Is the random &lt;br&gt;&lt;/div&gt;&lt;div&gt;number lower than that of &lt;br&gt;&lt;/div&gt;&lt;div&gt;the focused unit&#39;s &lt;br&gt;&lt;/div&gt;&lt;div&gt;multi hit chance?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="329.5" y="1040" width="169" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-28" target="_KzIcOepq-4StEWX0fqk-22">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="890" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="300" y="1260" />
+              <mxPoint x="300" y="930" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-28" value="Deal damage equal to the focused unit&#39;s attack" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="1230" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
