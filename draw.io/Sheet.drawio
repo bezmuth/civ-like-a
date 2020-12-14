@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-14T01:50:46.415Z" agent="5.0 (X11)" etag="80unZ5LXlNkYhFeqmR9p" version="14.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-14T01:52:45.140Z" agent="5.0 (X11)" etag="Q1pIswVaw0C1RKCNTHlL" version="14.0.1" type="github">
   <diagram id="pgvQU4TPYQ710n_Lu6ZC" name="Page-1">
     <mxGraphModel dx="1177" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -176,8 +176,10 @@
         <mxCell id="Tz45q9WBiDekPMIarujH-35" value="&lt;div&gt;Is the user &lt;br&gt;&lt;/div&gt;&lt;div&gt;left clicking?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="82.5" y="500" width="105" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="Tz45q9WBiDekPMIarujH-44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-42" target="Tz45q9WBiDekPMIarujH-43">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="Tz45q9WBiDekPMIarujH-44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-42">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="270" y="715" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="Tz45q9WBiDekPMIarujH-45" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" vertex="1" connectable="0" parent="Tz45q9WBiDekPMIarujH-44">
           <mxGeometry x="-0.1982" y="-1" relative="1" as="geometry">
@@ -197,9 +199,6 @@
         <mxCell id="Tz45q9WBiDekPMIarujH-42" value="Is the build mode demolish?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="77.5" y="660" width="115" height="110" as="geometry" />
         </mxCell>
-        <mxCell id="Tz45q9WBiDekPMIarujH-43" value="" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="270" y="685" width="120" height="60" as="geometry" />
-        </mxCell>
         <mxCell id="Tz45q9WBiDekPMIarujH-51" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-50" target="Tz45q9WBiDekPMIarujH-1">
           <mxGeometry x="-0.9304" relative="1" as="geometry">
             <mxPoint x="20" y="130" as="targetPoint" />
@@ -210,8 +209,32 @@
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-56" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-50" target="Tz45q9WBiDekPMIarujH-55">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="Tz45q9WBiDekPMIarujH-50" value="&lt;div&gt;Does the user &lt;br&gt;&lt;/div&gt;&lt;div&gt;have enough resources?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="80" y="835" width="110" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-58" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-55" target="Tz45q9WBiDekPMIarujH-57">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-55" value="Create a building entity with the appropriate components" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="75" y="1042.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-57" value="Set the sprite render in that location to that of the build mode" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="75" y="1182.5" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-59" value="&lt;font style=&quot;font-size: 12px&quot;&gt;Demolish&lt;/font&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=23;" edge="1" parent="1">
+          <mxGeometry x="0.4366" relative="1" as="geometry">
+            <mxPoint x="660" y="380" as="targetPoint" />
+            <mxPoint x="660" y="109.98" as="sourcePoint" />
+            <mxPoint y="1" as="offset" />
+            <Array as="points">
+              <mxPoint x="758" y="110" />
+              <mxPoint x="758" y="380" />
+              <mxPoint x="660" y="380" />
+            </Array>
+          </mxGeometry>
         </mxCell>
       </root>
     </mxGraphModel>
