@@ -1,1 +1,171 @@
-<mxfile host="app.diagrams.net" modified="2020-12-14T03:01:07.748Z" agent="5.0 (X11)" etag="5JZIfBeXkA6VzoLtCP-8" version="14.0.1" type="github"><diagram id="Zso8RzkM5MJyUw1dImm6" name="Page-1">7VpZk9s2DP41njxlR4fl43Ht3aRpN51MPZ1kH2mLttRKokpRtrW/vqBI6qLkuJHPTB92VoTAw8AHfADtgT0P9x8pir3PxMXBwDLc/cB+GliWNZmM4R+XZEJimrYlJBvqu1JWChb+G5ZCQ0pT38VJTZEREjA/rgtXJIrwitVkiFKyq6utSVDfNUYbrAkWKxTo0q++yzwhnVjjUv4L9jee2tkcTcWbECll+UkSD7lkVxHZzwN7Tglh4incz3HArafsIuZ96HhbHIziiB0zYboYfX30tu4/8bffXv4wZm+/vs3fO2KVLQpS+YFfwdrivCxTRsAu2EQOCWUe2ZAIBc+ldEZJGrmY72TAqNR5ISQGoQnCvzBjmXQwShkBkcfCQL4Ve/KNOj+eFCUkpSt84DMpmCC6weyA3rBwAsAXkxAzmsE8igPE/G39HEjCaFPolZaGB2ns/2D4kWb438k17A7Wpdm36uCVL/bgqOHTXi4uRpkcXcFfVk9/yalfiA8ntAyZo+ypjE+ZodRQrSCOJSeVTn+kFGUVtZgrJMdvY42derR+R980atEND+IEJQILk/w4KE0NlANrFIBPZq6/hccNf/wzwRSUvlCcJIA8y3jBa35wpbqkSlNJ4CyV+S1LfiZpgmGJZcoYifqthSJ+plCu2GMhP+HuZRBH8A/+0sgH8Yeu+Y3QpR4JlymAY7bzfIYXMcpjYAc02Zb4tpgyvD8cSjr0Fc1aDawo7OxKxjKHUuZV2WrcAPvJ0pt9a+mtktFeawnt7OnNOjK9dfj4MnQ0vnPOP9bIk7NwSBFcMgCd4XEkcqq8PT26intBS6jQa15Agb+J4HkFRofMbs94LvKhAn6UL0LfdYXDceK/oWW+Hne55DxY3JkNnKdDyUyW53JyUavWfN0NzM7M9954sA1HJpu+hYBTn0HW6wSfxV2W5q5PUd6brFLBqCH0UTnVXJNUnDqmRzqnTFooZXIuRhlqRnvO8arZDfbOS4DceQbzcE0lZ3HeQxbvlCQfxAHK8kUTHABe+ZSGDy5gebtu+aHdQudWi+1H57K9asZ/qjbxMlQwNC9LBRPNU7Jel1X6PPBXf3MPXDe7qHamaIdU9r1WejH1pHydivWECDf7lpTtEC/u5lS1c2TLfLIu9ag29VMikjrFsn/r0QpKishbU8ETKxlGMPYDfJtt4bQjE1VpxGiJsaY7TxdjOoffP42Y9lmCbNhIkKOhfdEgK26t//eL8EvhB+vBuawn9HTXwUx319xVvgfp6O4ULWe1DX/Uh+dv7Uz94usAN/VjpQYHwck4P1EUbXouTNa15uhd0m+5JMay4Lw5ijQbTa4z0cvQ1lbLNJ1u1PUjyXELgu47E0tTff8GdNQzZfczvP5d6KJyhSBPL4KNR0QSU4BnfjwwNW+x5KUCymvFMobKywcRp02811x1fsxrlYXKWde7XtDvL+8d8qNjId/3FqKf4fVvoRett2YcuO8Ogp7LcBizrKJ0Y0AfO1cHun47027vgnZjkvjMF41ne3YREGso35jlJ9PzWR6G5W9oRBlX/hTJfv4X</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2020-12-14T03:08:21.891Z" agent="5.0 (X11)" etag="nkF0gYs-BTIWI6e_M9Ta" version="14.0.1" type="github">
+  <diagram id="Zso8RzkM5MJyUw1dImm6" name="Page-1">
+    <mxGraphModel dx="2887" dy="1132" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-5" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-1" target="9S6WAhvdqpXKLR0BzJzC-4" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-6" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-1" target="9S6WAhvdqpXKLR0BzJzC-2" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="390" y="90" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="390" y="275" />
+              <mxPoint x="390" y="100" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-1" value="&lt;div&gt;User Pressed Left &lt;br&gt;&lt;/div&gt;&lt;div&gt;Mouse button &lt;br&gt;&lt;/div&gt;&lt;div&gt;and mouse &lt;br&gt;&lt;/div&gt;&lt;div&gt;is atop a unit?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="220" y="190" width="140" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-3" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-2" target="9S6WAhvdqpXKLR0BzJzC-1" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-2" target="TE2sU6scPT0O_OmQSyd--4" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="160" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-9" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" parent="9S6WAhvdqpXKLR0BzJzC-7" vertex="1" connectable="0">
+          <mxGeometry x="-0.3053" relative="1" as="geometry">
+            <mxPoint x="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-2" value="In focused mode?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="250" y="60" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-4" value="Enter focused mode and set the focused unit to the unit the player selected" style="whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="230" y="430" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-10" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-8" edge="1" target="9S6WAhvdqpXKLR0BzJzC-13">
+          <mxGeometry x="-0.6066" relative="1" as="geometry">
+            <mxPoint x="140" y="410" as="targetPoint" />
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-8" value="User Left Clicked?" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="100" y="270" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--7" target="TE2sU6scPT0O_OmQSyd--3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="185" y="840" as="targetPoint" />
+            <mxPoint x="315" y="840" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--2" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TE2sU6scPT0O_OmQSyd--1">
+          <mxGeometry x="-0.2923" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-14" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-13" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="400" y="643" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--9" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0;exitDx=0;exitDy=0;" edge="1" parent="1" source="9S6WAhvdqpXKLR0BzJzC-13">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="380" y="280" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="380" y="614" />
+              <mxPoint x="380" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-13" value="&lt;div&gt;Is the &lt;br&gt;&lt;/div&gt;&lt;div&gt;clicked tile in range &lt;br&gt;&lt;/div&gt;&lt;div&gt;of the unit&#39;s &lt;br&gt;&lt;/div&gt;&lt;div&gt;speed?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="150" y="585" width="120" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-17" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-15" target="9S6WAhvdqpXKLR0BzJzC-16" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-15" value="Set the target tiles sprite render to that of the focused tile" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="613" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="9S6WAhvdqpXKLR0BzJzC-16" target="9S6WAhvdqpXKLR0BzJzC-18" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-16" value="Set the focused tile&#39;s sprite render to the empty sprite" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="753" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--8" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="9S6WAhvdqpXKLR0BzJzC-18" target="TE2sU6scPT0O_OmQSyd--7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="9S6WAhvdqpXKLR0BzJzC-18" value="Set the focused unit&#39;s position to that of the target&#39;s position" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="400" y="893" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--3" value="Enter Combat Mode" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="220" y="760" width="120" height="25" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--4" target="9S6WAhvdqpXKLR0BzJzC-8">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--6" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="TE2sU6scPT0O_OmQSyd--5">
+          <mxGeometry x="-0.1692" y="2" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--10" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--4" target="TE2sU6scPT0O_OmQSyd--11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-60" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--4" value="In Combat Mode?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="95" y="60" width="90" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--7" value="&lt;div&gt;Is there a &lt;br&gt;&lt;/div&gt;&lt;div&gt;unit in range of the target tile?&lt;br&gt;&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="230" y="878" width="100" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--11">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-60" y="430" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--11" value="User Left Clicked?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-100" y="270" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--14" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--13" target="TE2sU6scPT0O_OmQSyd--15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-60" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--16" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--13">
+          <mxGeometry x="-0.7885" relative="1" as="geometry">
+            <mxPoint x="390" y="100" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="-240" y="488" />
+              <mxPoint x="-240" y="40" />
+            </Array>
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--13" value="&lt;div&gt;Is the &lt;br&gt;&lt;/div&gt;&lt;div&gt;clicked tile in range &lt;br&gt;&lt;/div&gt;and a unit?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="430" width="120" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--15" target="TE2sU6scPT0O_OmQSyd--18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-60" y="700" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--15" value="Attack the target unit " style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="612.5" width="120" height="27.5" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--19" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-60" y="850" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--20" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="-240" y="490" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--18" value="Did the unit die?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-100" y="673" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--21" value="Exit Combat Mode" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="850" width="120" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
