@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-14T03:08:21.891Z" agent="5.0 (X11)" etag="nkF0gYs-BTIWI6e_M9Ta" version="14.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-14T03:09:51.330Z" agent="5.0 (X11)" etag="qEAaqjF-jQOOx85v32JD" version="14.0.1" type="github">
   <diagram id="Zso8RzkM5MJyUw1dImm6" name="Page-1">
     <mxGraphModel dx="2887" dy="1132" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -159,11 +159,23 @@
             <mxPoint x="-240" y="490" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="TE2sU6scPT0O_OmQSyd--18" value="Did the unit die?" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-100" y="673" width="80" height="80" as="geometry" />
+        <mxCell id="TE2sU6scPT0O_OmQSyd--18" value="&lt;div&gt;Did the target&lt;/div&gt;&lt;div&gt;unit die?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-115" y="673" width="110" height="77" as="geometry" />
         </mxCell>
         <mxCell id="TE2sU6scPT0O_OmQSyd--21" value="Exit Combat Mode" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
-          <mxGeometry x="-120" y="850" width="120" height="30" as="geometry" />
+          <mxGeometry x="-120" y="1020" width="120" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--22" target="TE2sU6scPT0O_OmQSyd--23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--22" value="Remove the target unit from the world using entities.remove" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="848" width="120" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="TE2sU6scPT0O_OmQSyd--23" target="TE2sU6scPT0O_OmQSyd--21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="TE2sU6scPT0O_OmQSyd--23" value="Set the target unit&#39;s sprite render to empty sprite" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="930" width="120" height="52" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
