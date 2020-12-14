@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2020-12-14T01:54:19.141Z" agent="5.0 (X11)" etag="IP5eEHfpKnlqI3KzuXg-" version="14.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-14T01:57:03.762Z" agent="5.0 (X11)" etag="vfjtpVnRUvPhjawLTaba" version="14.0.1" type="github">
   <diagram id="pgvQU4TPYQ710n_Lu6ZC" name="Page-1">
     <mxGraphModel dx="1177" dy="647" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
@@ -175,7 +175,7 @@
         <mxCell id="Tz45q9WBiDekPMIarujH-35" value="&lt;div&gt;Is the user &lt;br&gt;&lt;/div&gt;&lt;div&gt;left clicking?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="82.5" y="500" width="105" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="Tz45q9WBiDekPMIarujH-44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-42">
+        <mxCell id="Tz45q9WBiDekPMIarujH-44" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-42" target="Tz45q9WBiDekPMIarujH-64">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="270" y="715" as="targetPoint" />
           </mxGeometry>
@@ -243,6 +243,43 @@
             <mxPoint x="187.5" y="1120" as="sourcePoint" />
             <mxPoint x="230" y="1070" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-66" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-64" target="Tz45q9WBiDekPMIarujH-65">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-67" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" vertex="1" connectable="0" parent="Tz45q9WBiDekPMIarujH-66">
+          <mxGeometry x="-0.1962" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-68" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-64">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260" y="140" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="350" y="715" />
+              <mxPoint x="350" y="396" />
+              <mxPoint x="260" y="396" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-69" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=12;" vertex="1" connectable="0" parent="Tz45q9WBiDekPMIarujH-68">
+          <mxGeometry x="-0.0666" relative="1" as="geometry">
+            <mxPoint x="-0.03" y="132.46" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-64" value="&lt;div&gt;Does the currently &lt;br&gt;&lt;/div&gt;&lt;div&gt;hovered tile &lt;br&gt;&lt;/div&gt;&lt;div&gt;belong to the &lt;br&gt;&lt;/div&gt;&lt;div&gt;current player?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="270" y="652.5" width="160" height="125" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-71" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;fontSize=12;" edge="1" parent="1" source="Tz45q9WBiDekPMIarujH-65">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="927.5" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-65" value="Delete the building entity" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="847.5" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="Tz45q9WBiDekPMIarujH-70" value="Set the sprite render to empty" style="whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="290" y="930" width="120" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
