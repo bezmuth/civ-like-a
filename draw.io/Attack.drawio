@@ -1,11 +1,92 @@
-<mxfile host="app.diagrams.net" modified="2020-12-14T03:12:48.035Z" agent="5.0 (X11)" etag="PcrT2gVait80RckzIe5Y" version="14.0.1" type="github">
+<mxfile host="app.diagrams.net" modified="2020-12-14T03:19:15.241Z" agent="5.0 (X11)" etag="1ePDv8quDdbE3TCy_aGI" version="14.0.1" type="github">
   <diagram id="3ddYDju-GY4ESvOwRW6C" name="Page-1">
     <mxGraphModel dx="981" dy="539" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="_KzIcOepq-4StEWX0fqk-2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-1" target="_KzIcOepq-4StEWX0fqk-3">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="340" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="_KzIcOepq-4StEWX0fqk-1" value="Get target unit&#39;s stats" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
           <mxGeometry x="354" y="230" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-3" target="_KzIcOepq-4StEWX0fqk-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="380" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-3" value="Generate random number" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="310" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-6" value="No" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-5" target="_KzIcOepq-4StEWX0fqk-7">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="440" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-8" value="Yes" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-5">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="540" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-5" value="&lt;div&gt;Is the random &lt;br&gt;&lt;/div&gt;&lt;div&gt;number greater than the target &lt;br&gt;&lt;/div&gt;&lt;div&gt;units resistance?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="339" y="380" width="150" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-7" value="Deal no Damage" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="425" width="100" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="610" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-9" value="Generate random number" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="540" width="120" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-12" target="_KzIcOepq-4StEWX0fqk-14">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="680" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-15" value="Yes" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="_KzIcOepq-4StEWX0fqk-13">
+          <mxGeometry x="-0.3643" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-12">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="414" y="790" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-17" value="No" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="_KzIcOepq-4StEWX0fqk-16">
+          <mxGeometry x="-0.2595" y="-1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-12" value="&lt;div&gt;Is the random &lt;br&gt;&lt;/div&gt;&lt;div&gt;number lower than that of &lt;br&gt;&lt;/div&gt;&lt;div&gt;the focused unit&#39;s &lt;br&gt;&lt;/div&gt;&lt;div&gt;critical hit chance?&lt;/div&gt;" style="rhombus;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="329.5" y="610" width="169" height="140" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-14" target="_KzIcOepq-4StEWX0fqk-22">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="480" y="810" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="710" y="680" />
+              <mxPoint x="710" y="900" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-14" value="Deal damage equal to 1.5 times the focused unit&#39;s attack" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="560" y="650" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-23" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="_KzIcOepq-4StEWX0fqk-20" target="_KzIcOepq-4StEWX0fqk-22">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-20" value="Deal damage equal to the focused unit&#39;s attack" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="354" y="790" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="_KzIcOepq-4StEWX0fqk-22" value="Iterate through multi_hit_amount" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fixedSize=1;rounded=0;" vertex="1" parent="1">
+          <mxGeometry x="354" y="870" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
