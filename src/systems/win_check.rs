@@ -24,10 +24,8 @@ impl<'s> System<'s> for WinCheckSystem {
             for (build) in (buildings).join(){
                 if build.playernum == 0 && build.tile_type == TileType::Center{
                     p1count += 1;
-                    println!("P1");
                 } else if build.playernum == 1 && build.tile_type == TileType::Center{
                     p2count += 1;
-                    println!("P2");
                 }
             }
             if p1count == 0{

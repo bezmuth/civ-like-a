@@ -97,8 +97,10 @@ impl<'s> System<'s> for UnitInteractSystem {
                 self.focused = false;
                 self.focused_ent = None;
                 self.last_turn = turn.num;
+                println!("pog2");
                 if let Some(mut ttc) = self.turns_til_claim{
-                    self.turns_til_claim = Some(ttc - 1);
+                    self.turns_til_claim = Some(ttc - 2);
+                    println!("poggers!")
                 }
             }else {
                 if self.focused{
@@ -159,6 +161,8 @@ impl<'s> System<'s> for UnitInteractSystem {
                                     for (tile, spriterender, pos, _) in (& tiles, &mut spriterenderers,  & tileposs, & layer3).join() {
                                         if pos == t_pos.unwrap(){
                                             spriterender.sprite_number = TileType::Empty as usize; // blank sprite;
+                                            self.focused = false;
+                                            combat_mode = false;
                                             break;
                                         }
                                     }
@@ -195,28 +199,42 @@ impl<'s> System<'s> for UnitInteractSystem {
                                 self.focused = false;
                             }
                         }
-                        for (tile, spriterender, pos, _) in (&mut tiles, &mut spriterenderers,  &mut tileposs, &mut layer2).join() {// if the target tile is a city centre of other player, destroy it.
+                        // Delete the building entity
+                        for (building, ent, pos) in (&buildings, &*entities, &tileposs).join() {// if the target tile is a city centre of other player, destroy it.
                             if focused_pos == *pos{
-                                for (building, ent) in (& buildings, &*entities).join(){
-                                    if tile.tile_type.is_some() && building.playernum != playersinfo.current_player_num {
-                                        if let Some(ttc) = self.turns_til_claim{
-                                            println!("{}", ttc);
-                                            if ttc == 0{
-                                                entities.delete(ent).expect("Could not delete this building, does it exist?");
-                                                spriterender.sprite_number = TileType::Empty as usize; // blank sprite;
-                                                tile.tile_type = None;
-                                                self.turns_til_claim = None;
-                                                break;
-                                            }
-                                        } else {
-                                            self.turns_til_claim = Some(2); // if the number of players is 2, this would need to change. Out of scope
+                                if building.playernum != playersinfo.current_player_num && building.tile_type == TileType::Center {
+                                    if let Some(ttc) = self.turns_til_claim{
+                                        println!("{}", ttc);
+                                        if ttc <= 0{
+                                            entities.delete(ent).expect("Could not delete this building, does it exist?");
+                                            break;
                                         }
+                                    } else {
+                                        self.turns_til_claim = Some(2); // if the number of players is 2, this would need to change. Out of scope
                                     }
                                 }
 
                             }
                         }
-
+                        if let Some(ttc) = self.turns_til_claim{
+                            // set the centre's sprite render to empty. This has
+                            // to be split into 2 loops so we can use the
+                            // tileposs storage twice (otherwise borrow errors
+                            // occur)
+                            if ttc <= 0{
+                                println!("deletey");
+                                for (tile, spriterender, pos, _) in (&mut tiles, &mut spriterenderers,  &mut tileposs, &mut layer2).join() {
+                                    if focused_pos == *pos{
+                                        if tile.tile_type.is_some() {
+                                            spriterender.sprite_number = TileType::Empty as usize; // blank sprite;
+                                            tile.tile_type = None;
+                                            self.turns_til_claim = None;
+                                            break; // TODO: see if there is another way to do this without break, without break all buildings of this type get detleted
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

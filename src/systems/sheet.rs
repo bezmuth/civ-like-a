@@ -137,9 +137,9 @@ impl<'s> System<'s> for SheetSystem { // handles user interaction with building 
                                     tint.0.blue = 1. - playersinfo.current_player_num as f32 * 0.5 % 1.;
                                     tint.0.green = 1. - playersinfo.current_player_num as f32 * 0.0 % 1.;
                                     tint.0.alpha = 0.1;
-                                    if tilepos.x == 49{ // checks if the output position will be out of range of the tilemap
+                                    if tilepos.x == 0{ // checks if the output position will be out of range of the tilemap
                                         // TODO update to support dynamic pull of tilemap size?
-                                        future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
+                                        future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x + 1 , y:tilepos.y}});
                                     } else {
                                         future_outpos = Some(OutPos{ pos : TilePos{x:tilepos.x - 1 , y:tilepos.y}});
                                     }
